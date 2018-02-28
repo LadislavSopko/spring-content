@@ -16,5 +16,6 @@ public class POIServiceImpl implements org.springframework.renditions.poi.POISer
     public XWPFDocument xwpfDocument(InputStream stream) throws IOException {
         Assert.notNull(stream);
         return new XWPFDocument(stream);
+        // some usless comment
     }
 }
