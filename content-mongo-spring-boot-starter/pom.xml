@@ -16,7 +16,7 @@
 		</dependency>
 		<dependency>
 			<groupId>it.zeroics</groupId>
-			<artifactId>spring-content-mongo</artifactId>
+			<artifactId>strg-spring-mongo</artifactId>
 			<version>0.0.10-SNAPSHOT</version>
 		</dependency>
 	</dependencies>

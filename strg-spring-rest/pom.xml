@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>spring-content-rest</artifactId>
+	<artifactId>strg-spring-rest</artifactId>
 
 	<parent>
 		<groupId>it.zeroics</groupId>
@@ -37,7 +37,7 @@
 		</dependency>
 		<dependency>
 			<groupId>it.zeroics</groupId>
-			<artifactId>spring-content-commons</artifactId>
+			<artifactId>strg-spring-commons</artifactId>
 			<version>0.0.10-SNAPSHOT</version>
 		</dependency>
 		<dependency>
@@ -100,13 +100,13 @@
 		</dependency>
 		<dependency>
 			<groupId>it.zeroics</groupId>
-			<artifactId>spring-content-mongo</artifactId>
+			<artifactId>strg-spring-mongo</artifactId>
 			<version>0.0.10-SNAPSHOT</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>it.zeroics</groupId>
-			<artifactId>spring-content-fs</artifactId>
+			<artifactId>strg-spring-fs</artifactId>
 			<version>0.0.10-SNAPSHOT</version>
 			<scope>test</scope>
 		</dependency>

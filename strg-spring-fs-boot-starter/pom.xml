@@ -8,12 +8,12 @@
 		<version>0.0.10-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>spring-content-fs-boot-starter</artifactId>
+	<artifactId>strg-spring-fs-boot-starter</artifactId>
 
 	<dependencies>
 		<dependency>
 			<groupId>it.zeroics</groupId>
-			<artifactId>spring-content-fs</artifactId>
+			<artifactId>strg-spring-fs</artifactId>
 			<version>0.0.10-SNAPSHOT</version>
 		</dependency>
 		<dependency>

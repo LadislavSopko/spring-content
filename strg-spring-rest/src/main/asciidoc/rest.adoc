@@ -6,8 +6,8 @@ Spring Content REST builds on top of Spring Content stores and automatically exp
 
 Spring Content REST officially supports:
 
-- https://github.com/paulcwarren/spring-content/spring-content-fs[Spring Content Filesystem]
-- https://github.com/paulcwarren/spring-content/spring-content-s3[Spring Content S3]
+- https://github.com/paulcwarren/spring-content/strg-spring-fs[Spring Content Filesystem]
+- https://github.com/paulcwarren/spring-content/strg-spring-s3[Spring Content S3]
 
 = Getting Started
 
@@ -25,7 +25,7 @@ The simplest way to get to started is if you are building a Spring Boot applicat
 ----
 dependencies {
     ...
-    compile("comn.github.paulcwarren:spring-content-rest-boot-starter:${version}")
+    compile("comn.github.paulcwarren:strg-spring-rest-boot-starter:${version}")
 	... 
 }
 ----
@@ -39,7 +39,7 @@ dependencies {
 	...
     <dependency>
       <groupId>com.github.paulcwarren</groupId>
-      <artifactId>spring-content-rest-boot-starter</artifactId>
+      <artifactId>strg-spring-rest-boot-starter</artifactId>
       <version>${version}</version>
     </dependency>
 	...
@@ -51,14 +51,14 @@ When using Spring Boot, Spring Content REST gets configured automatically.
 
 == Adding Spring Content REST to a Gradle Project
 
-To add Spring Content REST to a Gradle-based project, add the spring-content-rest artifact to your compile-time dependencies:
+To add Spring Content REST to a Gradle-based project, add the strg-spring-rest artifact to your compile-time dependencies:
 
 ====
 [source, java]
 ----
 dependencies {
     ...
-    compile("comn.github.paulcwarren:spring-content-rest:${version}")
+    compile("comn.github.paulcwarren:strg-spring-rest:${version}")
 	... 
 }
 ----
@@ -66,7 +66,7 @@ dependencies {
 
 == Adding Spring Content REST to a Maven Project
 
-To add Spring Content REST to a Maven-based project, add the spring-content-rest artifact to your compile-time dependencies:
+To add Spring Content REST to a Maven-based project, add the strg-spring-rest artifact to your compile-time dependencies:
 ====
 [source, java]
 ----
@@ -74,7 +74,7 @@ To add Spring Content REST to a Maven-based project, add the spring-content-rest
 	...
     <dependency>
       <groupId>com.github.paulcwarren</groupId>
-      <artifactId>spring-content-rest</artifactId>
+      <artifactId>strg-spring-rest</artifactId>
       <version>${version}</version>
     </dependency>
 	...
@@ -86,7 +86,7 @@ To add Spring Content REST to a Maven-based project, add the spring-content-rest
 
 To install Spring Content REST alongside your existing Spring MVC application, you need to include the appropriate MVC configuration.  Spring Content REST configuration is defined in two classes  called; `RestConfiguration` and `HypermediaConfiguration` and they can just be imported into your applications configuration.
 
-IMPORTANT: This step is unnecessary if you are using Spring Boot’s auto-configuration. Spring Boot will automatically enable Spring Content REST when you include `com.github.paulcwarren:spring-content-rest-boot-starter` and your app is flagged as a `@SpringBootApplication`.
+IMPORTANT: This step is unnecessary if you are using Spring Boot’s auto-configuration. Spring Boot will automatically enable Spring Content REST when you include `com.github.paulcwarren:strg-spring-rest-boot-starter` and your app is flagged as a `@SpringBootApplication`.
 
 Make sure you also configure Spring Content stores for the store you wish to use.  For details on that, please consult the reference documentation for the corresponding Spring Content module.
 

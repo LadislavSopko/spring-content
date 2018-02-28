@@ -8,12 +8,12 @@
 		<version>0.0.10-SNAPSHOT</version>
 	</parent>
 	
-	<artifactId>spring-content-s3-boot-starter</artifactId>
+	<artifactId>strg-spring-s3-boot-starter</artifactId>
 	
 	<dependencies>
 		<dependency>
 			<groupId>it.zeroics</groupId>
-			<artifactId>spring-content-s3</artifactId>
+			<artifactId>strg-spring-s3</artifactId>
 			<version>0.0.10-SNAPSHOT</version>
 		</dependency>
 		<dependency>

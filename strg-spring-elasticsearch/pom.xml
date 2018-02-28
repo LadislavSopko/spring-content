@@ -7,7 +7,7 @@
     <version>0.0.10-SNAPSHOT</version>
   </parent>
   
-  <artifactId>spring-content-elasticsearch</artifactId>
+  <artifactId>strg-spring-elasticsearch</artifactId>
   
   <dependencies>
   		<dependency>
@@ -20,7 +20,7 @@
 		</dependency>
         <dependency>
             <groupId>it.zeroics</groupId>
-            <artifactId>spring-content-commons</artifactId>
+            <artifactId>strg-spring-commons</artifactId>
             <version>0.0.10-SNAPSHOT</version>
         </dependency>
 		  <dependency>

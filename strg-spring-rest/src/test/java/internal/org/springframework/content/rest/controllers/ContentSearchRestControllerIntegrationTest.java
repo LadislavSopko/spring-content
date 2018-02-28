@@ -301,7 +301,7 @@ public class ContentSearchRestControllerIntegrationTest {
 		@Bean
 		public File filesystemRoot() {
 			File baseDir = new File(System.getProperty("java.io.tmpdir"));
-			File filesystemRoot = new File(baseDir, "spring-content-search-controller-tests");
+			File filesystemRoot = new File(baseDir, "strg-spring-search-controller-tests");
 			filesystemRoot.mkdirs();
 			return filesystemRoot;
 		}

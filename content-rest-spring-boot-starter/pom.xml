@@ -12,7 +12,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>it.zeroics</groupId>
-			<artifactId>spring-content-rest</artifactId>
+			<artifactId>strg-spring-rest</artifactId>
 			<version>0.0.10-SNAPSHOT</version>
 		</dependency>
 		<dependency>

@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>spring-content-s3</artifactId>
+	<artifactId>strg-spring-s3</artifactId>
 	
 	<parent>
 		<groupId>it.zeroics</groupId>
@@ -16,7 +16,7 @@
 		</dependency>
 		<dependency>
 		<groupId>it.zeroics</groupId>
-			<artifactId>spring-content-commons</artifactId>
+			<artifactId>strg-spring-commons</artifactId>
 			<version>0.0.10-SNAPSHOT</version>
 		</dependency>
  		<dependency>

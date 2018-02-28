@@ -12,7 +12,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>it.zeroics</groupId>
-			<artifactId>spring-content-solr</artifactId>
+			<artifactId>strg-spring-solr</artifactId>
 			<version>0.0.10-SNAPSHOT</version>
 		</dependency>
 	</dependencies>

@@ -33,7 +33,7 @@ public class StoreConfig extends JpaInfrastructureConfig {
 	@Bean
 	public File filesystemRoot() {
 		File baseDir = new File(System.getProperty("java.io.tmpdir"));
-		File filesystemRoot = new File(baseDir, "spring-content-controller-tests");
+		File filesystemRoot = new File(baseDir, "strg-spring-controller-tests");
 		filesystemRoot.mkdirs();
 		return filesystemRoot;
 	}

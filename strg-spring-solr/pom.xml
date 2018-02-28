@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>spring-content-solr</artifactId>
+    <artifactId>strg-spring-solr</artifactId>
 
     <dependencies>
         <dependency>
@@ -42,7 +42,7 @@
 		</dependency>
         <dependency>
             <groupId>it.zeroics</groupId>
-            <artifactId>spring-content-commons</artifactId>
+            <artifactId>strg-spring-commons</artifactId>
             <version>0.0.10-SNAPSHOT</version>
         </dependency>
 
