@@ -70,7 +70,7 @@
 	</properties>
 
 	<modules>
-		<module>./spring-content-autoconfigure</module>
+		<module>./strg-spring-autoconfigure</module>
 		<module>./spring-content-commons</module>
 		<module>./spring-content-docx4j</module>
 		<module>./spring-content-fs</module>
