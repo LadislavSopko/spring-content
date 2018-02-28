@@ -1,0 +1,103 @@
+= Filesystem Content Stores
+
+== Annotation-based Configuration
+
+Spring Content Filesystem Stores are enabled with the following Java Config.
+
+.Spring Content Filesystem Stores using Java Config
+====
+[source, java]
+----
+@Configuration
+@EnableFilesystemStores
+public static class ApplicationConfig {
+
+    @Bean
+    File filesystemRoot() {
+        try {
+            return Files.createTempDirectory("").toFile();
+        } catch (IOException ioe) {}
+        return null;
+    }
+
+    @Bean
+    FileSystemResourceLoader fileSystemResourceLoader() {
+        return new FileSystemResourceLoader(filesystemRoot().getAbsolutePath());
+    }
+    
+}
+----
+====
+
+By default content will be stored in a randomly chosen (at application startup) folder 
+
+== Spring Boot Configuration
+
+When using `strg-spring-fs-boot-starter` (or `content-fs-spring-boot-starter`) the root for all file system stores will be a randomly chosen folder (at application start-up) under `java.io.tmdir`.
+
+The following configuration properties (prefix `spring.content.fs`) are supported.
+
+[cols="2*", options="header"]
+|=========
+| Property | Description
+| filesystemRoot | The root location where file system stores place their content (defaults to `java.io.tmpdir/<random>/`).  
+|=========
+
+== Accessing Content
+
+=== Storage Customization
+
+By default Spring Content Filesystem will store all content at the root of the content store location.  
+
+The Filesystem Store uses a dedicated `ConversionService` to convert the content entity's ID into a resource path.  By configuring your application to contribute one (or more) `org.springframework.core.conmvert.converter.Converter` it is possible to configure the Store to use other more sophisticated storage models.  
+
+For example Content IDs of type `java.util.UUID` or `java.net.URI` can both be mapped to a nested resource path that will have the effect of distributing content evenly over the Store.       
+ 
+.Configuring the Filesystem Store  
+====
+[source, java]
+----
+@Configuration
+public class FilesystemStoreConfiguration  {
+
+   	public Converter<UUID,String> converter() {
+		return new FilesystemStoreConverter<UUID,String>() {
+
+			@Override
+			public String convert(UUID source) {
+				return String.format("/%s", source.toString().replaceAll("-", "/"));
+			}
+		};
+	}
+	
+	@Bean
+	public FilesystemStoreConfigurer configurer() {
+		return new FilesystemStoreConfigurer() {
+
+			@Override
+			public void configureFilesystemStoreConverters(ConverterRegistry registry) {
+				registry.addConverter(converter());
+			}
+		};
+	}
+}
+----
+====   
+
+=== Setting Content
+
+Storing content is achieved using the `ContentStore.setContent(entity, InputStream)` method.  
+
+If content has not yet been associated with this entity before and an ID has not been assigned by the application, one will be generated based on `java.util.UUID` and converted to the type of the @ContentId field.  
+
+The @ContentId and @ContentLength annotations will be updated on `entity`.  
+
+If content has been previously stored it will overwritten updating just the @ContentLength attribute, if appropriate.
+
+=== Getting Content
+
+Content can be accessed using the `ContentStore.getContent(entity)` method.  
+
+=== Unsetting Content
+
+Content can be removed using the `ContentStore.unsetContent(entity)` method.

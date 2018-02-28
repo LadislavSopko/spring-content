@@ -12,12 +12,12 @@
 	<dependencies>
 		<dependency>
 			<groupId>it.zeroics</groupId>
-			<artifactId>spring-content-s3</artifactId>
+			<artifactId>strg-spring-s3</artifactId>
 			<version>0.0.10-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>it.zeroics</groupId>
-			<artifactId>spring-content-autoconfigure</artifactId>
+			<artifactId>strg-spring-autoconfigure</artifactId>
 			<version>0.0.10-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
