@@ -1,38 +1,42 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.github.paulcwarren</groupId>
-	<artifactId>spring-content</artifactId>
+	<groupId>it.zeroics</groupId>
+	<artifactId>strg-spring</artifactId>
 	<version>0.0.10-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<name>Spring Content</name>
-	<url>https://github.com/paulcwarren/spring-content/</url>
-	<description>Cloud-Native Headless Content Management Services (CMS) for Spring.  
-
-Integrates with Spring Data, Spring Data REST and Apache Solr</description>
+	<name>Storage for spring Content</name>
+	<url>https://gitlab.com/zeroics/strg-spring</url>
+	<description>Customisation of Paul Warren's spring-content</description>
 	<organization>
-		<name>Paul Warren</name>
-		<url>https://github.com/paulcwarren</url>
+		<name>0ics srls</name>
+		<url>http://www.0ics.it</url>
 	</organization>
 	<issueManagement>
-		<system>Github</system>
-		<url>https://github.com/paulcwarren/spring-content/issues</url>
+		<system>Gitlab</system>
+		<url>https://gitlab.com/zeroics/strg-spring/issues</url>
 	</issueManagement>
+	<!--
 	<ciManagement>
 		<system>Travis CI</system>
-		<url>https://travis-ci.org/paulcwarren/spring-content</url>
+		<url>https://travis-ci.org/xwcs/spring-content</url>
 	</ciManagement>
 
 	<scm>
-		<url>https://github.com/paulcwarren/spring-content</url>
-		<developerConnection>Paul Warren</developerConnection>
+		<url>https://github.com/xwcs/spring-content</url>
+		<developerConnection>Ladislav Sopko</developerConnection>
 	</scm>
+	-->
 
 	<developers>
 		<developer>
-			<name>Paul Warren</name>
-			<email>paul_c_warren@yahoo.com</email>
+			<name>Ladislav Sopko</name>
+			<email>ladislav.sopko@gmail.com</email>
+		</developer>
+		<developer>
+			<name>Roberto Tirabassi</name>
+			<email>rtirabassi@3di.it</email>
 		</developer>
 	</developers>
 
@@ -62,7 +66,7 @@ Integrates with Spring Data, Spring Data REST and Apache Solr</description>
 		<springboot-version>1.5.10.RELEASE</springboot-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<docs.output.dir>../target/generated-docs/refs/${env.BUILD_TYPE}/</docs.output.dir>
+		<docs.output.dir>../target/generated-docs/refs/${env.SC_BUILD_TYPE}/</docs.output.dir>
 	</properties>
 
 	<modules>
@@ -79,7 +83,7 @@ Integrates with Spring Data, Spring Data REST and Apache Solr</description>
 		<module>./spring-content-rest-boot-starter</module>
 		<module>./spring-content-s3</module>
 		<module>./spring-content-s3-boot-starter</module>
-        <module>./spring-content-renditions</module>
+	    <module>./spring-content-renditions</module>
 		<module>./spring-content-renditions-boot-starter</module>
 		<module>./spring-content-solr</module>
 		<module>./spring-content-solr-boot-starter</module>
@@ -97,7 +101,8 @@ Integrates with Spring Data, Spring Data REST and Apache Solr</description>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-enforcer-plugin</artifactId>
-				<executions>
+				<version>3.0.0-M1</version>
+ 				<executions>
 					<execution>
 						<id>enforce-property</id>
 						<goals>
@@ -106,7 +111,7 @@ Integrates with Spring Data, Spring Data REST and Apache Solr</description>
 						<configuration>
 							<rules>
 								<requireEnvironmentVariable>
-									<variableName>BUILD_TYPE</variableName>
+									<variableName>SC_BUILD_TYPE</variableName>
 								</requireEnvironmentVariable>
 							</rules>
 							<fail>true</fail>
@@ -175,6 +180,7 @@ Integrates with Spring Data, Spring Data REST and Apache Solr</description>
 			</plugin>
 
 			<!-- Doc Publishing -->
+			<!--
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-scm-publish-plugin</artifactId>
@@ -187,11 +193,11 @@ Integrates with Spring Data, Spring Data REST and Apache Solr</description>
 						${project.artifactId}:${project.version}</checkinComment>
 					<content>${basedir}/target/generated-docs</content>
 					<skipDeletedFiles>true</skipDeletedFiles>
-					<!-- <dryRun>true</dryRun> -->
-					<pubScmUrl>scm:git:https://github.com/paulcwarren/spring-content.git</pubScmUrl>
-					<scmBranch>gh-pages</scmBranch> <!-- branch with static site -->
-					<username>${env.GITHUB_USERNAME}</username>
-					<password>${env.GITHUB_PASSWORD}</password>
+					
+					<pubScmUrl>scm:git:https://github.com/xwcs/spring-content.git</pubScmUrl>
+					<scmBranch>gh-pages</scmBranch> 
+					<username>${env.SC_GITHUB_USERNAME}</username>
+					<password>${env.SC_GITHUB_PASSWORD}</password>
 					<ignorePathsToDelete>
 						<ignorePathToDelete>/*</ignorePathToDelete>
 					</ignorePathsToDelete>
@@ -204,6 +210,7 @@ Integrates with Spring Data, Spring Data REST and Apache Solr</description>
 					</dependency>
 				</dependencies>
 			</plugin>
+			-->
 		</plugins>
 	</build>
 
@@ -269,11 +276,11 @@ Integrates with Spring Data, Spring Data REST and Apache Solr</description>
 		</profile>
 	</profiles>
 
-	<distributionManagement>
+	<!--distributionManagement>
 		<snapshotRepository>
 			<id>ossrh</id>
 			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 		</snapshotRepository>
-	</distributionManagement>
+	</distributionManagement-->
 
 </project>

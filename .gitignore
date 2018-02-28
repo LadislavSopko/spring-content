@@ -3,3 +3,6 @@
 /**/*.iml
 /**/*.versionsBackup
 /**/infinitest.args
+**/.sts4-cache
+**/bin
+**/target

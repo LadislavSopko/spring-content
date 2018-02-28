@@ -3,14 +3,14 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>spring-content-solr-boot-starter</artifactId>
 	<parent>
-		<groupId>com.github.paulcwarren</groupId>
-		<artifactId>spring-content</artifactId>
+		<groupId>it.zeroics</groupId>
+		<artifactId>strg-spring</artifactId>
 		<version>0.0.10-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<dependencies>
 		<dependency>
-			<groupId>com.github.paulcwarren</groupId>
+			<groupId>it.zeroics</groupId>
 			<artifactId>spring-content-solr</artifactId>
 			<version>0.0.10-SNAPSHOT</version>
 		</dependency>
