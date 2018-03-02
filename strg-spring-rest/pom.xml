@@ -45,6 +45,12 @@
 			<artifactId>evo-inflector</artifactId>
 			<version>1.2.1</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.tika/tika-core -->
+		<dependency>
+		    <groupId>org.apache.tika</groupId>
+		    <artifactId>tika-core</artifactId>
+		    <version>1.17</version>
+		</dependency>
 		
 		<!-- Test Dependencies -->
 		<dependency>
@@ -124,30 +130,32 @@
 	</dependencies>
 	
 	<build>
-		<plugins>
-			<!-- Docs Rendering -->
-			<plugin>
-				<groupId>org.asciidoctor</groupId>
-				<artifactId>asciidoctor-maven-plugin</artifactId>
-				<configuration>
-			        <backend>html</backend>
-			        <doctype>book</doctype>
-			        <attributes>
-					    <version>${project.version}</version>
-			        </attributes>
-			        <outputDirectory>${docs.output.dir}</outputDirectory>
-			    </configuration>
-			    <executions>
-			        <execution>
-			            <id>output-html</id>             
-			            <phase>generate-resources</phase>
-			            <goals>
-			                <goal>process-asciidoc</goal>
-			            </goals>
-			        </execution>
-			    </executions>
-			</plugin>
-		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!-- Docs Rendering -->
+				<plugin>
+					<groupId>org.asciidoctor</groupId>
+					<artifactId>asciidoctor-maven-plugin</artifactId>
+					<configuration>
+				        <backend>html</backend>
+				        <doctype>book</doctype>
+				        <attributes>
+						    <version>${project.version}</version>
+				        </attributes>
+				        <outputDirectory>${docs.output.dir}</outputDirectory>
+				    </configuration>
+				    <executions>
+				        <execution>
+				            <id>output-html</id>             
+				            <phase>generate-resources</phase>
+				            <goals>
+				                <goal>process-asciidoc</goal>
+				            </goals>
+				        </execution>
+				    </executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 	
 </project>

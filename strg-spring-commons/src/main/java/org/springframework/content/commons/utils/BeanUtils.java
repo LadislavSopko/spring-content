@@ -1,10 +1,5 @@
 package org.springframework.content.commons.utils;
 
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeanWrapperImpl;
-import org.springframework.beans.BeansException;
-import org.springframework.util.ReflectionUtils;
-
 import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -12,8 +7,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
+import org.springframework.beans.BeansException;
+import org.springframework.util.ReflectionUtils;
+
 public final class BeanUtils {
 
+	
+	
 	private static final Condition MATCHING_CONDITION = new Condition() {
 		@Override
 		public boolean matches(Field field) {
@@ -123,6 +125,37 @@ public final class BeanUtils {
         }
 
 		return value;
+	}
+	
+	public static Object getFieldValue(Object domainObj, Field field)
+			throws SecurityException, BeansException {
+		Object value = null;
+
+        if (field != null) {
+            try {
+                PropertyDescriptor descriptor = org.springframework.beans.BeanUtils.getPropertyDescriptor(domainObj.getClass(), field.getName());
+                if (descriptor != null) {
+                    BeanWrapper wrapper = new BeanWrapperImpl(domainObj);
+                    value = wrapper.getPropertyValue(field.getName());
+                } else {
+                    value = ReflectionUtils.getField(field, domainObj);
+                }
+                return value;
+            } catch (IllegalArgumentException iae) {}
+        }
+
+		return value;
+	}
+	
+	public static Field getFieldWithAnnotationField(Object domainObj, Class<? extends Annotation> annotationClass)
+			throws SecurityException, BeansException {
+		
+        Field field = findFieldWithAnnotation(domainObj, annotationClass);
+        if (field != null && field.getAnnotation(annotationClass) != null) {
+            return field;
+        }
+
+		return null;
 	}
 
 	/**

@@ -15,6 +15,7 @@ import org.docx4j.model.fields.FieldUpdater;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.springframework.content.commons.renditions.RenditionProvider;
 import org.springframework.stereotype.Service;
+import org.springframework.util.MimeType;
 
 @Service
 public class WordToHtmlRenditionProvider implements RenditionProvider {
@@ -27,6 +28,11 @@ public class WordToHtmlRenditionProvider implements RenditionProvider {
 	@Override
 	public String[] produces() {
 		return new String[] {"text/html"};
+	}
+	
+	@Override
+	public Boolean isCapable(String fromMimeType, String toMimeType) {
+		return MimeType.valueOf(toMimeType).includes(MimeType.valueOf("text/html")) && MimeType.valueOf("application/vnd.openxmlformats-officedocument.wordprocessingml.document").includes(MimeType.valueOf(fromMimeType));
 	}
 
 	@Override

@@ -11,6 +11,7 @@ import org.springframework.content.renditions.RenditionException;
 import org.springframework.renditions.poi.POIService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import org.springframework.util.MimeType;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,6 +40,12 @@ public class WordToJpegRenderer implements RenditionProvider {
     public String[] produces() {
         return new String[] {"image/jpg"};
     }
+    
+    @Override
+   	public Boolean isCapable(String fromMimeType, String toMimeType) {
+   		return (MimeType.valueOf(toMimeType).includes(MimeType.valueOf("image/jpg")) || MimeType.valueOf(toMimeType).includes(MimeType.valueOf("image/jpeg"))) && 
+   			   MimeType.valueOf("application/vnd.openxmlformats-officedocument.wordprocessingml.document").includes(MimeType.valueOf(fromMimeType));
+   	}
 
     @SuppressWarnings("resource")
     @Override

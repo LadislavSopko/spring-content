@@ -2,8 +2,13 @@ package internal.org.springframework.content.rest.utils;
 
 import java.io.InputStream;
 import java.io.Serializable;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.util.List;
 
+import org.apache.tika.config.TikaConfig;
+import org.apache.tika.mime.MimeTypeException;
+import org.apache.tika.mime.MimeTypes;
 import org.atteo.evo.inflector.English;
 import org.springframework.content.commons.annotations.ContentLength;
 import org.springframework.content.commons.renditions.Renderable;
@@ -21,6 +26,10 @@ import org.springframework.util.StringUtils;
 import internal.org.springframework.content.rest.annotations.ContentStoreRestResource;
 
 public final class ContentStoreUtils {
+	
+	// mimetypes recognition
+	private static TikaConfig tikaConfig = TikaConfig.getDefaultConfig();
+	private static MimeTypes allMimeTypes = tikaConfig.getMimeRepository();
 
 	private ContentStoreUtils() {}
 	
@@ -39,10 +48,22 @@ public final class ContentStoreUtils {
 	@SuppressWarnings("unchecked")
 	public static InputStream getContent(ContentStore<Object,Serializable> store, Object entity, List<MediaType> mimeTypes, HttpHeaders headers) {
 		InputStream content = null;
+		String cName = "content";
+		String httpNameHeader = "x-file-name";
 		
 		Object entityMimeType = BeanUtils.getFieldWithAnnotation(entity, org.springframework.content.commons.annotations.MimeType.class);
 		if (entityMimeType == null)
 			return content;
+		
+		//content name
+		Field contentName = BeanUtils.getFieldWithAnnotationField(entity, internal.org.springframework.content.rest.annotations.ContentName.class);
+		if (contentName != null) {
+			 Annotation cntNameAn = contentName.getAnnotation(internal.org.springframework.content.rest.annotations.ContentName.class);
+			 cName = BeanUtils.getFieldValue(entity, contentName).toString();
+			 if(cntNameAn != null) {
+				 httpNameHeader = AnnotationUtils.getValue(cntNameAn, "httpHeader").toString();
+			 }
+		}
 		
 		MediaType targetMimeType = MediaType.valueOf(entityMimeType.toString());
 		
@@ -55,7 +76,10 @@ public final class ContentStoreUtils {
 			if (mimeType.includes(targetMimeType)) {
 				headers.setContentType(targetMimeType);
 				
-				long contentLength = 0L;
+				// content name header
+				headers.set(httpNameHeader, cName);
+				
+				//long contentLength = 0L;
 				Object len = BeanUtils.getFieldWithAnnotation(entity, ContentLength.class);
 				if (len != null)
 					headers.setContentLength(Long.parseLong(len.toString()));
@@ -64,6 +88,22 @@ public final class ContentStoreUtils {
 				break;
 			} else if (store instanceof Renderable) {
 				content = ((Renderable<Object>)store).getRendition(entity, mimeType.toString());
+				if(content != null) {
+					headers.setContentType(mimeType);
+					
+					// determine file extension
+					String mtExt = ".unkn";
+					try {
+						mtExt = allMimeTypes.forName(mimeType.toString()).getExtension();
+					} catch (MimeTypeException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					// content name header
+					headers.set(httpNameHeader, cName + mtExt);
+					break;
+				}
 			}
 		}
 		return content;

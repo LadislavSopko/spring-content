@@ -10,6 +10,7 @@ import org.docx4j.fonts.PhysicalFonts;
 import org.docx4j.model.fields.FieldUpdater;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.springframework.content.commons.renditions.RenditionProvider;
+import org.springframework.util.MimeType;
 
 public class WordToPdfRenditionProvider implements RenditionProvider {
 
@@ -21,6 +22,11 @@ public class WordToPdfRenditionProvider implements RenditionProvider {
 	@Override
 	public String[] produces() {
 		return new String[] {"application/pdf"};
+	}
+	
+	@Override
+	public Boolean isCapable(String fromMimeType, String toMimeType) {
+		return MimeType.valueOf(toMimeType).includes(MimeType.valueOf("application/pdf")) && MimeType.valueOf("application/vnd.openxmlformats-officedocument.wordprocessingml.document").includes(MimeType.valueOf(fromMimeType));
 	}
 
 	@Override

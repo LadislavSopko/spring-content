@@ -12,6 +12,7 @@ import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
 import org.springframework.content.commons.renditions.RenditionProvider;
 import org.springframework.stereotype.Service;
+import org.springframework.util.MimeType;
 
 @Service
 public class WordToTextRenditionProvider implements RenditionProvider {
@@ -25,6 +26,12 @@ public class WordToTextRenditionProvider implements RenditionProvider {
 	public String[] produces() {
 		return new String[] {"text/plain"};
 	}
+	
+	@Override
+	public Boolean isCapable(String fromMimeType, String toMimeType) {
+		return MimeType.valueOf(toMimeType).includes(MimeType.valueOf("text/plain")) && MimeType.valueOf("application/vnd.openxmlformats-officedocument.wordprocessingml.document").includes(MimeType.valueOf(fromMimeType));
+	}
+
 
 	@Override
 	public InputStream convert(InputStream fromInputSource, String toMimeType) {
