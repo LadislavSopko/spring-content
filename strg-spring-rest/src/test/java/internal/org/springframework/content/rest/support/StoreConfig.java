@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.util.MimeType;
 
 import internal.org.springframework.content.rest.support.config.JpaInfrastructureConfig;
 
@@ -60,6 +61,12 @@ public class StoreConfig extends JpaInfrastructureConfig {
 					input = IOUtils.toString(fromInputSource);
 				} catch (IOException e) {}
 				return new ByteArrayInputStream(String.format("<html><body>%s</body></html>", input).getBytes());
+			}
+
+			@Override
+			public Boolean isCapable(String fromMimeType, String toMimeType) {
+				return MimeType.valueOf(toMimeType).includes(MimeType.valueOf("text/html")) && 
+			   		   MimeType.valueOf("text/plain").includes(MimeType.valueOf(fromMimeType));
 			}
 		};
 	}

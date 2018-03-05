@@ -4,8 +4,12 @@ import java.io.InputStream;
 
 public interface RenditionProvider {
 
+	
     public String consumes();
     public String[] produces();
     public InputStream convert(InputStream fromInputSource, String toMimeType);
+    
+    public Boolean isCapable(String fromMimeType, String toMimeType);
+    
 	  
 }

@@ -7,5 +7,6 @@ public interface RenditionService {
     public boolean canConvert(String fromMimeType, String toMimeType);
     public String[] conversions(String fromMimeType);
     public InputStream convert(String fromMimeType, InputStream fromInputSource, String toMimeType);
-
+    
+    public RenditionProvider getProvider(String fromMimeType, String toMimeType);
 }

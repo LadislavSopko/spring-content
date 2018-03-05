@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.content.commons.renditions.RenditionProvider;
+import org.springframework.util.MimeType;
 
 public class JpegToPngRenditionProvider implements RenditionProvider {
 
@@ -22,6 +23,11 @@ public class JpegToPngRenditionProvider implements RenditionProvider {
 		return new String[] {"image/png"};
 	}
 
+	@Override
+	public Boolean isCapable(String fromMimeType, String toMimeType) {
+		return MimeType.valueOf(toMimeType).includes(MimeType.valueOf("image/png")) && MimeType.valueOf("image/jpeg").includes(MimeType.valueOf(fromMimeType));
+	}
+	
 	@Override
 	public InputStream convert(InputStream fromInputSource, String toMimeType) {
 		try {
@@ -39,4 +45,6 @@ public class JpegToPngRenditionProvider implements RenditionProvider {
 		}
 		return null;
 	}
+
+	
 }

@@ -22,6 +22,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.util.Assert;
 
+import internal.org.springframework.content.commons.utils.InputContentStream;
+
 public class DefaultMongoStoreImpl<S, SID extends Serializable> implements ContentStore<S,SID> {
 
 	private static Log logger = LogFactory.getLog(DefaultMongoStoreImpl.class);
@@ -75,7 +77,7 @@ public class DefaultMongoStoreImpl<S, SID extends Serializable> implements Conte
 		Resource resource = gridFs.getResource(location);
 		try {
 			if (resource != null && resource.exists()) {
-				return resource.getInputStream();
+				return new InputContentStream(resource.getInputStream(), property);
 			}
 		} catch (IOException e) {
 			logger.error(String.format("Unexpected error getting content %s", contentId.toString()), e);

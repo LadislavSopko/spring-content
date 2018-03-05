@@ -27,6 +27,8 @@ import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.WritableResource;
 
+import internal.org.springframework.content.commons.utils.InputContentStream;
+
 public class DefaultFilesystemStoreImpl<S, SID extends Serializable> implements Store<SID>, AssociativeStore<S, SID>, ContentStore<S,SID> {
 
 	private static Log logger = LogFactory.getLog(DefaultFilesystemStoreImpl.class);
@@ -121,7 +123,7 @@ public class DefaultFilesystemStoreImpl<S, SID extends Serializable> implements 
 		
 		try {
 			if (resource.exists()) {
-				return resource.getInputStream();
+				return new InputContentStream(resource.getInputStream(), property);//resource.getInputStream();
 			}
 		} catch (IOException e) {
 			logger.error(String.format("Unexpected error getting content %s", contentId.toString()), e);

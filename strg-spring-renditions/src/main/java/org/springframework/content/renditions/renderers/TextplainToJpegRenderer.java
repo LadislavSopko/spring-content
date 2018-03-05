@@ -6,6 +6,7 @@ import org.springframework.content.commons.renditions.RenditionProvider;
 import org.springframework.content.renditions.RenditionException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import org.springframework.util.MimeType;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -47,6 +48,13 @@ public class TextplainToJpegRenderer implements RenditionProvider {
     public String[] produces() {
         return new String[] {"image/jpg", "image/jpeg"};
     }
+    
+    @Override
+	public Boolean isCapable(String fromMimeType, String toMimeType) {
+		return (MimeType.valueOf(toMimeType).includes(MimeType.valueOf("image/jpg")) || MimeType.valueOf(toMimeType).includes(MimeType.valueOf("image/jpeg"))) && 
+			   MimeType.valueOf("text/plain").includes(MimeType.valueOf(fromMimeType));
+	}
+
 
     @Override
     public InputStream convert(InputStream fromInputSource, String toMimeType) {
