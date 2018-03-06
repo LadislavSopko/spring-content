@@ -309,8 +309,8 @@
 	</distributionManagement>
 
 	<scm>
-		<url>http://gitlab.bo.priv/spring/it.tredi.spring-data-elasticsearch.git</url>
-		<developerConnection>scm:git:ssh://${git.username}@gitlab.bo.priv:spring/it.tredi.spring-data-elasticsearch.git</developerConnection>
-		<connection>scm:git:ssh://${git.username}@gitlab.bo.priv:spring/it.tredi.spring-data-elasticsearch.git</connection>
+		<url>http://gitlab.bo.priv/storage/it.zeroics.strg-spring.git</url>
+		<developerConnection>scm:git:ssh://${git.username}@gitlab.bo.priv:storage/it.zeroics.strg-spring.git</developerConnection>
+		<connection>scm:git:ssh://${git.username}@gitlab.bo.priv:storage/it.zeroics.strg-spring.git</connection>
 	</scm>
 </project>
