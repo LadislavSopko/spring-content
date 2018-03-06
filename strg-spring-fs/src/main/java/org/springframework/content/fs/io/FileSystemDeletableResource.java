@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.net.URL;
+import java.nio.file.Files;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
@@ -28,7 +29,8 @@ public class FileSystemDeletableResource implements WritableResource, DeletableR
 	@Override
 	public void delete() {
 		try {
-			FileUtils.forceDelete(this.getFile());
+			Files.delete(this.getFile().toPath());
+			//FileUtils.forceDelete(this.getFile());
 		} catch (IOException ioe) {
 			logger.debug(String.format("Unexpected error deleting resource %s", this), ioe);
 		}
