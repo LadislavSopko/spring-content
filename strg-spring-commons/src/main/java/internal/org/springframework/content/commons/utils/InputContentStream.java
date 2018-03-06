@@ -1,5 +1,7 @@
 package internal.org.springframework.content.commons.utils;
 
+
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -7,15 +9,31 @@ public class InputContentStream extends InputStream {
 
     private final InputStream is;
     private final Object entity;
+    private final String mimeType;
 
 	
 	public Object getEntity() {
 		return entity;
 	}
+	
+	
+
+	public String getMimeType() {
+		return mimeType;
+	}
+
+
 
 	public InputContentStream(InputStream is, Object e) {
         this.is = is;
         this.entity = e;
+        this.mimeType = null;
+	}
+	
+	public InputContentStream(InputStream is, Object e, String m) {
+        this.is = is;
+        this.entity = e;
+        this.mimeType = m;
 	}
 
 	
