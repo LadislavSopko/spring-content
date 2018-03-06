@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>it.zeroics</groupId>
 		<artifactId>strg-spring</artifactId>
-		<version>0.0.10-SNAPSHOT</version>
+		<version>0.1.0-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<dependencies>
@@ -21,43 +21,43 @@
 		<dependency>
 			<groupId>it.zeroics</groupId>
 			<artifactId>strg-spring-commons</artifactId>
-			<version>0.0.10-SNAPSHOT</version>
+			<version>0.1.0-SNAPSHOT</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>it.zeroics</groupId>
 			<artifactId>strg-spring-fs</artifactId>
-			<version>0.0.10-SNAPSHOT</version>
+			<version>0.1.0-SNAPSHOT</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>it.zeroics</groupId>
 			<artifactId>strg-spring-jpa</artifactId>
-			<version>0.0.10-SNAPSHOT</version>
+			<version>0.1.0-SNAPSHOT</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>it.zeroics</groupId>
 			<artifactId>strg-spring-mongo</artifactId>
-			<version>0.0.10-SNAPSHOT</version>
+			<version>0.1.0-SNAPSHOT</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>it.zeroics</groupId>
 			<artifactId>strg-spring-renditions</artifactId>
-			<version>0.0.10-SNAPSHOT</version>
+			<version>0.1.0-SNAPSHOT</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 	      	<groupId>it.zeroics</groupId>
 	  		<artifactId>strg-spring-rest</artifactId>
-	  		<version>0.0.10-SNAPSHOT</version>
+	  		<version>0.1.0-SNAPSHOT</version>
 			<optional>true</optional>
   		</dependency>
 		<dependency>
 			<groupId>it.zeroics</groupId>
 			<artifactId>strg-spring-s3</artifactId>
-			<version>0.0.10-SNAPSHOT</version>
+			<version>0.1.0-SNAPSHOT</version>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
@@ -69,7 +69,7 @@
 		<dependency>
 			<groupId>it.zeroics</groupId>
 			<artifactId>strg-spring-solr</artifactId>
-			<version>0.0.10-SNAPSHOT</version>
+			<version>0.1.0-SNAPSHOT</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>

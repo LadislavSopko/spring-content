@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>it.zeroics</groupId>
 		<artifactId>strg-spring</artifactId>
-		<version>0.0.10-SNAPSHOT</version>
+		<version>0.1.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>strg-spring-rest-boot-starter</artifactId>
@@ -15,12 +15,12 @@
 		<dependency>
 			<groupId>it.zeroics</groupId>
 			<artifactId>strg-spring-rest</artifactId>
-			<version>0.0.10-SNAPSHOT</version>
+			<version>0.1.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>it.zeroics</groupId>
 			<artifactId>strg-spring-autoconfigure</artifactId>
-			<version>0.0.10-SNAPSHOT</version>
+			<version>0.1.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 </project>
