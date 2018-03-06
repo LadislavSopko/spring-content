@@ -23,6 +23,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
 
+import internal.org.springframework.content.commons.utils.InputContentStream;
 import internal.org.springframework.content.rest.annotations.ContentStoreRestResource;
 
 public final class ContentStoreUtils {
@@ -89,7 +90,9 @@ public final class ContentStoreUtils {
 			} else if (store instanceof Renderable) {
 				content = ((Renderable<Object>)store).getRendition(entity, mimeType.toString());
 				if(content != null) {
-					headers.setContentType(mimeType);
+					// we have to use mime arrived from rendition due to it can be one of possible requested
+					String mt = (content instanceof InputContentStream) ? ((InputContentStream)content).getMimeType() : "application/octet-stream";
+					headers.setContentType(MediaType.valueOf(mt));
 					
 					// determine file extension
 					String mtExt = ".unkn";

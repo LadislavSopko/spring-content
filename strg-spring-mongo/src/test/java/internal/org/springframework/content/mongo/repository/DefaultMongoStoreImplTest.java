@@ -1,6 +1,11 @@
 package internal.org.springframework.content.mongo.repository;
 
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.*;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.BeforeEach;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Context;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.JustBeforeEach;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -141,7 +146,7 @@ public class DefaultMongoStoreImplTest {
                     });
 
                     It("should get content", () -> {
-                        assertThat(result, is(content));
+                        assertThat(result, is(instanceOf(InputStream.class)));
                     });
                 });
 
@@ -240,13 +245,17 @@ public class DefaultMongoStoreImplTest {
             this.contentId = new String(contentId);
         }
 
-        public String getContentId() { return this.contentId; }
+        @Override
+		public String getContentId() { return this.contentId; }
 
-        public void setContentId(String contentId) { this.contentId = contentId; }
+        @Override
+		public void setContentId(String contentId) { this.contentId = contentId; }
 
-        public long getContentLen() { return contentLen; }
+        @Override
+		public long getContentLen() { return contentLen; }
 
-        public void setContentLen(long contentLen) { this.contentLen = contentLen; }
+        @Override
+		public void setContentLen(long contentLen) { this.contentLen = contentLen; }
     }
 
     public static class SharedIdContentIdEntity implements ContentProperty {
@@ -260,13 +269,17 @@ public class DefaultMongoStoreImplTest {
 
         public SharedIdContentIdEntity() {this.contentId = null;}
 
-        public String getContentId() { return this.contentId; }
+        @Override
+		public String getContentId() { return this.contentId; }
 
-        public void setContentId(String contentId) { this.contentId = contentId; }
+        @Override
+		public void setContentId(String contentId) { this.contentId = contentId; }
 
-        public long getContentLen() { return contentLen; }
+        @Override
+		public long getContentLen() { return contentLen; }
 
-        public void setContentLen(long contentLen) { this.contentLen = contentLen; }
+        @Override
+		public void setContentLen(long contentLen) { this.contentLen = contentLen; }
     }
 
     public static class SharedSpringIdContentIdEntity implements ContentProperty {
@@ -280,12 +293,16 @@ public class DefaultMongoStoreImplTest {
 
         public SharedSpringIdContentIdEntity() { this.contentId = null; }
 
-        public String getContentId() { return this.contentId; }
+        @Override
+		public String getContentId() { return this.contentId; }
 
-        public void setContentId(String contentId) { this.contentId = contentId; }
+        @Override
+		public void setContentId(String contentId) { this.contentId = contentId; }
 
-        public long getContentLen() { return contentLen; }
+        @Override
+		public long getContentLen() { return contentLen; }
 
-        public void setContentLen(long contentLen) { this.contentLen = contentLen; }
+        @Override
+		public void setContentLen(long contentLen) { this.contentLen = contentLen; }
     }
 }

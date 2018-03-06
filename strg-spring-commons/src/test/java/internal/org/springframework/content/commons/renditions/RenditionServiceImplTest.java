@@ -1,6 +1,10 @@
 package internal.org.springframework.content.commons.renditions;
 
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.*;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.BeforeEach;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Context;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.JustBeforeEach;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -10,6 +14,7 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -24,7 +29,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.content.commons.annotations.MimeType;
 import org.springframework.content.commons.renditions.Renderable;
-import org.springframework.content.commons.renditions.RenditionProvider;
 import org.springframework.content.commons.repository.StoreInvoker;
 
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
@@ -40,7 +44,7 @@ public class RenditionServiceImplTest {
 	// mocks
 	private MethodInvocation invocation;
 	private StoreInvoker repoInvoker;
-	private RenditionProvider mockProvider = null;
+	private DummyRenderer mockProvider = null;
 	
 	{
 		Describe("RenditionServiceImpl", () -> {
@@ -58,12 +62,10 @@ public class RenditionServiceImplTest {
 				});
 				Context("given a provider", () -> {
 					BeforeEach(() -> {
-						mockProvider = mock(RenditionProvider.class);
-						when(mockProvider.consumes()).thenReturn("one/thing");
-						when(mockProvider.produces()).thenReturn(new String[]{"something/else"});
+						mockProvider = spy(new DummyRenderer());
 						renditionService.setProviders(mockProvider);
 					});
-					It("should return true for a consumes/produces match", () -> {
+					It("should return true for a isCapable match", () -> {
 						assertThat(renditionService.canConvert("one/thing", "something/else"), is(true));
 					});
 					It("should return false if only consumes matches", () -> {
@@ -95,12 +97,10 @@ public class RenditionServiceImplTest {
 				});
 				Context("given a provider", () -> {
 					BeforeEach(() -> {
-						mockProvider = mock(RenditionProvider.class);
-						when(mockProvider.consumes()).thenReturn("one/thing");
-						when(mockProvider.produces()).thenReturn(new String[]{"something/else"});
+						mockProvider = spy(new DummyRenderer());
 						renditionService.setProviders(mockProvider);
 					});
-					It("should return true for a consumes/produces match", () -> {
+					It("should return true for a isCapable match", () -> {
 						renditionService.convert("one/thing", null, "something/else");
 						verify(mockProvider).convert(anyObject(), eq("something/else"));
 					});
@@ -148,9 +148,7 @@ public class RenditionServiceImplTest {
 				});
 				Context("given a provider", ()->{
 					BeforeEach(() -> {
-						mockProvider = mock(RenditionProvider.class);
-						when(mockProvider.consumes()).thenReturn("one/thing");
-						when(mockProvider.produces()).thenReturn(new String[]{"something/else"});
+						mockProvider = spy(new DummyRenderer());
 						renditionService.setProviders(mockProvider);
 					});
 					

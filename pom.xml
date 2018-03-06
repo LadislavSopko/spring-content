@@ -62,11 +62,12 @@
 	</dependencyManagement>
 
 	<properties>
+		<buildType>${SC_BUILD_TYPE}</buildType>
 		<ginkgo4j-version>1.0.9</ginkgo4j-version>
 		<springboot-version>1.5.10.RELEASE</springboot-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<docs.output.dir>../target/generated-docs/refs/${env.SC_BUILD_TYPE}/</docs.output.dir>
+		<docs.output.dir>../target/generated-docs/refs/${SC_BUILD_TYPE}/</docs.output.dir>
 	</properties>
 
 	<modules>
@@ -110,9 +111,13 @@
 						</goals>
 						<configuration>
 							<rules>
-								<requireEnvironmentVariable>
+								<!-- requireEnvironmentVariable>
 									<variableName>SC_BUILD_TYPE</variableName>
-								</requireEnvironmentVariable>
+								</requireEnvironmentVariable-->
+								<requireProperty>
+									<property>buildType</property>
+									<message>You must set a buildType property!</message>
+								</requireProperty>
 							</rules>
 							<fail>true</fail>
 						</configuration>
@@ -182,6 +187,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
+				<version>3.0.1</version>
 				<executions>
 					<execution>
 					<id>attach-sources</id>
@@ -289,11 +295,22 @@
 		</profile>
 	</profiles>
 
-	<!--distributionManagement>
+	<distributionManagement>
+		<repository>
+			<id>deployment</id>
+			<name>Internal Releases</name>
+			<url>http://ecatonchiro.bo.priv:8081/nexus/content/repositories/releases/</url>
+		</repository>
 		<snapshotRepository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+			<id>deployment</id>
+			<name>Internal Releases</name>
+			<url>http://ecatonchiro.bo.priv:8081/nexus/content/repositories/snapshots/</url>
 		</snapshotRepository>
-	</distributionManagement-->
+	</distributionManagement>
 
+	<scm>
+		<url>http://gitlab.bo.priv/spring/it.tredi.spring-data-elasticsearch.git</url>
+		<developerConnection>scm:git:ssh://${git.username}@gitlab.bo.priv:spring/it.tredi.spring-data-elasticsearch.git</developerConnection>
+		<connection>scm:git:ssh://${git.username}@gitlab.bo.priv:spring/it.tredi.spring-data-elasticsearch.git</connection>
+	</scm>
 </project>

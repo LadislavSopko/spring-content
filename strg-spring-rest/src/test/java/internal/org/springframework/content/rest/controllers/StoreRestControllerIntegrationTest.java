@@ -1,5 +1,13 @@
 package internal.org.springframework.content.rest.controllers;
 
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.BeforeEach;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Context;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -7,9 +15,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.UUID;
 
-import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,17 +38,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.DelegatingWebMvcConfiguration;
 
+import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
-
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.BeforeEach;
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Context;
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
 
 import internal.org.springframework.content.rest.support.StoreConfig;
 import internal.org.springframework.content.rest.support.TestEntityContentRepository;
@@ -79,7 +79,9 @@ public class StoreRestControllerIntegrationTest {
 					request = "/teststore" + path;
 					Resource r = store.getResource(path);
 					if (r instanceof WritableResource) {
-						IOUtils.copy(new ByteArrayInputStream("Existing content".getBytes()), ((WritableResource) r).getOutputStream());
+						OutputStream os = ((WritableResource) r).getOutputStream();
+						IOUtils.copy(new ByteArrayInputStream("Existing content".getBytes()), os);
+						os.close();
 					}
 				});
 				It("should return the resource's content", () -> {
@@ -107,7 +109,9 @@ public class StoreRestControllerIntegrationTest {
 							.andExpect(status().isOk());
 
 					Resource r = store.getResource(path);
-					assertThat(IOUtils.contentEquals(new ByteArrayInputStream("New Existing content".getBytes()), r.getInputStream()), is(true));
+					InputStream ins = r.getInputStream();
+					assertThat(IOUtils.contentEquals(new ByteArrayInputStream("New Existing content".getBytes()), ins), is(true));
+					ins.close();
 				});
 				Context("a POST to /{store}/{path} with multi-part form-data ", () -> {
 					It("should overwrite the content and return 200", () -> {
@@ -119,7 +123,9 @@ public class StoreRestControllerIntegrationTest {
 								.andExpect(status().isOk());
 
 						Resource r = store.getResource(path);
-						assertThat(IOUtils.contentEquals(new ByteArrayInputStream("New multi-part content".getBytes()), r.getInputStream()), is(true));
+						InputStream ins = r.getInputStream(); 
+						assertThat(IOUtils.contentEquals(new ByteArrayInputStream("New multi-part content".getBytes()), ins), is(true));
+						ins.close();
 					});
 				});
 				It("should delete the resource", () -> {
@@ -137,7 +143,9 @@ public class StoreRestControllerIntegrationTest {
 					request = "/teststore" + path;
 					Resource r = store.getResource(path);
 					if (r instanceof WritableResource) {
-						IOUtils.copy(new ByteArrayInputStream("Existing content".getBytes()), ((WritableResource) r).getOutputStream());
+						OutputStream os = ((WritableResource) r).getOutputStream();
+						IOUtils.copy(new ByteArrayInputStream("Existing content".getBytes()), os);
+						os.close();
 					}
 				});
 				It("should return the resource's content", () -> {
@@ -175,7 +183,9 @@ public class StoreRestControllerIntegrationTest {
 							.andExpect(status().isOk());
 
 					Resource r = store.getResource(path);
-					assertThat(IOUtils.contentEquals(new ByteArrayInputStream("New Existing content".getBytes()), r.getInputStream()), is(true));
+					InputStream ins = r.getInputStream(); 
+					assertThat(IOUtils.contentEquals(new ByteArrayInputStream("New Existing content".getBytes()), ins), is(true));
+					ins.close();
 				});
 				Context("a POST to /{store}/{path} with multi-part form-data ", () -> {
 					It("should overwrite the content and return 200", () -> {
@@ -187,7 +197,9 @@ public class StoreRestControllerIntegrationTest {
 								.andExpect(status().isOk());
 
 						Resource r = store.getResource(path);
-						assertThat(IOUtils.contentEquals(new ByteArrayInputStream("New multi-part content".getBytes()), r.getInputStream()), is(true));
+						InputStream ins = r.getInputStream(); 
+						assertThat(IOUtils.contentEquals(new ByteArrayInputStream("New multi-part content".getBytes()), ins), is(true));
+						ins.close();
 					});
 				});
 				It("should delete the resource", () -> {
