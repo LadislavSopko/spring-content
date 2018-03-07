@@ -89,6 +89,17 @@
 		<module>./strg-spring-solr</module>
 		<module>./strg-spring-solr-boot-starter</module>
 		<module>./strg-spring-elasticsearch</module>
+		<!-- SERVICE -->
+		<module>./strg-service-autoconfigure</module>
+		<module>./strg-service-commons</module>
+		<module>./strg-service-java</module>
+		<module>./strg-service-java-boot-starter</module>
+		<module>./strg-service-rest</module>
+		<module>./strg-service-rest-boot-starter</module>
+		<module>./strg-service-renditions</module>
+		<module>./strg-service-renditions-boot-starter</module>
+		
+		<!-- SPRING third parties -->
 		<module>./content-fs-spring-boot-starter</module>
 		<module>./content-jpa-spring-boot-starter</module>
 		<module>./content-mongo-spring-boot-starter</module>

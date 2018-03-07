@@ -17,13 +17,13 @@ import org.springframework.content.commons.repository.Store;
 import org.springframework.content.commons.storeservice.ContentStoreInfo;
 import org.springframework.content.commons.storeservice.ContentStoreService;
 import org.springframework.content.commons.utils.BeanUtils;
-import org.springframework.content.rest.StoreRestResource;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
 
 import internal.org.springframework.content.commons.utils.InputContentStream;
+import internal.org.springframework.content.rest.StoreRestResource;
 import internal.org.springframework.content.rest.annotations.ContentStoreRestResource;
 
 public final class ContentStoreUtils {
@@ -57,9 +57,9 @@ public final class ContentStoreUtils {
 			return content;
 		
 		//content name
-		Field contentName = BeanUtils.getFieldWithAnnotationField(entity, internal.org.springframework.content.rest.annotations.ContentName.class);
+		Field contentName = BeanUtils.getFieldWithAnnotationField(entity, org.springframework.content.commons.annotations.ContentName.class);
 		if (contentName != null) {
-			 Annotation cntNameAn = contentName.getAnnotation(internal.org.springframework.content.rest.annotations.ContentName.class);
+			 Annotation cntNameAn = contentName.getAnnotation(org.springframework.content.commons.annotations.ContentName.class);
 			 cName = BeanUtils.getFieldValue(entity, contentName).toString();
 			 if(cntNameAn != null) {
 				 httpNameHeader = AnnotationUtils.getValue(cntNameAn, "httpHeader").toString();
