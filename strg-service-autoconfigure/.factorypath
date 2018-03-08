@@ -214,6 +214,7 @@
     <factorypathentry kind="VARJAR" id="M2_REPO/javax/transaction/javax.transaction-api/1.2/javax.transaction-api-1.2.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/springframework/spring-aspects/4.3.14.RELEASE/spring-aspects-4.3.14.RELEASE.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/commons-io/commons-io/1.3.2/commons-io-1.3.2.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/it/zeroics/strg-service-java/0.1.0-SNAPSHOT/strg-service-java-0.1.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/apache/tika/tika-parsers/1.17/tika-parsers-1.17.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/gagravarr/vorbis-java-tika/0.8/vorbis-java-tika-0.8.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/com/healthmarketscience/jackcess/jackcess/2.1.8/jackcess-2.1.8.jar" enabled="true" runInBatchMode="false"/>

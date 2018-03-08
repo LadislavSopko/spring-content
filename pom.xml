@@ -92,8 +92,8 @@
 		<!-- SERVICE -->
 		<module>./strg-service-autoconfigure</module>
 		<module>./strg-service-commons</module>
-		<module>./strg-service-java</module>
-		<module>./strg-service-java-boot-starter</module>
+		<module>./strg-service-api</module>
+		<module>./strg-service-api-boot-starter</module>
 		<module>./strg-service-rest</module>
 		<module>./strg-service-rest-boot-starter</module>
 		<module>./strg-service-renditions</module>
