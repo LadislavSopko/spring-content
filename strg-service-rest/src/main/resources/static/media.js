@@ -51,19 +51,22 @@ angular.module('MediaApp', [])
             });
     };
     
-    mediaList.downloadFile = function (u) {
+    mediaList.downloadFile = function (u, mime, ext) {
         $http({
             method: 'GET',
             url: u._links["self"].href,
             //params: { name: name },
             responseType: 'arraybuffer',
         	headers: {
-                'accept': 'text/plain;'
+                'accept': mime
             }
         }).success(function (data, status, headers) {
             headers = headers();
      
-            var filename = headers['x-file-name'] || "text.txt";
+            var filename = headers['x-file-name'] || ("file."+ext);
+            if ( !filename.endsWith("."+ext) ) {
+            	filename += "."+ext
+            }
             var contentType = headers['content-type'];
      
             var linkElement = document.createElement('a');

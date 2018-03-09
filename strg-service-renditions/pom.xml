@@ -22,7 +22,7 @@
 		  <groupId>org.apache.tika</groupId>
 		  <artifactId>tika-core</artifactId>
 		  <version>1.17</version>
-		</dependency>
+        </dependency>
 		<dependency>
 		  <groupId>org.apache.tika</groupId>
 		  <artifactId>tika-parsers</artifactId>
@@ -55,6 +55,31 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
             <version>1.10.19</version>
+        </dependency>
+        <dependency>
+        	<groupId>it.zeroics</groupId>
+        	<artifactId>strg-service-commons</artifactId>
+        	<version>0.1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+        	<groupId>it.tredi</groupId>
+        	<artifactId>jodconverter-compare</artifactId>
+        	<version>4.0.0</version>
+        </dependency>
+        <dependency>
+        	<groupId>org.dcm4che</groupId>
+        	<artifactId>dcm4che-core</artifactId>
+        	<version>5.12.0</version>
+        	<type>bundle</type>
+        </dependency>
+        <dependency>
+        	<groupId>org.dcm4che.tool</groupId>
+        	<artifactId>dcm4che-tool-common</artifactId>
+        	<version>5.12.0</version>
+        </dependency>
+        <dependency>
+        	<groupId>com.fasterxml.jackson.core</groupId>
+        	<artifactId>jackson-databind</artifactId>
         </dependency>
     </dependencies>
 
