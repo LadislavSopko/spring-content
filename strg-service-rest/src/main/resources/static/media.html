@@ -1,0 +1,35 @@
+<!doctype html>
+<html ng-app="MediaApp">
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+    <script src="media.js"></script>
+  </head>
+  <body>
+    <div ng-controller="MediaListController as mediaListCtrl">
+        <h1>Media</h1>
+
+        <section style="display: table; width: 80%">
+          <header style="display: table-row;">
+            <div style="display: table-cell;">Name</div>
+            <div style="display: table-cell;">Length</div>
+            <div style="display: table-cell;">Created</div>
+            <div style="display: table-cell;">Summary</div>
+          </header>
+          <div style="display: table-row;" ng-repeat="medium in mediaListCtrl.media">
+            <div style="display: table-cell;">
+            <a href="{{mediaListCtrl.getHref(medium)}}" type={{medium.mimeType}} download={{medium.name}}>{{medium.name}}</a>
+            <button ng-click="mediaListCtrl.downloadFile(medium)">Text</button>
+            </div>
+            <div style="display: table-cell;"><label>{{medium.contentLength}}</label></div>
+            <div style="display: table-cell;"><label>{{medium.created}}</label></div>
+            <div style="display: table-cell;"><label>{{medium.summary}}</label></div>
+          </div>
+        </section>
+
+        <h2>New File</h2>
+        <input type="file" id="mediumElement" name="mediumElement"/>
+        <input type="summary" id="summary" name="summary" ng-model="mediaListCtrl.summary" placeholder="Summary"/>
+        <button ng-click="mediaListCtrl.upload()">Upload</button>
+    </div>
+  </body>
+</html>

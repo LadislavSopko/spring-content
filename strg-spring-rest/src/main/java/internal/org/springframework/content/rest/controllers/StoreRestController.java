@@ -25,8 +25,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UrlPathHelper;
 
-import internal.org.springframework.content.rest.annotations.ContentRestController;
 import internal.org.springframework.content.rest.mappings.ContentHandlerMapping.StoreType;
+import internal.org.springframework.content.rest.annotations.ContentRestController;
 import internal.org.springframework.content.rest.mappings.StoreByteRangeHttpRequestHandler;
 import internal.org.springframework.content.rest.utils.ContentStoreUtils;
 

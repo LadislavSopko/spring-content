@@ -1,4 +1,4 @@
-package internal.org.springframework.content.rest.annotations;
+package org.springframework.content.commons.annotations;
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;

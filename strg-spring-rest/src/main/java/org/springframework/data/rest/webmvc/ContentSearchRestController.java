@@ -5,7 +5,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
 
-import internal.org.springframework.content.rest.annotations.ContentRestController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.content.commons.annotations.ContentId;
 import org.springframework.content.commons.repository.ContentStore;
@@ -33,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import internal.org.springframework.content.rest.annotations.ContentRestController;
 import internal.org.springframework.content.rest.controllers.BadRequestException;
 import internal.org.springframework.content.rest.mappings.ContentHandlerMapping.StoreType;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;

@@ -1,4 +1,4 @@
-package org.springframework.content.rest;
+package internal.org.springframework.content.rest;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;

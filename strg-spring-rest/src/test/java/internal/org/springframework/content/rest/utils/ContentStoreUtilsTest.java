@@ -12,7 +12,6 @@ import org.springframework.content.commons.renditions.Renderable;
 import org.springframework.content.commons.repository.ContentStore;
 import org.springframework.content.commons.storeservice.ContentStoreInfo;
 import org.springframework.content.commons.storeservice.ContentStoreService;
-import org.springframework.content.rest.StoreRestResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
@@ -37,6 +36,7 @@ import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.JustBeforeEach;
 
 import internal.org.springframework.content.commons.storeservice.ContentStoreInfoImpl;
+import internal.org.springframework.content.rest.StoreRestResource;
 import internal.org.springframework.content.rest.annotations.ContentStoreRestResource;
 import internal.org.springframework.content.rest.support.TestEntity;
 
