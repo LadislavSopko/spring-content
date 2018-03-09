@@ -1,5 +1,10 @@
 package org.springframework.content.rest.config;
 
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.BeforeEach;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Context;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
+
 import java.util.Arrays;
 
 import org.hamcrest.CoreMatchers;
@@ -25,15 +30,9 @@ import org.springframework.web.servlet.config.annotation.DelegatingWebMvcConfigu
 
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jRunner;
-import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
-
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.BeforeEach;
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Context;
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
 
 @RunWith(Ginkgo4jRunner.class)
 @Ginkgo4jConfiguration(threads=1)
@@ -82,7 +81,7 @@ public class RestConfigurationTest {
 		}
 
 		@Override
-		public MongoDbFactory mongoDbFactory() throws Exception {
+		public MongoDbFactory mongoDbFactory() {
 			
 			if (System.getenv("spring_eg_content_mongo_host") != null) {
 		    	String host = System.getenv("spring_eg_content_mongo_host");
@@ -104,8 +103,8 @@ public class RestConfigurationTest {
 		}
 
 		@Override
-		public Mongo mongo() throws Exception {
-	        return new MongoClient();
+		public MongoClient mongoClient() {
+			 return new MongoClient();
 		}
 	}
 	

@@ -1,6 +1,13 @@
 package internal.org.springframework.content.rest.controllers;
 
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.*;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.BeforeEach;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Context;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -33,11 +40,6 @@ import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
 import com.theoryinpractise.halbuilder.api.ReadableRepresentation;
 import com.theoryinpractise.halbuilder.api.RepresentationFactory;
 import com.theoryinpractise.halbuilder.standard.StandardRepresentationFactory;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 import internal.org.springframework.content.rest.support.StoreConfig;
 import internal.org.springframework.content.rest.support.TestEntity;
@@ -118,7 +120,7 @@ public class ContentEntityRestControllerIntegrationTest {
 						.contentType("text/plain"))
 						.andExpect(status().isCreated());
 
-						TestEntity fetched = repository.findOne(testEntity.id);
+						TestEntity fetched = repository.findById(testEntity.id).get();
 						assertThat(fetched.contentId, is(not(nullValue())));
 						assertThat(fetched.len, is(31L));
 						assertThat(fetched.mimeType, is("text/plain"));
@@ -140,7 +142,7 @@ public class ContentEntityRestControllerIntegrationTest {
 								.file(new MockMultipartFile("file", "test-file.txt", "text/plain", content.getBytes())))
 						.andExpect(status().isOk());
 
-						TestEntity fetched = repository.findOne(testEntity.id);
+						TestEntity fetched = repository.findById(testEntity.id).get();
 						assertThat(fetched.contentId, is(not(nullValue())));
 						assertThat(fetched.mimeType, is("text/plain"));
 						assertThat(fetched.len, is(new Long(content.length())));
@@ -154,7 +156,7 @@ public class ContentEntityRestControllerIntegrationTest {
 						.contentType("application/hal+json"))
 						.andExpect(status().is2xxSuccessful());
 
-						TestEntity fetched = repository.findOne(testEntity.id);
+						TestEntity fetched = repository.findById(testEntity.id).get();
 						assertThat(fetched.name, is("Spring Content"));
 						assertThat(fetched.contentId, is(nullValue()));
 						assertThat(fetched.len, is(nullValue()));
@@ -244,7 +246,7 @@ public class ContentEntityRestControllerIntegrationTest {
 									.file(new MockMultipartFile("file", "test-file.txt", "text/plain", content.getBytes())))
 							.andExpect(status().isOk());
 
-							TestEntity fetched = repository.findOne(testEntity.id);
+							TestEntity fetched = repository.findById(testEntity.id).get();
 							assertThat(fetched.contentId, is(not(nullValue())));
 							assertThat(fetched.mimeType, is("text/plain"));
 							assertThat(fetched.len, is(new Long(content.length())));

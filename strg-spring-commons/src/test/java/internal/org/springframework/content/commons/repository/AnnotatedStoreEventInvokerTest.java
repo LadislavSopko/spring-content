@@ -11,8 +11,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.fail;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.argThat;
+import static org.mockito.ArgumentMatchers.anyObject;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -22,15 +21,15 @@ import java.lang.reflect.Method;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.content.commons.annotations.StoreEventHandler;
 import org.springframework.content.commons.annotations.HandleAfterGetContent;
 import org.springframework.content.commons.annotations.HandleAfterSetContent;
 import org.springframework.content.commons.annotations.HandleAfterUnsetContent;
 import org.springframework.content.commons.annotations.HandleBeforeGetContent;
 import org.springframework.content.commons.annotations.HandleBeforeSetContent;
 import org.springframework.content.commons.annotations.HandleBeforeUnsetContent;
-import org.springframework.content.commons.repository.StoreEvent;
+import org.springframework.content.commons.annotations.StoreEventHandler;
 import org.springframework.content.commons.repository.ContentStore;
+import org.springframework.content.commons.repository.StoreEvent;
 import org.springframework.content.commons.repository.events.AfterGetContentEvent;
 import org.springframework.content.commons.repository.events.AfterSetContentEvent;
 import org.springframework.content.commons.repository.events.AfterUnsetContentEvent;
@@ -96,7 +95,7 @@ public class AnnotatedStoreEventInvokerTest {
 					Method handler = ReflectionUtils.findMethod(CustomEventHandler.class, "beforeGetContent", Object.class);
 					assertThat(handler, is(not(nullValue())));
 					
-					verify(reflectionService).invokeMethod(argThat(is(handler)), argThat(isA(CustomEventHandler.class)), argThat(is(event.getSource())));
+					verify(reflectionService).invokeMethod(org.mockito.hamcrest.MockitoHamcrest.argThat(is(handler)), org.mockito.hamcrest.MockitoHamcrest.argThat(isA(CustomEventHandler.class)), org.mockito.hamcrest.MockitoHamcrest.argThat(is(event.getSource())));
 				});
 			});
 			Context("given an event handler and a AfterGetContent event", () -> {
@@ -108,7 +107,7 @@ public class AnnotatedStoreEventInvokerTest {
 					Method handler = ReflectionUtils.findMethod(CustomEventHandler.class, "afterGetContent", Object.class);
 					assertThat(handler, is(not(nullValue())));
 					
-					verify(reflectionService).invokeMethod(argThat(is(handler)), argThat(isA(CustomEventHandler.class)), argThat(is(event.getSource())));
+					verify(reflectionService).invokeMethod(org.mockito.hamcrest.MockitoHamcrest.argThat(is(handler)), org.mockito.hamcrest.MockitoHamcrest.argThat(isA(CustomEventHandler.class)), org.mockito.hamcrest.MockitoHamcrest.argThat(is(event.getSource())));
 				});
 			});
 			Context("given an event handler and a BeforeSetContent event", () -> {
@@ -120,7 +119,7 @@ public class AnnotatedStoreEventInvokerTest {
 					Method handler = ReflectionUtils.findMethod(CustomEventHandler.class, "beforeSetContent", Object.class);
 					assertThat(handler, is(not(nullValue())));
 					
-					verify(reflectionService).invokeMethod(argThat(is(handler)), argThat(isA(CustomEventHandler.class)), argThat(is(event.getSource())));
+					verify(reflectionService).invokeMethod(org.mockito.hamcrest.MockitoHamcrest.argThat(is(handler)), org.mockito.hamcrest.MockitoHamcrest.argThat(isA(CustomEventHandler.class)), org.mockito.hamcrest.MockitoHamcrest.argThat(is(event.getSource())));
 				});
 			});
 			Context("given an event handler and a BeforeSetContent event", () -> {
@@ -132,7 +131,7 @@ public class AnnotatedStoreEventInvokerTest {
 					Method handler = ReflectionUtils.findMethod(CustomEventHandler.class, "afterSetContent", Object.class);
 					assertThat(handler, is(not(nullValue())));
 					
-					verify(reflectionService).invokeMethod(argThat(is(handler)), argThat(isA(CustomEventHandler.class)), argThat(is(event.getSource())));
+					verify(reflectionService).invokeMethod(org.mockito.hamcrest.MockitoHamcrest.argThat(is(handler)), org.mockito.hamcrest.MockitoHamcrest.argThat(isA(CustomEventHandler.class)), org.mockito.hamcrest.MockitoHamcrest.argThat(is(event.getSource())));
 				});
 			});
 			Context("given an event handler and a BeforeUnsetContent event", () -> {
@@ -144,7 +143,7 @@ public class AnnotatedStoreEventInvokerTest {
 					Method handler = ReflectionUtils.findMethod(CustomEventHandler.class, "beforeUnsetContent", Object.class);
 					assertThat(handler, is(not(nullValue())));
 					
-					verify(reflectionService).invokeMethod(argThat(is(handler)), argThat(isA(CustomEventHandler.class)), argThat(is(event.getSource())));
+					verify(reflectionService).invokeMethod(org.mockito.hamcrest.MockitoHamcrest.argThat(is(handler)), org.mockito.hamcrest.MockitoHamcrest.argThat(isA(CustomEventHandler.class)), org.mockito.hamcrest.MockitoHamcrest.argThat(is(event.getSource())));
 				});
 			});
 			Context("given an event handler and a AfterUnsetContent event", () -> {
@@ -156,7 +155,7 @@ public class AnnotatedStoreEventInvokerTest {
 					Method handler = ReflectionUtils.findMethod(CustomEventHandler.class, "afterUnsetContent", Object.class);
 					assertThat(handler, is(not(nullValue())));
 					
-					verify(reflectionService).invokeMethod(argThat(is(handler)), argThat(isA(CustomEventHandler.class)), argThat(is(event.getSource())));
+					verify(reflectionService).invokeMethod(org.mockito.hamcrest.MockitoHamcrest.argThat(is(handler)), org.mockito.hamcrest.MockitoHamcrest.argThat(isA(CustomEventHandler.class)), org.mockito.hamcrest.MockitoHamcrest.argThat(is(event.getSource())));
 				});
 			});
 			Context("given an event handler and an unknown event", () -> {

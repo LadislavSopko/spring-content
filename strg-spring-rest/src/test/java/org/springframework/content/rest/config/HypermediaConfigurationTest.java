@@ -14,7 +14,6 @@ import org.springframework.content.commons.annotations.Content;
 import org.springframework.content.commons.annotations.ContentId;
 import org.springframework.content.commons.repository.ContentStore;
 import org.springframework.content.mongo.config.EnableMongoContentRepositories;
-import org.springframework.content.rest.config.HypermediaConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.annotation.Id;
@@ -30,7 +29,6 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 import org.springframework.web.servlet.config.annotation.DelegatingWebMvcConfiguration;
 
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jRunner;
-import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
@@ -74,7 +72,7 @@ public class HypermediaConfigurationTest {
 		}
 
 		@Override
-		public MongoDbFactory mongoDbFactory() throws Exception {
+		public MongoDbFactory mongoDbFactory() {
 			
 			if (System.getenv("spring_eg_content_mongo_host") != null) {
 		    	String host = System.getenv("spring_eg_content_mongo_host");
@@ -95,9 +93,10 @@ public class HypermediaConfigurationTest {
 			return super.mongoDbFactory();
 		}
 
+		
 		@Override
-		public Mongo mongo() throws Exception {
-	        return new MongoClient();
+		public MongoClient mongoClient() {
+			return new MongoClient();
 		}
 	}
 	

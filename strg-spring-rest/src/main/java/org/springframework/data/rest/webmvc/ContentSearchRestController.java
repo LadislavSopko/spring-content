@@ -1,9 +1,15 @@
 package org.springframework.data.rest.webmvc;
 
+import static org.springframework.data.rest.webmvc.ControllerUtils.EMPTY_RESOURCE_LIST;
+
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.content.commons.annotations.ContentId;
@@ -31,13 +37,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import internal.org.springframework.content.rest.annotations.ContentRestController;
-import internal.org.springframework.content.rest.controllers.BadRequestException;
-import internal.org.springframework.content.rest.mappings.ContentHandlerMapping.StoreType;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import static org.springframework.data.rest.webmvc.ControllerUtils.EMPTY_RESOURCE_LIST;
+import internal.org.springframework.content.rest.controllers.BadRequestException;
+import internal.org.springframework.content.rest.mappings.ContentHandlerMapping.StoreType;
 
 @RepositoryRestController
 public class ContentSearchRestController /*extends AbstractRepositoryRestController */{
@@ -128,7 +131,7 @@ public class ContentSearchRestController /*extends AbstractRepositoryRestControl
 			List<Object> results = new ArrayList<>();
 			if (idField.equals(contentIdField)) {
 				for (Object contentId : contentIds) {
-					Object entity = repoInfo.getInvoker().invokeFindOne(contentId.toString());
+					Object entity = repoInfo.getInvoker().invokeFindById(contentId.toString());
 					if (entity != null) {
 						results.add(entity);
 					}

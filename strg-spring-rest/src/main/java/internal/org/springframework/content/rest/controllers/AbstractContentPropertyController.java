@@ -2,6 +2,7 @@ package internal.org.springframework.content.rest.controllers;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.content.commons.annotations.ContentId;
@@ -106,13 +107,13 @@ public abstract class AbstractContentPropertyController {
 		Class<?> domainObjClazz = ri.getDomainType();
 		Class<?> idClazz = ri.getIdType();
 		
-		Method findOneMethod = ri.getCrudMethods().getFindOneMethod();
+		Optional<Method> findOneMethod = ri.getCrudMethods().getFindOneMethod();
 		if (findOneMethod == null) {
 			throw new HttpRequestMethodNotSupportedException("fineOne");
 		}
 		
 		Object oid = new DefaultConversionService().convert(id, idClazz);
-		domainObj = ReflectionUtils.invokeMethod(findOneMethod, repositories.getRepositoryFor(domainObjClazz), oid);
+		domainObj = ReflectionUtils.invokeMethod(findOneMethod.get(), repositories.getRepositoryFor(domainObjClazz), oid);
 		
 		if (null == domainObj) {
 			throw new ResourceNotFoundException();
@@ -135,13 +136,13 @@ public abstract class AbstractContentPropertyController {
 		Class<?> domainObjClazz = ri.getDomainType();
 		Class<?> idClazz = ri.getIdType();
 		
-		Method findOneMethod = ri.getCrudMethods().getFindOneMethod();
+		Optional<Method> findOneMethod = ri.getCrudMethods().getFindOneMethod();
 		if (findOneMethod == null) {
 			throw new HttpRequestMethodNotSupportedException("fineOne");
 		}
 		
 		Object oid = new DefaultConversionService().convert(id, idClazz);
-		domainObj = ReflectionUtils.invokeMethod(findOneMethod, repositories.getRepositoryFor(domainObjClazz), oid);
+		domainObj = ReflectionUtils.invokeMethod(findOneMethod.get(), repositories.getRepositoryFor(domainObjClazz), oid);
 		
 		if (null == domainObj) {
 			throw new ResourceNotFoundException();
@@ -164,12 +165,12 @@ public abstract class AbstractContentPropertyController {
 		Class<?> domainObjClazz = ri.getDomainType();
 		Class<?> idClazz = ri.getIdType();
 		
-		Method findAllMethod = ri.getCrudMethods().getFindAllMethod();
+		Optional<Method> findAllMethod = ri.getCrudMethods().getFindAllMethod();
 		if (findAllMethod == null) {
 			throw new HttpRequestMethodNotSupportedException("fineAll");
 		}
 		
-		entities = (Iterable)ReflectionUtils.invokeMethod(findAllMethod, repositories.getRepositoryFor(domainObjClazz));
+		entities = (Iterable)ReflectionUtils.invokeMethod(findAllMethod.get(), repositories.getRepositoryFor(domainObjClazz));
 		
 		if (null == entities) {
 			throw new ResourceNotFoundException();
@@ -190,36 +191,36 @@ public abstract class AbstractContentPropertyController {
 		Class<?> domainObjClazz = ri.getDomainType();
 		
 		if (domainObjClazz != null) {
-			Method saveMethod = ri.getCrudMethods().getSaveMethod();
+			Optional<Method> saveMethod = ri.getCrudMethods().getSaveMethod();
 			if (saveMethod == null) {
 				throw new HttpRequestMethodNotSupportedException("save");
 			}
-			domainObj = ReflectionUtils.invokeMethod(saveMethod, repositories.getRepositoryFor(domainObjClazz), domainObj);
+			domainObj = ReflectionUtils.invokeMethod(saveMethod.get(), repositories.getRepositoryFor(domainObjClazz), domainObj);
 		}
 
 		return domainObj;
 	}
 	
 	public static RepositoryInformation findRepositoryInformation(Repositories repositories, String repository) {
-		RepositoryInformation ri = null;
+		Optional<RepositoryInformation> ri = null;
 		for (Class<?> clazz : repositories) {
-			RepositoryInformation candidate = repositories.getRepositoryInformationFor(clazz);
+			Optional<RepositoryInformation> candidate = repositories.getRepositoryInformationFor(clazz);
 			if (candidate == null) {
 				continue;
 			}
-			if (repository.equals(RepositoryUtils.repositoryPath(candidate))) {
+			if (repository.equals(RepositoryUtils.repositoryPath(candidate.get()))) {
 				ri = repositories.getRepositoryInformationFor(clazz);
 				break;
 			}
 		}
-		return ri;
+		return ri.get();
 	}
 
 	public static RepositoryInformation findRepositoryInformation(Repositories repositories, Class<?> domainObjectClass) {
 		RepositoryInformation ri = null;
 		for (Class<?> clazz : repositories) {
 			if (clazz.equals(domainObjectClass)) {
-				return repositories.getRepositoryInformationFor(clazz);
+				return repositories.getRepositoryInformationFor(clazz).get();
 			}
 		}
 		return ri;
