@@ -1,5 +1,6 @@
 # Auto Configure
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-it.zeroics.boot.autoconfigure.api.ApiContentAutoConfiguration,\
+it.zeroics.boot.autoconfigure.renditions.RenditionsAutoConfiguration,\
+it.zeroics.boot.autoconfigure.model.ModelAutoConfiguration,\
 it.zeroics.boot.autoconfigure.rest.RestContentAutoConfiguration
 

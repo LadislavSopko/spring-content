@@ -1,5 +1,5 @@
 package it.zeroics.boot.autoconfigure.api;
-
+/*
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.context.annotation.Configuration;
@@ -17,3 +17,4 @@ import com.mongodb.Mongo;
 @Import(it.zeroics.strg.api.ApiConfiguration.class) // non rest apis	
 public class ApiContentAutoConfiguration {
 }
+*/

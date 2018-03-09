@@ -1,4 +1,4 @@
-package it.zeroics.renditions;
+package it.zeroics.strg.renditions;
 
 import org.springframework.core.NestedRuntimeException;
 

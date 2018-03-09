@@ -19,7 +19,7 @@
         </dependency>
         <dependency>
             <groupId>it.zeroics</groupId>
-            <artifactId>strg-spring-autoconfigure</artifactId>
+            <artifactId>strg-service-autoconfigure</artifactId>
             <version>0.1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>

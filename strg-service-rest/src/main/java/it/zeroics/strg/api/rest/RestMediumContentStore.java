@@ -1,10 +1,10 @@
 package it.zeroics.strg.api.rest;
 
-import org.springframework.stereotype.Repository;
+import org.springframework.content.commons.renditions.Renderable;
+import org.springframework.content.commons.repository.ContentStore;
 
 import internal.org.springframework.content.rest.StoreRestResource;
-import it.zeroics.strg.api.MediumContentStore;
+import it.zeroics.strg.model.Medium;
 
-@Repository
-@StoreRestResource(path="medium")
-public interface RestMediumContentStore extends MediumContentStore {}
+@StoreRestResource(path="media")
+public interface RestMediumContentStore extends ContentStore<Medium, String>, Renderable<Medium> {}

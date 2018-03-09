@@ -1,4 +1,4 @@
-package it.zeroics.renditions;
+package it.zeroics.strg.renditions;
 
 import java.io.IOException;
 import java.io.InputStream;

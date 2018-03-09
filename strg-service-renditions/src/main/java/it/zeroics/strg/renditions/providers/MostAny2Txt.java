@@ -1,4 +1,4 @@
-package it.zeroics.renditions.providers;
+package it.zeroics.strg.renditions.providers;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -20,8 +20,8 @@ import org.springframework.util.Assert;
 import org.springframework.util.MimeType;
 import org.xml.sax.SAXException;
 
-import it.zeroics.renditions.Context;
-import it.zeroics.renditions.RenditionException;
+import it.zeroics.strg.renditions.Context;
+import it.zeroics.strg.renditions.RenditionException;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
