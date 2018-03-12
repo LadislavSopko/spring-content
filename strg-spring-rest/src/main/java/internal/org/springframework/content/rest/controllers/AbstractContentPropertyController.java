@@ -108,12 +108,16 @@ public abstract class AbstractContentPropertyController {
 		Class<?> idClazz = ri.getIdType();
 		
 		Optional<Method> findOneMethod = ri.getCrudMethods().getFindOneMethod();
-		if (findOneMethod == null) {
+		if (!findOneMethod.isPresent()) {
 			throw new HttpRequestMethodNotSupportedException("fineOne");
 		}
 		
 		Object oid = new DefaultConversionService().convert(id, idClazz);
-		domainObj = ReflectionUtils.invokeMethod(findOneMethod.get(), repositories.getRepositoryFor(domainObjClazz), oid);
+		Optional<Object> target = repositories.getRepositoryFor(domainObjClazz);
+		if(target.isPresent()) {
+			domainObj = BeanUtils.deOptional(ReflectionUtils.invokeMethod(findOneMethod.get(), target.get(), oid));
+		}
+		
 		
 		if (null == domainObj) {
 			throw new ResourceNotFoundException();
@@ -137,12 +141,17 @@ public abstract class AbstractContentPropertyController {
 		Class<?> idClazz = ri.getIdType();
 		
 		Optional<Method> findOneMethod = ri.getCrudMethods().getFindOneMethod();
-		if (findOneMethod == null) {
+		if (!findOneMethod.isPresent()) {
 			throw new HttpRequestMethodNotSupportedException("fineOne");
 		}
 		
 		Object oid = new DefaultConversionService().convert(id, idClazz);
-		domainObj = ReflectionUtils.invokeMethod(findOneMethod.get(), repositories.getRepositoryFor(domainObjClazz), oid);
+		
+		//domainObj = ReflectionUtils.invokeMethod(findOneMethod.get(), repositories.getRepositoryFor(domainObjClazz), oid);
+		Optional<Object> target = repositories.getRepositoryFor(domainObjClazz);
+		if(target.isPresent()) {
+			domainObj = BeanUtils.deOptional(ReflectionUtils.invokeMethod(findOneMethod.get(), target.get(), oid));
+		}
 		
 		if (null == domainObj) {
 			throw new ResourceNotFoundException();
@@ -151,10 +160,10 @@ public abstract class AbstractContentPropertyController {
 		return domainObj;
 	}
 
-	public static Iterable findAll(Repositories repositories, String repository) 
+	public static Iterable<Object> findAll(Repositories repositories, String repository) 
 			throws HttpRequestMethodNotSupportedException {
 		
-		Iterable entities = null;
+		Iterable<Object> entities = null;
 		
 		RepositoryInformation ri = findRepositoryInformation(repositories, repository);
 
@@ -166,11 +175,15 @@ public abstract class AbstractContentPropertyController {
 		Class<?> idClazz = ri.getIdType();
 		
 		Optional<Method> findAllMethod = ri.getCrudMethods().getFindAllMethod();
-		if (findAllMethod == null) {
+		if (!findAllMethod.isPresent()) {
 			throw new HttpRequestMethodNotSupportedException("fineAll");
 		}
 		
-		entities = (Iterable)ReflectionUtils.invokeMethod(findAllMethod.get(), repositories.getRepositoryFor(domainObjClazz));
+		Optional<Object> target = repositories.getRepositoryFor(domainObjClazz);
+		if(target.isPresent()) {
+			entities = (Iterable<Object>)ReflectionUtils.invokeMethod(findAllMethod.get(), target.get());
+		}
+		
 		
 		if (null == entities) {
 			throw new ResourceNotFoundException();
@@ -192,10 +205,15 @@ public abstract class AbstractContentPropertyController {
 		
 		if (domainObjClazz != null) {
 			Optional<Method> saveMethod = ri.getCrudMethods().getSaveMethod();
-			if (saveMethod == null) {
+			if (!saveMethod.isPresent()) {
 				throw new HttpRequestMethodNotSupportedException("save");
 			}
-			domainObj = ReflectionUtils.invokeMethod(saveMethod.get(), repositories.getRepositoryFor(domainObjClazz), domainObj);
+			
+			Optional<Object> target = repositories.getRepositoryFor(domainObjClazz);
+			if(target.isPresent()) {
+				domainObj = BeanUtils.deOptional(ReflectionUtils.invokeMethod(saveMethod.get(), target.get(), domainObj));
+			}
+			
 		}
 
 		return domainObj;

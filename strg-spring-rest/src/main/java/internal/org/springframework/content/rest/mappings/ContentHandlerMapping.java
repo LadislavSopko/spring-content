@@ -6,7 +6,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,8 +22,10 @@ import org.springframework.content.commons.storeservice.ContentStoreInfo;
 import org.springframework.content.commons.storeservice.ContentStoreService;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.InvalidMediaTypeException;
 import org.springframework.http.MediaType;
+import org.springframework.lang.Nullable;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.condition.RequestCondition;
@@ -67,6 +74,59 @@ public class ContentHandlerMapping extends RequestMappingHandlerMapping {
 		}
 		return null; 
 	}
+	
+	
+	private static class CorsConfigurationUtils{
+		/* Cors specific due to changes of spring 5.0 */
+		private static final List<String> CORS_DEFAULT_PERMIT_ALL =
+				Collections.unmodifiableList(Arrays.asList(CorsConfiguration.ALL));
+
+		private static final List<String> CORS_DEFAULT_PERMIT_METHODS =
+				Collections.unmodifiableList(Arrays.asList(HttpMethod.GET.name(), HttpMethod.HEAD.name(), HttpMethod.POST.name()));
+		
+		public static CorsConfiguration combine(@Nullable CorsConfiguration first, @Nullable CorsConfiguration other) {
+			if (other == null) {
+				return first;
+			}
+			CorsConfiguration config = new CorsConfiguration(first);
+			config.setAllowedOrigins(corsCombine(first.getAllowedOrigins(), other.getAllowedOrigins()));
+			config.setAllowedMethods(corsCombine(first.getAllowedMethods(), other.getAllowedMethods()));
+			config.setAllowedHeaders(corsCombine(first.getAllowedHeaders(), other.getAllowedHeaders()));
+			config.setExposedHeaders(corsCombine(first.getExposedHeaders(), other.getExposedHeaders()));
+			Boolean allowCredentials = other.getAllowCredentials();
+			if (allowCredentials != null) {
+				config.setAllowCredentials(allowCredentials);
+			}
+			Long maxAge = other.getMaxAge();
+			if (maxAge != null) {
+				config.setMaxAge(maxAge);
+			}
+			return config;
+		}
+		
+		
+
+		private static List<String> corsCombine(@Nullable List<String> source, @Nullable List<String> other) {
+			if (other == null) {
+				return (source != null ? source : Collections.emptyList());
+			}
+			if (source == null) {
+				return other;
+			}
+			if (source.equals(CORS_DEFAULT_PERMIT_ALL) || source.equals(CORS_DEFAULT_PERMIT_METHODS)) {
+				return other;
+			}
+			if (other.equals(CORS_DEFAULT_PERMIT_ALL) || other.equals(CORS_DEFAULT_PERMIT_METHODS)) {
+				return source;
+			}
+			if (source.contains(CorsConfiguration.ALL) || other.contains(CorsConfiguration.ALL)) {
+				return new ArrayList<>(Collections.singletonList(CorsConfiguration.ALL));
+			}
+			Set<String> combined = new LinkedHashSet<>(source);
+			combined.addAll(other);
+			return new ArrayList<>(combined);
+		}
+	}
 
 	@Override
 	protected CorsConfiguration getCorsConfiguration(Object handler, HttpServletRequest request) {
@@ -85,9 +145,31 @@ public class ContentHandlerMapping extends RequestMappingHandlerMapping {
 		CorsConfigurationBuilder builder = new CorsConfigurationBuilder();
 		CorsConfiguration storeCorsConfiguration = builder.build(info2.getInterface());  
 		
+		/*
+		 * public CorsConfiguration combine(@Nullable CorsConfiguration other)
+		 * was changed in spring 5.0 it will combine list values in non override but in 
+		 * sort of sum, where "*" win any way, so we have to do override manually
+		 * cause we want if present list value in CorsAnnotation it must win
+		 * 
+		 * NOTE: original spring doc note <<
+		 * 
+		 * 	Combine the non-null properties of the supplied CorsConfiguration with this one.
+		 *  When combining single values like allowCredentials or maxAge, this properties are overridden by non-null other properties if any.
+		 *  Combining lists like allowedOrigins, allowedMethods, allowedHeaders or exposedHeaders is done in an additive way. 
+		 *  For example, combining ["GET", "POST"] with ["PATCH"] results in ["GET", "POST", "PATCH"], but keep in mind that combining ["GET", "POST"] with ["*"] results in ["*"].
+		 *  
+		 *  Notice that default permit values set by applyPermitDefaultValues() are overridden by any value explicitly defined.
+		 *  
+		 *  >>
+		 */
 		return corsConfiguration == null ? storeCorsConfiguration
-				: corsConfiguration.combine(storeCorsConfiguration);
+				: CorsConfigurationUtils.combine(corsConfiguration, storeCorsConfiguration);
+				//: corsConfiguration.combine(storeCorsConfiguration);
 	}
+	
+	
+	
+	
 
 	private boolean isHalOrJsonRequest(HttpServletRequest request) {
 		String method = request.getMethod();
@@ -217,5 +299,10 @@ public class ContentHandlerMapping extends RequestMappingHandlerMapping {
 			} 
 			return false;
 		}
+		
+		
+		
+		
+		
 	}
 }

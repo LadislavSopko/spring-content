@@ -6,6 +6,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
@@ -14,6 +15,13 @@ import org.springframework.util.ReflectionUtils;
 
 public final class BeanUtils {
 
+	public static Object deOptional(Object someObject) {
+		if(someObject instanceof Optional) {
+			return ((Optional<Object>) someObject).get();
+		}else {
+			return someObject;
+		}
+	}
 	
 	
 	private static final Condition MATCHING_CONDITION = new Condition() {
@@ -28,7 +36,7 @@ public final class BeanUtils {
 	public static boolean hasFieldWithAnnotation(Object domainObj, Class<? extends Annotation> annotationClass)
 			throws SecurityException, BeansException {
 
-        Field field = findFieldWithAnnotation(domainObj, annotationClass);
+        Field field = findFieldWithAnnotation(deOptional(domainObj), annotationClass);
         if (field != null && field.getAnnotation(annotationClass) != null) {
             return true;
         }
@@ -38,7 +46,7 @@ public final class BeanUtils {
 
 	public static Field findFieldWithAnnotation(Object domainObj, Class<? extends Annotation> annotationClass)
 			throws SecurityException, BeansException {
-		return findFieldWithAnnotation(domainObj.getClass(), annotationClass);
+		return findFieldWithAnnotation(deOptional(domainObj).getClass(), annotationClass);
 	}
 
 	public static Field findFieldWithAnnotation(Class<?> domainObjClass, Class<? extends Annotation> annotationClass)
@@ -98,7 +106,7 @@ public final class BeanUtils {
 			throws SecurityException, BeansException {
 		Class<?> type = null;
 
-        Field field = findFieldWithAnnotation(domainObj, annotationClass);
+        Field field = findFieldWithAnnotation(deOptional(domainObj), annotationClass);
         if (field != null && field.getAnnotation(annotationClass) != null) {
             type = field.getType();
         }
@@ -110,6 +118,8 @@ public final class BeanUtils {
 			throws SecurityException, BeansException {
 		Object value = null;
 
+		domainObj = deOptional(domainObj);
+		
         Field field = findFieldWithAnnotation(domainObj, annotationClass);
         if (field != null && field.getAnnotation(annotationClass) != null) {
             try {
@@ -131,6 +141,8 @@ public final class BeanUtils {
 			throws SecurityException, BeansException {
 		Object value = null;
 
+		domainObj = deOptional(domainObj);
+		
         if (field != null) {
             try {
                 PropertyDescriptor descriptor = org.springframework.beans.BeanUtils.getPropertyDescriptor(domainObj.getClass(), field.getName());
@@ -150,7 +162,7 @@ public final class BeanUtils {
 	public static Field getFieldWithAnnotationField(Object domainObj, Class<? extends Annotation> annotationClass)
 			throws SecurityException, BeansException {
 		
-        Field field = findFieldWithAnnotation(domainObj, annotationClass);
+        Field field = findFieldWithAnnotation(deOptional(domainObj), annotationClass);
         if (field != null && field.getAnnotation(annotationClass) != null) {
             return field;
         }
@@ -169,7 +181,7 @@ public final class BeanUtils {
 	 * 					the value to set
 	 */
 	public static void setFieldWithAnnotation(Object domainObj, Class<? extends Annotation> annotationClass, Object value) {
-		setFieldWithAnnotationConditionally(domainObj, annotationClass, value, MATCHING_CONDITION);
+		setFieldWithAnnotationConditionally(deOptional(domainObj), annotationClass, value, MATCHING_CONDITION);
 	}
 	
 	/**
@@ -186,6 +198,8 @@ public final class BeanUtils {
 	 */
 	public static void setFieldWithAnnotationConditionally(Object domainObj, Class<? extends Annotation> annotationClass, Object value, Condition condition) {
 
+		domainObj = deOptional(domainObj);
+		
 		Field field = findFieldWithAnnotation(domainObj, annotationClass);
 		if (field != null && field.getAnnotation(annotationClass) != null && condition.matches(field)) {
 			try {

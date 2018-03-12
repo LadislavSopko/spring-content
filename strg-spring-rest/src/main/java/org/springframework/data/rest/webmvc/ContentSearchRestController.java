@@ -102,7 +102,7 @@ public class ContentSearchRestController /*extends AbstractRepositoryRestControl
 
 		ContentStoreInfo info = infos[0];
 		
-		ContentStore<Object,Serializable> store = info.getImpementation();
+		ContentStore<Object,Serializable> store = info.getImplementation(ContentStore.class);// info.getImpementation();
 		if (store instanceof Searchable == false) {
 			throw new ResourceNotFoundException("Entity content is not searchable");
 		}
@@ -131,10 +131,8 @@ public class ContentSearchRestController /*extends AbstractRepositoryRestControl
 			List<Object> results = new ArrayList<>();
 			if (idField.equals(contentIdField)) {
 				for (Object contentId : contentIds) {
-					Object entity = repoInfo.getInvoker().invokeFindById(contentId.toString());
-					if (entity != null) {
-						results.add(entity);
-					}
+					//use new Optional<T> syntax sugar cause FindById return it, after this we will turn back into no Optional<T>
+					repoInfo.getInvoker().invokeFindById(contentId.toString()).ifPresent(x->results.add(x));
 				}
 			} else {
 				Pageable pageable = null;
@@ -192,7 +190,7 @@ public class ContentSearchRestController /*extends AbstractRepositoryRestControl
 		List<Resource<Object>> resources = new ArrayList<Resource<Object>>();
 
 		for (Object obj : entities) {
-			resources.add(obj == null ? null : assembler.toResource(obj));
+			resources.add(obj != null ? assembler.toResource(obj) : null);
 		}
 
 		return new Resources<Resource<Object>>(resources, getDefaultSelfLink());
