@@ -77,7 +77,7 @@ public class ContentS3AutoConfigurationTest {
 		// will be supplied by auto-configuration
 	}
 
-	@Entity
+	@Entity(name="TestEntity")
 	@Content
 	public class TestEntity {
 		@Id

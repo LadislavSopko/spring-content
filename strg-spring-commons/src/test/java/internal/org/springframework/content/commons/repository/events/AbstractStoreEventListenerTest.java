@@ -7,7 +7,6 @@ import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.JustBeforeEach;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -16,8 +15,8 @@ import java.io.Serializable;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-import org.springframework.content.commons.repository.StoreEvent;
 import org.springframework.content.commons.repository.ContentStore;
+import org.springframework.content.commons.repository.StoreEvent;
 import org.springframework.content.commons.repository.events.AbstractStoreEventListener;
 import org.springframework.content.commons.repository.events.AfterGetContentEvent;
 import org.springframework.content.commons.repository.events.AfterSetContentEvent;
@@ -64,7 +63,7 @@ public class AbstractStoreEventListenerTest {
 						assertThat(argumentCaptor.getValue().getStore(), is(store));
 					});
 					It("should call the event source consumer", () -> {
-						verify(consumer).onBeforeGetContent(argThat(is(event.getSource())));
+						verify(consumer).onBeforeGetContent(org.mockito.hamcrest.MockitoHamcrest.argThat(is(event.getSource())));
 					});
 				});
 				Context("given an after get content event", () -> {
@@ -79,7 +78,7 @@ public class AbstractStoreEventListenerTest {
 						assertThat(argumentCaptor.getValue().getStore(), is(store));
 					});
 					It("should call the event source consumer", () -> {
-						verify(consumer).onAfterGetContent(argThat(is(event.getSource())));
+						verify(consumer).onAfterGetContent(org.mockito.hamcrest.MockitoHamcrest.argThat(is(event.getSource())));
 					});
 				});
 				Context("given a before set content event", () -> {
@@ -94,7 +93,7 @@ public class AbstractStoreEventListenerTest {
 						assertThat(argumentCaptor.getValue().getStore(), is(store));
 					});
 					It("should call the event source consumer", () -> {
-						verify(consumer).onBeforeSetContent(argThat(is(event.getSource())));
+						verify(consumer).onBeforeSetContent(org.mockito.hamcrest.MockitoHamcrest.argThat(is(event.getSource())));
 					});
 				});
 				Context("given a after set content event", () -> {
@@ -109,7 +108,7 @@ public class AbstractStoreEventListenerTest {
 						assertThat(argumentCaptor.getValue().getStore(), is(store));
 					});
 					It("should call the event source consumer", () -> {
-						verify(consumer).onAfterSetContent(argThat(is(event.getSource())));
+						verify(consumer).onAfterSetContent(org.mockito.hamcrest.MockitoHamcrest.argThat(is(event.getSource())));
 					});
 				});
 				Context("given a before unset content event", () -> {
@@ -124,7 +123,7 @@ public class AbstractStoreEventListenerTest {
 						assertThat(argumentCaptor.getValue().getStore(), is(store));
 					});
 					It("should call the event source consumer", () -> {
-						verify(consumer).onBeforeUnsetContent(argThat(is(event.getSource())));
+						verify(consumer).onBeforeUnsetContent(org.mockito.hamcrest.MockitoHamcrest.argThat(is(event.getSource())));
 					});
 				});
 				Context("given a after unset content event", () -> {
@@ -139,7 +138,7 @@ public class AbstractStoreEventListenerTest {
 						assertThat(argumentCaptor.getValue().getStore(), is(store));
 					});
 					It("should call the event source consumer", () -> {
-						verify(consumer).onAfterUnsetContent(argThat(is(event.getSource())));
+						verify(consumer).onAfterUnsetContent(org.mockito.hamcrest.MockitoHamcrest.argThat(is(event.getSource())));
 					});
 				});
 			});

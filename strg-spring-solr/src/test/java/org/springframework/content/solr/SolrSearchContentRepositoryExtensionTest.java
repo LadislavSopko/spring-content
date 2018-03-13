@@ -82,7 +82,7 @@ public class SolrSearchContentRepositoryExtensionTest {
                     search = new SolrSearchContentRepositoryExtension(null, reflectionService, conversionService, solrProperties);
                     search.invoke(invocation, invoker);
 
-                    verify(reflectionService).invokeMethod(argThat(is(method)), argThat(is(instanceOf(SolrSearchService.class))), argThat(is("something")));
+                    verify(reflectionService).invokeMethod(org.mockito.hamcrest.MockitoHamcrest.argThat(is(method)), org.mockito.hamcrest.MockitoHamcrest.argThat(is(instanceOf(SolrSearchService.class))), org.mockito.hamcrest.MockitoHamcrest.argThat(is("something")));
                 });
                 It("should convert the returned list to the content id type", () -> {
                     doReturn(Integer.class).when(invoker).getContentIdClass();

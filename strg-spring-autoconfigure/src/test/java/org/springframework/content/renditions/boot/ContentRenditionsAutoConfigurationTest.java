@@ -16,6 +16,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.test.context.TestPropertySource;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -28,6 +29,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 @RunWith(Ginkgo4jRunner.class)
 @Ginkgo4jConfiguration(threads=1)
+@TestPropertySource(locations="classpath:test.properties")
 public class ContentRenditionsAutoConfigurationTest {
 
 	{
@@ -46,16 +48,15 @@ public class ContentRenditionsAutoConfigurationTest {
 		});
 	}
 
-
 	@Configuration
 	@AutoConfigurationPackage
 	@EnableAutoConfiguration
 	public static class TestConfig {
 	}
 
-	@Entity
+	@Entity(name="TestEntity")
 	@Content
-	public class TestEntity {
+	public static class TestEntity {
 		@Id
 		@GeneratedValue(strategy = GenerationType.AUTO)
 		private long id;
@@ -63,6 +64,10 @@ public class ContentRenditionsAutoConfigurationTest {
 		private String contentId;
 	}
 
-	public interface TestEntityContentStore extends ContentStore<TestEntity, String>, Renderable<TestEntity> {
+	public static interface TestEntityContentStore extends ContentStore<TestEntity, String>, Renderable<TestEntity> {
 	}
+
+	
 }
+
+

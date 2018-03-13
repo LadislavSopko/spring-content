@@ -9,6 +9,9 @@
 		</layout>
 	</appender>
 
+	<logger name="org.hibernate" level="ERROR"/>
+	<logger name="internal.org.springframework.content" level="DEBUG"/>
+
 	<root level="info">
 		<appender-ref ref="STDOUT" />
 	</root>
