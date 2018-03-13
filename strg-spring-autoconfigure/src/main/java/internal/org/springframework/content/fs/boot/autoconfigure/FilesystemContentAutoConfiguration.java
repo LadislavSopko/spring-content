@@ -74,7 +74,7 @@ public class FilesystemContentAutoConfiguration {
 
 		public void setFilesystemRoot(String filesystemRoot) {
 			try {
-				this.filesystemRoot = filesystemRoot.replaceAll("[\\/\\\\]*?", File.separator.equals("\\") ? "\\\\" : "/");
+				this.filesystemRoot = filesystemRoot.replaceAll("[\\/\\\\]+?", File.separator.equals("\\") ? "\\\\" : "/");
 			}catch(Exception ex) {
 				logger.error(ex.getMessage());
 			}
