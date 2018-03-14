@@ -2,7 +2,7 @@ package it.zeroics.strg.renditions.providers;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
+import org.springframework.content.commons.renditions.RenditionCapability;
 import org.springframework.content.commons.renditions.RenditionProvider;
 import org.springframework.stereotype.Service;
 //import org.springframework.stereotype.Service;
@@ -28,30 +28,30 @@ public class MostAny2Txt implements RenditionProvider {
 
     @Override
     public String consumes() {
-        return "*/*"; //"application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+    	throw new UnsupportedOperationException("Deprecated method:use isCapable instead");
     }
 
     @Override
     public String[] produces() {
-        return new String[] {"text/plain"};
+    	throw new UnsupportedOperationException("Deprecated method:use isCapable instead");
     }
     
     @Override
-	public Boolean isCapable(String fromMimeType, String toMimeType) {
+	public RenditionCapability isCapable(String fromMimeType, String toMimeType) {
     	logger.debug("Mime check: " + fromMimeType + " -> " + toMimeType);
     	MimeType fromMime = MimeType.valueOf(fromMimeType) ;
     	MimeType toMime = MimeType.valueOf(toMimeType) ;
     	
     	if (toMime.includes(MimeType.valueOf("text/plain")) &&
     			MimeType.valueOf("*/*").includes(fromMime) ) {
-    		return true;
+    		return RenditionCapability.BEST_FIT;
     	}
     	if (BasicRenderer.justMeta(toMime) &&
     			!fromMime.getSubtype().equals("dicom") && // TODO: Tika is able but not very able, should return a "vote".
     			MimeType.valueOf("*/*").includes(fromMime) ) {
-			return true ;
+			return RenditionCapability.PRETTY_CAPABLE ;
     	}
-		return false;
+		return RenditionCapability.NOT_CAPABLE;
 	}
 
     @SuppressWarnings("resource")

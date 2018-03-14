@@ -15,6 +15,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.content.commons.renditions.RenditionCapability;
 import org.springframework.content.commons.renditions.RenditionProvider;
 
 import internal.org.springframework.content.docx4j.WordToHtmlRenditionProvider;
@@ -30,8 +31,7 @@ public class WordToHtmlRenditionProviderTest {
 	
 	@Test
 	public void testCanConvert() {
-		assertThat(service.consumes(), is("application/vnd.openxmlformats-officedocument.wordprocessingml.document"));
-		assertThat(Arrays.asList(service.produces()), hasItems("text/html"));
+		assertThat(service.isCapable("application/vnd.openxmlformats-officedocument.wordprocessingml.document", "text/html").isBetterThan(RenditionCapability.NOT_CAPABLE), is(true));
 	}
 
 	@Test

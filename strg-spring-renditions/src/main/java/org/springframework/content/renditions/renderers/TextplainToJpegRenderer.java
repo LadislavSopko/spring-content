@@ -2,6 +2,7 @@ package org.springframework.content.renditions.renderers;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.content.commons.renditions.RenditionCapability;
 import org.springframework.content.commons.renditions.RenditionProvider;
 import org.springframework.content.renditions.RenditionException;
 import org.springframework.stereotype.Service;
@@ -50,9 +51,10 @@ public class TextplainToJpegRenderer implements RenditionProvider {
     }
     
     @Override
-	public Boolean isCapable(String fromMimeType, String toMimeType) {
-		return (MimeType.valueOf(toMimeType).includes(MimeType.valueOf("image/jpg")) || MimeType.valueOf(toMimeType).includes(MimeType.valueOf("image/jpeg"))) && 
-			   MimeType.valueOf("text/plain").includes(MimeType.valueOf(fromMimeType));
+	public RenditionCapability isCapable(String fromMimeType, String toMimeType) {
+		if ((MimeType.valueOf(toMimeType).includes(MimeType.valueOf("image/jpg")) || MimeType.valueOf(toMimeType).includes(MimeType.valueOf("image/jpeg"))) && 
+			   MimeType.valueOf("text/plain").includes(MimeType.valueOf(fromMimeType))) return RenditionCapability.GOOD_CAPABILITY;
+		return RenditionCapability.NOT_CAPABLE;
 	}
 
 

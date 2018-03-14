@@ -2,7 +2,7 @@ package it.zeroics.strg.renditions.providers;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
+import org.springframework.content.commons.renditions.RenditionCapability;
 import org.springframework.content.commons.renditions.RenditionProvider;
 import org.springframework.stereotype.Service;
 //import org.springframework.stereotype.Service;
@@ -27,24 +27,24 @@ public class AnyImage2Any implements RenditionProvider {
 
 	@Override
 	public String consumes() {
-		return "image/*"; // "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+		throw new UnsupportedOperationException("Deprecated method:use isCapable instead");
 	}
 
 	@Override
 	public String[] produces() {
-		return new String[] { "image/*", "application/pdf" };
+		throw new UnsupportedOperationException("Deprecated method:use isCapable instead");
 	}
 
 	@Override
-	public Boolean isCapable(String fromMimeType, String toMimeType) {
+	public RenditionCapability isCapable(String fromMimeType, String toMimeType) {
 		logger.debug("Mime check: " + fromMimeType + " -> " + toMimeType);
 		MimeType toMime = MimeType.valueOf(toMimeType) ;
 		if (toMime.includes(MimeType.valueOf("application/pdf")) || toMime.includes(MimeType.valueOf("image/*")) ) {
 			if ( MimeType.valueOf(fromMimeType).includes(MimeType.valueOf("image/*")) ) {
-				return true;
+				return RenditionCapability.GOOD_CAPABILITY;
 			}
 		}
-		return false;
+		return RenditionCapability.NOT_CAPABLE;
 	}
 
 	@SuppressWarnings("resource")

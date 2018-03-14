@@ -5,6 +5,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.poi.POIXMLProperties;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.springframework.content.commons.renditions.RenditionCapability;
 import org.springframework.content.commons.renditions.RenditionProvider;
 import org.springframework.content.commons.repository.StoreExtensionException;
 import org.springframework.content.renditions.RenditionException;
@@ -33,18 +34,19 @@ public class WordToJpegRenderer implements RenditionProvider {
 
     @Override
     public String consumes() {
-        return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+    	throw new UnsupportedOperationException();
     }
 
     @Override
     public String[] produces() {
-        return new String[] {"image/jpg"};
+    	throw new UnsupportedOperationException();
     }
     
     @Override
-   	public Boolean isCapable(String fromMimeType, String toMimeType) {
-   		return (MimeType.valueOf(toMimeType).includes(MimeType.valueOf("image/jpg")) || MimeType.valueOf(toMimeType).includes(MimeType.valueOf("image/jpeg"))) && 
-   			   MimeType.valueOf("application/vnd.openxmlformats-officedocument.wordprocessingml.document").includes(MimeType.valueOf(fromMimeType));
+   	public RenditionCapability isCapable(String fromMimeType, String toMimeType) {
+   		if ((MimeType.valueOf(toMimeType).includes(MimeType.valueOf("image/jpg")) || MimeType.valueOf(toMimeType).includes(MimeType.valueOf("image/jpeg"))) && 
+   			   MimeType.valueOf("application/vnd.openxmlformats-officedocument.wordprocessingml.document").includes(MimeType.valueOf(fromMimeType))) return RenditionCapability.GOOD_CAPABILITY;
+   		return RenditionCapability.NOT_CAPABLE; 
    	}
 
     @SuppressWarnings("resource")

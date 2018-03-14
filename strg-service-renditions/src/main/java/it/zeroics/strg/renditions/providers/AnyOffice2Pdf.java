@@ -2,7 +2,7 @@ package it.zeroics.strg.renditions.providers;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
+import org.springframework.content.commons.renditions.RenditionCapability;
 import org.springframework.content.commons.renditions.RenditionProvider;
 import org.springframework.stereotype.Service;
 //import org.springframework.stereotype.Service;
@@ -27,16 +27,16 @@ public class AnyOffice2Pdf implements RenditionProvider {
 
 	@Override
 	public String consumes() {
-		return "*/*"; // "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public String[] produces() {
-		return new String[] { "application/pdf" };
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public Boolean isCapable(String fromMimeType, String toMimeType) {
+	public RenditionCapability isCapable(String fromMimeType, String toMimeType) {
 		logger.debug("Mime check: " + fromMimeType + " -> " + toMimeType);
 		MimeType toMime = MimeType.valueOf(toMimeType) ;
 		if (toMime.includes(MimeType.valueOf("application/pdf")) ) {
@@ -54,10 +54,10 @@ public class AnyOffice2Pdf implements RenditionProvider {
 					MimeType.valueOf(fromMimeType).includes(MimeType.valueOf("application/vnd.ms-powerpoint")) || // Microsoft Power Point .ppt
 					MimeType.valueOf(fromMimeType).includes(MimeType.valueOf("application/vnd.ms-excel")) // Microsoft Power Point .xls
 			) {
-				return true;
+				return RenditionCapability.BEST_FIT;
 			}
 		}
-		return false;
+		return RenditionCapability.NOT_CAPABLE;
 	}
 
 	@SuppressWarnings("resource")

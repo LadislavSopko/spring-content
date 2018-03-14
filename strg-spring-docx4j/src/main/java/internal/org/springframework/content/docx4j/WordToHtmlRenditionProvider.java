@@ -13,6 +13,7 @@ import org.docx4j.convert.out.html.AbstractHtmlExporter;
 import org.docx4j.convert.out.html.HtmlExporterNG2;
 import org.docx4j.model.fields.FieldUpdater;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
+import org.springframework.content.commons.renditions.RenditionCapability;
 import org.springframework.content.commons.renditions.RenditionProvider;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MimeType;
@@ -22,17 +23,18 @@ public class WordToHtmlRenditionProvider implements RenditionProvider {
 
 	@Override
 	public String consumes() {
-		return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public String[] produces() {
-		return new String[] {"text/html"};
+		throw new UnsupportedOperationException();
 	}
 	
 	@Override
-	public Boolean isCapable(String fromMimeType, String toMimeType) {
-		return MimeType.valueOf(toMimeType).includes(MimeType.valueOf("text/html")) && MimeType.valueOf("application/vnd.openxmlformats-officedocument.wordprocessingml.document").includes(MimeType.valueOf(fromMimeType));
+	public RenditionCapability isCapable(String fromMimeType, String toMimeType) {
+		if (MimeType.valueOf(toMimeType).includes(MimeType.valueOf("text/html")) && MimeType.valueOf("application/vnd.openxmlformats-officedocument.wordprocessingml.document").includes(MimeType.valueOf(fromMimeType))) return RenditionCapability.GOOD_CAPABILITY;
+		return RenditionCapability.NOT_CAPABLE;
 	}
 
 	@Override

@@ -14,6 +14,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.content.commons.renditions.Renderable;
+import org.springframework.content.commons.renditions.RenditionCapability;
 import org.springframework.content.commons.renditions.RenditionProvider;
 import org.springframework.content.commons.renditions.RenditionService;
 import org.springframework.content.commons.repository.StoreExtension;
@@ -50,7 +51,7 @@ public class RenditionServiceImpl implements RenditionService, StoreExtension {
 		}*/
 		
 		for (RenditionProvider provider : providers) {
-			if(provider.isCapable(fromMimeType, toMimeType)) {
+			if(provider.isCapable(fromMimeType, toMimeType).isBetterThan(RenditionCapability.NOT_CAPABLE)) {
 				return true;
 			}
 			/*
@@ -80,35 +81,8 @@ public class RenditionServiceImpl implements RenditionService, StoreExtension {
 
 	@Override
 	public InputStream convert(String fromMimeType, InputStream fromInputSource, String toMimeType) {
-		/*
-		for (RenditionProvider provider : providers) {
-			if (MimeType.valueOf(fromMimeType).includes(MimeType.valueOf(provider.consumes()))) {
-				for (String produce : provider.produces()) {
-					if (MimeType.valueOf(toMimeType).includes(MimeType.valueOf(produce))) {
-						return provider.convert(fromInputSource, toMimeType);
-					}
-				}
-			}
-		}
-		*/
-		
-		for (RenditionProvider provider : providers) {
-			if(provider.isCapable(fromMimeType, toMimeType)) {
-				return provider.convert(fromInputSource, toMimeType);
-			}
-			
-			/*
-			for (String produce : provider.produces()) {
-				if (
-						MimeType.valueOf(toMimeType).includes(MimeType.valueOf(produce)) &&
-						// * /* includes all so we can create rendition with consume * /*
-						MimeType.valueOf(provider.consumes()).includes(MimeType.valueOf(fromMimeType))
-				) {
-					return provider.convert(fromInputSource, toMimeType);
-				}
-			}
-			*/
-		}
+		RenditionProvider provider = getProvider(fromMimeType, toMimeType) ;
+		if ( provider != null ) return provider.convert(fromInputSource, toMimeType);
 		return null;
 	}
 
@@ -150,9 +124,14 @@ public class RenditionServiceImpl implements RenditionService, StoreExtension {
 
 	@Override
 	public RenditionProvider getProvider(String fromMimeType,	String toMimeType) {
+		RenditionCapability bestCapability = RenditionCapability.NOT_CAPABLE ;
+		RenditionProvider bestProvider = null;
 		for (RenditionProvider provider : providers) {
-			if(provider.isCapable(fromMimeType, toMimeType)) {
-				return provider;
+			RenditionCapability vote = provider.isCapable(fromMimeType, toMimeType) ;
+			if ( vote.isBest() ) return provider; // Return the best provider.
+			if ( vote.isBetterThan(bestCapability) ) {
+				bestCapability = vote; // Elect a better priovider.
+				bestProvider = provider;
 			}
 			
 			/*
@@ -167,6 +146,6 @@ public class RenditionServiceImpl implements RenditionService, StoreExtension {
 			}
 			*/
 		}
-		return null;
+		return bestProvider;
 	}
 }

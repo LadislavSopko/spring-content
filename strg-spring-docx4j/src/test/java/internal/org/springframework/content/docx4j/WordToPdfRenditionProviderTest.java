@@ -13,6 +13,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.util.PDFTextStripper;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.content.commons.renditions.RenditionCapability;
 import org.springframework.content.commons.renditions.RenditionProvider;
 
 import internal.org.springframework.content.docx4j.WordToPdfRenditionProvider;
@@ -28,8 +29,7 @@ public class WordToPdfRenditionProviderTest {
 	
 	@Test
 	public void testCanConvert() {
-		assertThat(service.consumes(), is("application/vnd.openxmlformats-officedocument.wordprocessingml.document"));
-		assertThat(Arrays.asList(service.produces()), hasItems("application/pdf"));
+		assertThat(service.isCapable("application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/pdf").isBetterThan(RenditionCapability.NOT_CAPABLE), is(true));		
 	}
 
 	@Test

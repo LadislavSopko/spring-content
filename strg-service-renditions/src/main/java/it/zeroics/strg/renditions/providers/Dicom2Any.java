@@ -2,7 +2,7 @@ package it.zeroics.strg.renditions.providers;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
+import org.springframework.content.commons.renditions.RenditionCapability;
 import org.springframework.content.commons.renditions.RenditionProvider;
 import org.springframework.stereotype.Service;
 //import org.springframework.stereotype.Service;
@@ -27,23 +27,23 @@ public class Dicom2Any implements RenditionProvider {
 
 	@Override
 	public String consumes() {
-		return "*/dicom"; // "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public String[] produces() {
-		return new String[] { "application/json" };
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public Boolean isCapable(String fromMimeType, String toMimeType) {
+	public RenditionCapability isCapable(String fromMimeType, String toMimeType) {
 		logger.debug("Mime check: " + fromMimeType + " -> " + toMimeType);
 		MimeType fromMime = MimeType.valueOf(fromMimeType) ;
 		MimeType toMime = MimeType.valueOf(toMimeType) ;
 		if ( BasicRenderer.justMeta(toMime) && fromMime.getSubtype().equals("dicom")) {
-			return true;
+			return RenditionCapability.BEST_FIT;
 		}
-		return false;
+		return RenditionCapability.NOT_CAPABLE;
 	}
 
 	@SuppressWarnings("resource")

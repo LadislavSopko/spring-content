@@ -8,6 +8,7 @@ import java.io.InputStream;
 import javax.imageio.ImageIO;
 
 import org.apache.commons.io.IOUtils;
+import org.springframework.content.commons.renditions.RenditionCapability;
 import org.springframework.content.commons.renditions.RenditionProvider;
 import org.springframework.util.MimeType;
 
@@ -15,17 +16,18 @@ public class JpegToPngRenditionProvider implements RenditionProvider {
 
 	@Override
 	public String consumes() {
-		return "image/jpeg";
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public String[] produces() {
-		return new String[] {"image/png"};
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public Boolean isCapable(String fromMimeType, String toMimeType) {
-		return MimeType.valueOf(toMimeType).includes(MimeType.valueOf("image/png")) && MimeType.valueOf("image/jpeg").includes(MimeType.valueOf(fromMimeType));
+	public RenditionCapability isCapable(String fromMimeType, String toMimeType) {
+		if (MimeType.valueOf(toMimeType).includes(MimeType.valueOf("image/png")) && MimeType.valueOf("image/jpeg").includes(MimeType.valueOf(fromMimeType))) return RenditionCapability.GOOD_CAPABILITY;
+		return RenditionCapability.NOT_CAPABLE;
 	}
 	
 	@Override
