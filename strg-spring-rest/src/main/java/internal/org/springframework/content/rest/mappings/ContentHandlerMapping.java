@@ -113,10 +113,18 @@ public class ContentHandlerMapping extends RequestMappingHandlerMapping {
 			if (source == null) {
 				return other;
 			}
-			if (source.equals(CORS_DEFAULT_PERMIT_ALL) || source.equals(CORS_DEFAULT_PERMIT_METHODS)) {
+			if (
+				source == CORS_DEFAULT_PERMIT_ALL || source == CORS_DEFAULT_PERMIT_METHODS || 
+				source.size() == 1 && 
+					(source.equals(CORS_DEFAULT_PERMIT_ALL) || source.equals(CORS_DEFAULT_PERMIT_METHODS))
+			) {
 				return other;
 			}
-			if (other.equals(CORS_DEFAULT_PERMIT_ALL) || other.equals(CORS_DEFAULT_PERMIT_METHODS)) {
+			if (
+				other == CORS_DEFAULT_PERMIT_ALL || other == CORS_DEFAULT_PERMIT_METHODS || 
+				other.size() == 1 && 
+					(other.equals(CORS_DEFAULT_PERMIT_ALL) || other.equals(CORS_DEFAULT_PERMIT_METHODS))
+			) {
 				return source;
 			}
 			if (source.contains(CorsConfiguration.ALL) || other.contains(CorsConfiguration.ALL)) {
@@ -168,9 +176,6 @@ public class ContentHandlerMapping extends RequestMappingHandlerMapping {
 	}
 	
 	
-	
-	
-
 	private boolean isHalOrJsonRequest(HttpServletRequest request) {
 		String method = request.getMethod();
 		if ("GET".equals(method) || "DELETE".equals(method)) {
@@ -299,10 +304,5 @@ public class ContentHandlerMapping extends RequestMappingHandlerMapping {
 			} 
 			return false;
 		}
-		
-		
-		
-		
-		
 	}
 }
