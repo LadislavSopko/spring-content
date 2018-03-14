@@ -17,23 +17,13 @@ import it.zeroics.strg.renditions.RenditionException;
 import java.io.InputStream;
 
 @Service
-public class Dicom2Any implements RenditionProvider {
+public class Dicom2Any extends BasicProvider {
 
 	private static Log logger = LogFactory.getLog(Dicom2Any.class);
 
 	public Dicom2Any() {
-
+		super() ;
 	};
-
-	@Override
-	public String consumes() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public String[] produces() {
-		throw new UnsupportedOperationException();
-	}
 
 	@Override
 	public RenditionCapability isCapable(String fromMimeType, String toMimeType) {

@@ -36,7 +36,7 @@ public class MostAny2TxtTest {
     public ExpectedException thrown = ExpectedException.none();
 
     {
-        Describe("RenditionProviders", () -> {
+        Describe("RenditionProviders: MostAny2Txt", () -> {
             JustBeforeEach(() -> {
                 provider = new MostAny2Txt();
             });

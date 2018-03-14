@@ -17,25 +17,15 @@ import it.zeroics.strg.renditions.TikaRenderer;
 import java.io.InputStream;
 
 @Service
-public class MostAny2Txt implements RenditionProvider {
+public class MostAny2Txt extends BasicProvider {
 
     private static Log logger = LogFactory.getLog(MostAny2Txt.class);
 
     
     public MostAny2Txt() {
-        
+		super() ;
     };
 
-    @Override
-    public String consumes() {
-    	throw new UnsupportedOperationException("Deprecated method:use isCapable instead");
-    }
-
-    @Override
-    public String[] produces() {
-    	throw new UnsupportedOperationException("Deprecated method:use isCapable instead");
-    }
-    
     @Override
 	public RenditionCapability isCapable(String fromMimeType, String toMimeType) {
     	logger.debug("Mime check: " + fromMimeType + " -> " + toMimeType);

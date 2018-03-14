@@ -17,30 +17,20 @@ import it.zeroics.strg.renditions.RenditionException;
 import java.io.InputStream;
 
 @Service
-public class AnyImage2Any implements RenditionProvider {
+public class AnyImage2Any extends BasicProvider {
 
 	private static Log logger = LogFactory.getLog(AnyImage2Any.class);
 
 	public AnyImage2Any() {
-
+		super() ;
 	};
-
-	@Override
-	public String consumes() {
-		throw new UnsupportedOperationException("Deprecated method:use isCapable instead");
-	}
-
-	@Override
-	public String[] produces() {
-		throw new UnsupportedOperationException("Deprecated method:use isCapable instead");
-	}
 
 	@Override
 	public RenditionCapability isCapable(String fromMimeType, String toMimeType) {
 		logger.debug("Mime check: " + fromMimeType + " -> " + toMimeType);
 		MimeType toMime = MimeType.valueOf(toMimeType) ;
-		if (toMime.includes(MimeType.valueOf("application/pdf")) || toMime.includes(MimeType.valueOf("image/*")) ) {
-			if ( MimeType.valueOf(fromMimeType).includes(MimeType.valueOf("image/*")) ) {
+		if (toMime.includes(MimeType.valueOf("application/pdf")) || toMime.getType().equals("image")) {
+			if ( MimeType.valueOf(fromMimeType).getType().equals("image") ) {
 				return RenditionCapability.GOOD_CAPABILITY;
 			}
 		}

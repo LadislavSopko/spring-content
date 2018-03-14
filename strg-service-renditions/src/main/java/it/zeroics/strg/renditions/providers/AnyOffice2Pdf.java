@@ -17,23 +17,13 @@ import it.zeroics.strg.renditions.RenditionException;
 import java.io.InputStream;
 
 @Service
-public class AnyOffice2Pdf implements RenditionProvider {
+public class AnyOffice2Pdf extends BasicProvider {
 
 	private static Log logger = LogFactory.getLog(AnyOffice2Pdf.class);
 
 	public AnyOffice2Pdf() {
-
+		super() ;
 	};
-
-	@Override
-	public String consumes() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public String[] produces() {
-		throw new UnsupportedOperationException();
-	}
 
 	@Override
 	public RenditionCapability isCapable(String fromMimeType, String toMimeType) {

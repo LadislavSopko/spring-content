@@ -38,7 +38,7 @@ public class AnyOffice2PdfTest {
     public ExpectedException thrown = ExpectedException.none();
 
     {
-        Describe("RenditionProviders", () -> {
+        Describe("RenditionProviders: AntOffice2Pdf", () -> {
             JustBeforeEach(() -> {
                 provider = new AnyOffice2Pdf();
             });

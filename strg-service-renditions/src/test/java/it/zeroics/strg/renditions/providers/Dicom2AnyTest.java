@@ -36,7 +36,7 @@ public class Dicom2AnyTest {
     public ExpectedException thrown = ExpectedException.none();
 
     {
-        Describe("RenditionProviders", () -> {
+        Describe("RenditionProviders: Dicom2Any", () -> {
             JustBeforeEach(() -> {
                 provider = new Dicom2Any();
             });
