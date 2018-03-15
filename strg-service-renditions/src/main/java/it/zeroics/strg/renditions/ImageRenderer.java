@@ -24,6 +24,7 @@ import com.sun.star.form.binding.IncompatibleTypesException;
 //import gettingstarted.springcontentfs.File;
 import internal.org.springframework.content.commons.utils.InputContentStream;
 import it.zeroics.strg.model.Medium;
+import it.zeroics.strg.renditions.utils.MimeHelper;
 
 @Component
 public class ImageRenderer extends BasicRenderer {
@@ -49,8 +50,6 @@ public class ImageRenderer extends BasicRenderer {
 			originalFile = File.createTempFile("image-", "."+inputExtension);
 			FileUtils.copyInputStreamToFile(is, originalFile);
 			// Create file according to out mime type.
-			Map<String, String> parms = outputMimeType.getParameters();
-
 			String ext = outputMimeType.getSubtype();
 			switch(ext) {
 				case "pdf":
@@ -73,10 +72,14 @@ public class ImageRenderer extends BasicRenderer {
 					break;
 				case "pjpeg":
 				case "jpeg":
+				case "pjpg":
+				case "jpg":
 					ext = "jpg";
 					break;
 				case "tiff":
 				case "x-tiff":
+				case "tif":
+				case "x-tif":
 					ext = "tif";
 					break;
 				default:
@@ -88,8 +91,15 @@ public class ImageRenderer extends BasicRenderer {
 			if (logger.isDebugEnabled())
 				logger.debug("ImageRenderer.run(): from " + originalFile.getAbsolutePath() + " to " + outputFile.getAbsolutePath());
 
-			//String commandLine = new String(iMagikCall) ;
-			String commandLine = "\"C:/Program Files/ImageMagick-6.8.1-Q16/convert\" -limit memory 250mb -limit map 500mb " ;
+			String commandLine = RenditionsProperties.getImagikCall() ;
+			// String commandLine = "\"C:/Program Files/ImageMagick-6.8.1-Q16/convert\" -limit memory 250mb -limit map 500mb " ;
+			if ( MimeHelper.isGrayscale(outputMimeType) ) {
+				commandLine += " -colorspace Gray " ;
+			}
+			if ( MimeHelper.isThumb(outputMimeType) ) {
+				commandLine += " -thumbnail " + MimeHelper.getThumbMode(outputMimeType) ;
+			}
+			
 			// Compose Command line according to mime parameters
 			commandLine += " \"" + originalFile + "\" \"" + outputFile + "\"" ; 			
 			// Call ImageMagik

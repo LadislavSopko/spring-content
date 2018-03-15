@@ -24,6 +24,7 @@ import org.springframework.util.MimeType;
 //import gettingstarted.springcontentfs.File;
 import internal.org.springframework.content.commons.utils.InputContentStream;
 import it.zeroics.strg.model.Medium;
+import it.zeroics.strg.renditions.utils.MimeHelper;
 
 @Component
 public class PdfRenderer extends BasicRenderer {
@@ -108,17 +109,13 @@ public class PdfRenderer extends BasicRenderer {
 			officeFile = File.createTempFile("office-", "."+inputExtension);
 			FileUtils.copyInputStreamToFile(is, officeFile);
 			// Create file according to out mime type.
-			Map<String, String> parms = outputMimeType.getParameters();
 
 			pdfFile = File.createTempFile("pdf-", ".pdf");
 			if (logger.isDebugEnabled())
 				logger.debug("PdfConverter.run(): from " + officeFile.getAbsolutePath() + " to " + pdfFile.getAbsolutePath());
 			
-			if ( ! parms.isEmpty() ) {
-				String toPdfA = parms.get("PdfA") ;
-				if ( null != toPdfA && toPdfA.equals("true")) {
-					pdfDocumentFormat = getPdfaDocumentFormat(officeFile) ;
-				}
+			if ( MimeHelper.isPdfA(outputMimeType) ) {
+				pdfDocumentFormat = getPdfaDocumentFormat(officeFile) ;
 			}
 
 			OfficeManager officeManager = OfficeManagerOSC.getInstance().getOfficeManager();

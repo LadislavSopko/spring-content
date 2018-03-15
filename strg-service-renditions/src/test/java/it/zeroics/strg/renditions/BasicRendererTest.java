@@ -6,6 +6,7 @@ import com.github.paulcwarren.ginkgo4j.Ginkgo4jRunner;
 import internal.org.springframework.content.commons.renditions.RenditionServiceImpl;
 import internal.org.springframework.content.commons.utils.InputContentStream;
 import it.zeroics.strg.model.Medium;
+import it.zeroics.strg.renditions.utils.MimeHelper;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
@@ -37,19 +38,19 @@ public class BasicRendererTest {
 			Context("#Match Meta", () -> {
 				It("Must match request of metadata", () -> {
 					try {
-						BasicRenderer.justMeta(MimeType.valueOf("")) ;
+						MimeHelper.justMeta(MimeType.valueOf("")) ;
 						fail("Invalid meta is recognized as good");
 					}
 					catch(Exception e) {
 						assertThat(e , instanceOf(Exception.class));
 					}
 					
-					assertThat(BasicRenderer.justMeta(MimeType.valueOf("application/json")) , is(false));
-					assertThat(BasicRenderer.justMeta(MimeType.valueOf("this/that")) , is(false));
-					assertThat(BasicRenderer.justMeta(MimeType.valueOf("this/that;meta=true")) , is(false));
-					assertThat(BasicRenderer.justMeta(MimeType.valueOf("application/pdf;meta=true")) , is(false));
+					assertThat(MimeHelper.justMeta(MimeType.valueOf("this/that")) , is(false));
+					assertThat(MimeHelper.justMeta(MimeType.valueOf("this/that;meta=true")) , is(false));
+					assertThat(MimeHelper.justMeta(MimeType.valueOf("application/pdf;meta=true")) , is(false));
 
-					assertThat(BasicRenderer.justMeta(MimeType.valueOf("application/json;meta=true")) , is(true));
+					assertThat(MimeHelper.justMeta(MimeType.valueOf("application/json")) , is(false));
+					assertThat(MimeHelper.justMeta(MimeType.valueOf("application/json;meta=true")) , is(true));
 				});
 			});
         });

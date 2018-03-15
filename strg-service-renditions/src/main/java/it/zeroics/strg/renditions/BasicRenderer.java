@@ -40,20 +40,6 @@ public class BasicRenderer implements Runnable {
 		init(is, null);
 	}
 
-	public static boolean justMeta(MimeType mime) {
-        // Should I bring text or meta?
-        if ( mime.isCompatibleWith(MimeType.valueOf("application/json")) ) {
-            Map<String, String> parms = mime.getParameters();
-    		if ( !parms.isEmpty() ) {
-    			String toMeta = parms.get("meta") ;
-    			if ( null != toMeta && toMeta.equals("true")) {
-    				return true ;
-    			}
-    		}
-        }
-        return false ;
-	}
-	
 	// Must Override
 	public void run(){
 		/*

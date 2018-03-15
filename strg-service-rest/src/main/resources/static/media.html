@@ -8,20 +8,27 @@
     <div ng-controller="MediaListController as mediaListCtrl">
         <h1>Media</h1>
 
-        <section style="display: table; width: 80%">
+        <section style="display: table; width: 90%">
           <header style="display: table-row;">
             <div style="display: table-cell;">Name</div>
             <div style="display: table-cell;">Length</div>
             <div style="display: table-cell;">Created</div>
             <div style="display: table-cell;">Summary</div>
           </header>
+          	Load As...
+			<select name="mimeSelect" id="mimeSelect" ng-model="mediaListCtrl.conversion.mime">
+				<option ng-repeat="opt in mediaListCtrl.conversion.options" value="{{opt.mime}}">{{opt.descr}}</option>
+				<!-- 
+				<option value="text/plain">Txt</option>
+				<option value="application/pdf">Pdf</option>
+				<option value="application/pdf;PdfA=true">Pdf/A</option>
+				<option value="application/json;meta=true">Meta</option>
+				 -->
+		    </select>
           <div style="display: table-row;" ng-repeat="medium in mediaListCtrl.media">
             <div style="display: table-cell;">
             <a href="{{mediaListCtrl.getHref(medium)}}" type={{medium.mimeType}} download={{medium.name}}>{{medium.name}}</a>
-            <button ng-click="mediaListCtrl.downloadFile(medium, 'text/plain;', 'txt')">Text</button>
-            <button ng-click="mediaListCtrl.downloadFile(medium, 'application/pdf;', 'pdf')">Pdf</button>
-            <button ng-click="mediaListCtrl.downloadFile(medium, 'application/pdf;PdfA=true', 'pdf')">Pdf/A</button>
-            <button ng-click="mediaListCtrl.downloadFile(medium, 'application/json;meta=true', 'json')">Meta</button>
+            <button ng-click="mediaListCtrl.downloadFile(medium, '{{mediaListCtrl.conversion.mime}}')">Load as '{{mediaListCtrl.getDescription()}}'</button>
             </div>
             <div style="display: table-cell;"><label>{{medium.contentLength}}</label></div>
             <div style="display: table-cell;"><label>{{medium.created}}</label></div>

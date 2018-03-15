@@ -13,6 +13,7 @@ import it.zeroics.strg.renditions.BasicRenderer;
 import it.zeroics.strg.renditions.Context;
 import it.zeroics.strg.renditions.RenditionException;
 import it.zeroics.strg.renditions.TikaRenderer;
+import it.zeroics.strg.renditions.utils.MimeHelper;
 
 import java.io.InputStream;
 
@@ -36,7 +37,7 @@ public class MostAny2Txt extends BasicProvider {
     			MimeType.valueOf("*/*").includes(fromMime) ) {
     		return RenditionCapability.BEST_FIT;
     	}
-    	if (BasicRenderer.justMeta(toMime) &&
+    	if (MimeHelper.justMeta(toMime) &&
     			!fromMime.getSubtype().equals("dicom") && // TODO: Tika is able but not very able, should return a "vote".
     			MimeType.valueOf("*/*").includes(fromMime) ) {
 			return RenditionCapability.PRETTY_CAPABLE ;

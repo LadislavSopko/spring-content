@@ -74,7 +74,12 @@ public final class ContentStoreUtils {
 		
 		for (int i=0; i < arrMimeTypes.length && content == null; i++) {
 			MediaType mimeType = arrMimeTypes[i];
-			if (mimeType.includes(targetMimeType)) {
+			if ( !(mimeType.isConcrete() && targetMimeType.isConcrete() &&
+					mimeType.getType().equals(targetMimeType.getType()) &&
+					mimeType.getSubtype().equals(targetMimeType.getSubtype()) &&
+					!mimeType.equals(targetMimeType)
+					) && // If the same but with parameters, use renderer...
+					mimeType.includes(targetMimeType)) {  // ... or load original in compatibility mode
 				headers.setContentType(targetMimeType);
 				
 				// content name header

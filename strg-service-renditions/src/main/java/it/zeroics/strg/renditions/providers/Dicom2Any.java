@@ -13,6 +13,7 @@ import it.zeroics.strg.renditions.BasicRenderer;
 import it.zeroics.strg.renditions.Context;
 import it.zeroics.strg.renditions.DicomRenderer;
 import it.zeroics.strg.renditions.RenditionException;
+import it.zeroics.strg.renditions.utils.MimeHelper;
 
 import java.io.InputStream;
 
@@ -30,7 +31,7 @@ public class Dicom2Any extends BasicProvider {
 		logger.debug("Mime check: " + fromMimeType + " -> " + toMimeType);
 		MimeType fromMime = MimeType.valueOf(fromMimeType) ;
 		MimeType toMime = MimeType.valueOf(toMimeType) ;
-		if ( BasicRenderer.justMeta(toMime) && fromMime.getSubtype().equals("dicom")) {
+		if ( MimeHelper.justMeta(toMime) && fromMime.getSubtype().equals("dicom")) {
 			return RenditionCapability.BEST_FIT;
 		}
 		return RenditionCapability.NOT_CAPABLE;

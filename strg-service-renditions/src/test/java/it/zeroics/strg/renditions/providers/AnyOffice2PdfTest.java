@@ -6,6 +6,7 @@ import com.github.paulcwarren.ginkgo4j.Ginkgo4jRunner;
 import internal.org.springframework.content.commons.renditions.RenditionServiceImpl;
 import internal.org.springframework.content.commons.utils.InputContentStream;
 import it.zeroics.strg.model.Medium;
+import it.zeroics.strg.renditions.utils.MimeHelper;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
@@ -51,7 +52,9 @@ public class AnyOffice2PdfTest {
 				It("Must be capable only in some cases", () -> {
 					assertThat(provider.isCapable("what/the_fuck", "text/plain").isBest(), is(false));
 					assertThat(provider.isCapable("what/the_fuck", "application/pdf"), is(RenditionCapability.NOT_CAPABLE));
-					assertThat(provider.isCapable("what/the_fuck", "application/json;meta=true"), is(RenditionCapability.NOT_CAPABLE));
+					MimeHelper mh = new MimeHelper(MimeHelper.METADATA_MIMETYPE);
+					mh.requireMetadata();
+					assertThat(provider.isCapable("what/the_fuck", mh.toString()), is(RenditionCapability.NOT_CAPABLE));
 					assertThat(provider.isCapable("image/dicom", "application/pdf"), is(RenditionCapability.NOT_CAPABLE));
 					assertThat(provider.isCapable("application/msword", "application/pdf").isBetterThan(RenditionCapability.NOT_CAPABLE), is(true));
 					assertThat(provider.isCapable("application/vnd.ms-powerpoint", "application/pdf").isBetterThan(RenditionCapability.NOT_CAPABLE), is(true));

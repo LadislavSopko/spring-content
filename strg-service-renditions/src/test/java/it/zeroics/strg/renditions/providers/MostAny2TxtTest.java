@@ -6,6 +6,7 @@ import com.github.paulcwarren.ginkgo4j.Ginkgo4jRunner;
 import internal.org.springframework.content.commons.renditions.RenditionServiceImpl;
 import internal.org.springframework.content.commons.utils.InputContentStream;
 import it.zeroics.strg.model.Medium;
+import it.zeroics.strg.renditions.utils.MimeHelper;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
@@ -48,9 +49,11 @@ public class MostAny2TxtTest {
 			Context("#isCapable", () -> {
 				It("Must be capable only in some cases", () -> {
 					assertThat(provider.isCapable("what/the_fuck", "text/plain").isBest(), is(true));
-					assertThat(provider.isCapable("what/the_fuck", "application/json;meta=true").isBetterThan(RenditionCapability.NOT_CAPABLE), is(true));
-					assertThat(provider.isCapable("what/the_fuck", "application/json;meta=true").isBest(), is(false));
-					assertThat(provider.isCapable("image/dicom", "application/json;meta=true"), is(RenditionCapability.NOT_CAPABLE));
+					MimeHelper mh = new MimeHelper(MimeHelper.METADATA_MIMETYPE);
+					mh.requireMetadata();
+					assertThat(provider.isCapable("what/the_fuck", mh.toString()).isBetterThan(RenditionCapability.NOT_CAPABLE), is(true));
+					assertThat(provider.isCapable("what/the_fuck", mh.toString()).isBest(), is(false));
+					assertThat(provider.isCapable("image/dicom", mh.toString()), is(RenditionCapability.NOT_CAPABLE));
 				});
 			});
 			Context("#convert", () -> {
@@ -65,8 +68,10 @@ public class MostAny2TxtTest {
 				Context("#docx to meta", () -> {
 					It("Must convert docx to json", () -> {
 						RendererTest c = new RendererTest();
+						MimeHelper mh = new MimeHelper(MimeHelper.METADATA_MIMETYPE);
+						mh.requireMetadata();
 						assertThat(c.compareAsString(
-								c.callConverterFromFileName("sample-docx.docx","application/vnd.openxmlformats-officedocument.wordprocessingml.document","application/json;meta=true", provider),
+								c.callConverterFromFileName("sample-docx.docx","application/vnd.openxmlformats-officedocument.wordprocessingml.document", mh.toString(), provider),
 								"sample-docx.docx.meta"), is(true));
 					});
 				});

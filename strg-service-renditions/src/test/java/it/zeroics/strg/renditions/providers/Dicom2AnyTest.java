@@ -6,6 +6,7 @@ import com.github.paulcwarren.ginkgo4j.Ginkgo4jRunner;
 import internal.org.springframework.content.commons.renditions.RenditionServiceImpl;
 import internal.org.springframework.content.commons.utils.InputContentStream;
 import it.zeroics.strg.model.Medium;
+import it.zeroics.strg.renditions.utils.MimeHelper;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
@@ -47,23 +48,29 @@ public class Dicom2AnyTest {
 			});
 			Context("#isCapable", () -> {
 				It("Must be capable only in some cases", () -> {
-					assertThat(provider.isCapable("what/the_fuck", "application/json;meta=true").isBetterThan(RenditionCapability.NOT_CAPABLE), is(false));
-					assertThat(provider.isCapable("image/dicom", "application/json;meta=true").isBetterThan(RenditionCapability.NOT_CAPABLE), is(true));
-					assertThat(provider.isCapable("image/dicom", "application/json;meta=true").isBest(), is(true));
+					MimeHelper mh = new MimeHelper(MimeHelper.METADATA_MIMETYPE);
+					mh.requireMetadata();
+					assertThat(provider.isCapable("what/the_fuck", mh.toString()).isBetterThan(RenditionCapability.NOT_CAPABLE), is(false));
+					assertThat(provider.isCapable("image/dicom", mh.toString()).isBetterThan(RenditionCapability.NOT_CAPABLE), is(true));
+					assertThat(provider.isCapable("image/dicom", mh.toString()).isBest(), is(true));
 				});
 			});
 			Context("#convert", () -> {
 				Context("#dcm to meta", () -> {
 					It("Must convert single frame dcm to json", () -> {
 						RendererTest c = new RendererTest();
+						MimeHelper mh = new MimeHelper(MimeHelper.METADATA_MIMETYPE);
+						mh.requireMetadata();
 						assertThat(c.compareAsString(
-								c.callConverterFromFileName("sample-singleframe-dcm.dcm","image/dicom","application/json;meta=true", provider),
+								c.callConverterFromFileName("sample-singleframe-dcm.dcm","image/dicom", mh.toString(), provider),
 								"sample-singleframe-dcm.dcm.meta"), is(true));
 					});
 					It("Must convert multi frame dcm to json", () -> {
 						RendererTest c = new RendererTest();
+						MimeHelper mh = new MimeHelper(MimeHelper.METADATA_MIMETYPE);
+						mh.requireMetadata();
 						assertThat(c.compareAsString(
-								c.callConverterFromFileName("sample-multiframe-dcm.dcm","image/dicom","application/json;meta=true", provider),
+								c.callConverterFromFileName("sample-multiframe-dcm.dcm","image/dicom",mh.toString(), provider),
 								"sample-multiframe-dcm.dcm.meta"), is(true));
 					});
 				});

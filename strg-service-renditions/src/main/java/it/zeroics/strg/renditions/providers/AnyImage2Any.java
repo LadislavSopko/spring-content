@@ -1,9 +1,10 @@
 package it.zeroics.strg.renditions.providers;
 
+import java.io.InputStream;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.content.commons.renditions.RenditionCapability;
-import org.springframework.content.commons.renditions.RenditionProvider;
 import org.springframework.stereotype.Service;
 //import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -13,8 +14,6 @@ import it.zeroics.strg.renditions.BasicRenderer;
 import it.zeroics.strg.renditions.Context;
 import it.zeroics.strg.renditions.ImageRenderer;
 import it.zeroics.strg.renditions.RenditionException;
-
-import java.io.InputStream;
 
 @Service
 public class AnyImage2Any extends BasicProvider {

@@ -20,6 +20,7 @@ import org.springframework.util.MimeType;
 import org.xml.sax.SAXException;
 
 import it.zeroics.strg.model.Medium;
+import it.zeroics.strg.renditions.utils.MimeHelper;
 import internal.org.springframework.content.commons.utils.InputContentStream;
 
 @Component
@@ -196,7 +197,7 @@ public class TikaRenderer extends BasicRenderer {
         	metadata.set(Metadata.CONTENT_TYPE, mediaMimeType);
         }
         
-        if ( justMeta(outputMimeType) ) {
+        if ( MimeHelper.justMeta(outputMimeType) ) {
 			Metadata tikaMetadata = new Metadata();
 	        try {
 	        	Tika t = new Tika() ;
