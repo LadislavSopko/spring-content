@@ -11,10 +11,8 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import org.hamcrest.CoreMatchers;
-import org.hamcrest.core.IsInstanceOf;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-import org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoProperties.Storage;
 import org.springframework.content.commons.annotations.ContentId;
 import org.springframework.content.commons.repository.ContentStore;
 import org.springframework.content.commons.repository.StoreAccessException;
@@ -84,7 +82,7 @@ public class ElasticsearchIndexerTest {
 					It("should send the content for indexing", () -> {
 						ArgumentCaptor<HttpEntity> argument = ArgumentCaptor.forClass(HttpEntity.class);
 						
-						verify(template).exchange(argThat(CoreMatchers.endsWith("/some-id")), eq(HttpMethod.PUT), argument.capture(), (Class<Object>)anyObject());
+						verify(template).exchange(org.mockito.hamcrest.MockitoHamcrest.argThat(CoreMatchers.endsWith("/some-id")), eq(HttpMethod.PUT), argument.capture(), (Class<Object>)anyObject());
 						
 						HttpEntity entity = argument.getValue();
 						assertTrue(((String)entity.getBody()).contains("\"contentId\":\"some-id\""));
@@ -166,7 +164,7 @@ public class ElasticsearchIndexerTest {
 				});
 				Context("when elasticsearch is available", () -> {
 					It("should send a DELETE request", () -> {
-						verify(template).exchange(argThat(CoreMatchers.endsWith("/some-id")), eq(HttpMethod.DELETE), eq(null), (Class<Object>)anyObject());
+						verify(template).exchange(org.mockito.hamcrest.MockitoHamcrest.argThat(CoreMatchers.endsWith("/some-id")), eq(HttpMethod.DELETE), eq(null), (Class<Object>)anyObject());
 					});
 					Context("when removing index failed", () -> {
 						It("should throw a StoreAccessException", () -> {

@@ -1,5 +1,16 @@
 package org.springframework.content.fs.boot;
 
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Context;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
+import static org.hamcrest.CoreMatchers.endsWith;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import java.io.File;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,19 +26,11 @@ import org.springframework.content.fs.io.FileSystemResourceLoader;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
-import org.springframework.core.env.StandardEnvironment;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jRunner;
-
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.*;
-import static org.hamcrest.CoreMatchers.endsWith;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 import internal.org.springframework.content.fs.boot.autoconfigure.FilesystemContentAutoConfiguration;
 
@@ -50,46 +53,51 @@ public class ContentFilesystemAutoConfigurationTest {
 			});
 
 			Context("given an environment specifying a filesystem root using spring prefix", () -> {
+				/* Value come from test.properties !!!!!
 				BeforeEach(() -> {
 					System.setProperty("SPRING_CONTENT_FS_FILESYSTEM_ROOT", "${java.io.tmpdir}/UPPERCASE/NOTATION/");
 				});
 				AfterEach(() -> {
 					System.clearProperty("SPRING_CONTENT_FS_FILESYSTEM_ROOT");
 				});
+				*/
 				It("should have a filesystem properties bean with the correct root set", () -> {
 					AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
 					context.register(TestConfig.class);
 					context.refresh();
 
-					assertThat(context.getBean(FilesystemContentAutoConfiguration.FilesystemProperties.class).getFilesystemRoot(), endsWith("/UPPERCASE/NOTATION/"));
+					assertThat(context.getBean(FilesystemContentAutoConfiguration.FilesystemProperties.class).getFilesystemRoot(), endsWith(File.separator + "UPPERCASE" + File.separator + "NOTATION"));
 
 					context.close();
 				});
 			});
-
+			
             Context("given a configuration that contributes a loader bean", () -> {
 				It("should have that loader bean in the context", () -> {
 					AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
 					context.register(ConfigWithLoaderBean.class);
 					context.refresh();
 
+					// file system resource loader don't normalize path separator !!!!
 					FileSystemResourceLoader loader = context.getBean(FileSystemResourceLoader.class);
 					assertThat(loader.getFilesystemRoot(), is("/some/random/path/"));
 
 					context.close();
 				});
 			});
+			
 
 		});
 	}
 
 
+	@PropertySource("classpath:/test.properties")
 	@Configuration
 	@AutoConfigurationPackage
 	@EnableAutoConfiguration
 	public static class TestConfig {
 	}
-
+	
 	@Configuration
 	@AutoConfigurationPackage
 	@EnableAutoConfiguration
@@ -102,7 +110,7 @@ public class ContentFilesystemAutoConfigurationTest {
 
 	}
 
-	@Entity
+	@Entity(name="TestEntity")
 	@Content
 	public class TestEntity {
 		@Id

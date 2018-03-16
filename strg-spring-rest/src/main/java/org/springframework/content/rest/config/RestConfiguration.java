@@ -1,10 +1,13 @@
 package org.springframework.content.rest.config;
 
+import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.content.commons.storeservice.ContentStoreService;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.data.web.config.HateoasAwareSpringDataWebConfiguration;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
@@ -15,6 +18,10 @@ import internal.org.springframework.content.rest.mappings.StoreByteRangeHttpRequ
 @ComponentScan("internal.org.springframework.content.rest.controllers")
 public class RestConfiguration extends HateoasAwareSpringDataWebConfiguration {
 	
+	public RestConfiguration(ApplicationContext context, ObjectFactory<ConversionService> conversionService) {
+		super(context, conversionService);
+	}
+
 	@Autowired 
 	ContentStoreService stores;
 	

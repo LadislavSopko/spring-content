@@ -36,7 +36,7 @@ public class ContentJpaAutoConfigurationTests {
 	public static class TestConfig {
 	}
 
-	@Entity
+	@Entity(name="TestEntity")
 	@Content
 	public class TestEntity {
 		@Id

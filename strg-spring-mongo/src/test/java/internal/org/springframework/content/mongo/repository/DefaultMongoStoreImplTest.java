@@ -20,6 +20,7 @@ import static org.mockito.Mockito.when;
 import java.io.InputStream;
 import java.util.UUID;
 
+import org.bson.types.ObjectId;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.content.commons.annotations.ContentId;
@@ -37,6 +38,7 @@ public class DefaultMongoStoreImplTest {
     private DefaultMongoStoreImpl<Object, String> mongoContentRepoImpl;
     private GridFsTemplate gridFsTemplate;
     private GridFSFile gridFSFile;
+    private ObjectId gridFSId;
     private ContentProperty property;
     private GridFsResource resource;
     private ConversionService converter;
@@ -53,6 +55,7 @@ public class DefaultMongoStoreImplTest {
                 gridFSFile = mock(GridFSFile.class);
                 resource = mock(GridFsResource.class);
                 mongoContentRepoImpl = new DefaultMongoStoreImpl<Object, String>(gridFsTemplate, converter);
+                gridFSId = new ObjectId();
             });
 
             Context("#setContent", () -> {
@@ -70,7 +73,7 @@ public class DefaultMongoStoreImplTest {
                 	BeforeEach(() -> {
                 		when(converter.convert(isA(UUID.class), eq(String.class))).thenReturn("12345-67890");
                 		when(gridFsTemplate.getResource(anyString())).thenReturn(null).thenReturn(resource);
-                		when(gridFsTemplate.store(anyObject(), anyString())).thenReturn(gridFSFile);
+                		when(gridFsTemplate.store(anyObject(), anyString())).thenReturn(gridFSId);
                 		when(resource.contentLength()).thenReturn(1L);
                 	});
 
@@ -93,7 +96,7 @@ public class DefaultMongoStoreImplTest {
 
                 		when(converter.convert(eq("abcd-efghi"), eq(String.class))).thenReturn("abcd-efghi");
                 		when(gridFsTemplate.getResource(anyObject())).thenReturn(resource);
-                		when(gridFsTemplate.store(anyObject(), anyString())).thenReturn(gridFSFile);
+                		when(gridFsTemplate.store(anyObject(), anyString())).thenReturn(gridFSId);
                 		when(resource.exists()).thenReturn(true);
                 		when(resource.contentLength()).thenReturn(1L);
                 	});

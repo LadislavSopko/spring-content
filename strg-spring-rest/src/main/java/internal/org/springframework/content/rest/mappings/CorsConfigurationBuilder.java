@@ -1,7 +1,5 @@
 package internal.org.springframework.content.rest.mappings;
 
-import java.util.Arrays;
-
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.http.HttpMethod;
 import org.springframework.util.CollectionUtils;
@@ -23,17 +21,22 @@ public class CorsConfigurationBuilder {
 			config.addAllowedOrigin(origin);
 		}
 
+		/* handled later by: config.applyPermitDefaultValues()
 		if (CollectionUtils.isEmpty(config.getAllowedOrigins())) {
 			config.setAllowedOrigins(Arrays.asList(CrossOrigin.DEFAULT_ORIGINS));
 		}
+		*/
 		
 		for (String header : annotation.allowedHeaders()) {
 			config.addAllowedHeader(header);
 		}
 
+		/* handled later by: config.applyPermitDefaultValues()
+		 * 
 		if (CollectionUtils.isEmpty(config.getAllowedHeaders())) {
 			config.setAllowedHeaders(Arrays.asList(CrossOrigin.DEFAULT_ALLOWED_HEADERS));
 		}
+		*/
 		
 		for (String header : annotation.exposedHeaders()) {
 			config.addExposedHeader(header);
@@ -60,17 +63,24 @@ public class CorsConfigurationBuilder {
 					+ "or an empty string (\"\"): current value is [" + allowCredentials + "]");
 		}
 		
+		
 		if (config.getAllowCredentials() == null) {
 			config.setAllowCredentials(CrossOrigin.DEFAULT_ALLOW_CREDENTIALS);
 		}
+		
 
 		if (annotation.maxAge() >= 0) {
 			config.setMaxAge(annotation.maxAge());
 		}
 
+		/*
 		if (config.getMaxAge() == null) {
 			config.setMaxAge(CrossOrigin.DEFAULT_MAX_AGE);
 		}
+		*/
+		
+		// handle with defaults what was not set @since spring 5.0
+		config.applyPermitDefaultValues();
 
 		return config;
 	}
