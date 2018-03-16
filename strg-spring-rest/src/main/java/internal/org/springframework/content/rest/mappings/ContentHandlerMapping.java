@@ -75,7 +75,6 @@ public class ContentHandlerMapping extends RequestMappingHandlerMapping {
 		return null; 
 	}
 	
-	
 	private static class CorsConfigurationUtils{
 		/* Cors specific due to changes of spring 5.0 */
 		private static final List<String> CORS_DEFAULT_PERMIT_ALL =
@@ -135,7 +134,7 @@ public class ContentHandlerMapping extends RequestMappingHandlerMapping {
 			return new ArrayList<>(combined);
 		}
 	}
-
+	
 	@Override
 	protected CorsConfiguration getCorsConfiguration(Object handler, HttpServletRequest request) {
 		CorsConfiguration corsConfiguration = super.getCorsConfiguration(handler, request);
@@ -167,12 +166,13 @@ public class ContentHandlerMapping extends RequestMappingHandlerMapping {
 		 *  For example, combining ["GET", "POST"] with ["PATCH"] results in ["GET", "POST", "PATCH"], but keep in mind that combining ["GET", "POST"] with ["*"] results in ["*"].
 		 *  
 		 *  Notice that default permit values set by applyPermitDefaultValues() are overridden by any value explicitly defined.
-		 *  
-		 *  >>
+		 * 
+		 *  FOLLOWING DISCUSSION : https://jira.spring.io/browse/SPR-15772 WE DO HERE DIFFERENT THING IF ARRIVE [OPTIONS] method
 		 */
-		return corsConfiguration == null ? storeCorsConfiguration
-				: CorsConfigurationUtils.combine(corsConfiguration, storeCorsConfiguration);
-				//: corsConfiguration.combine(storeCorsConfiguration);
+		return  corsConfiguration == null ? storeCorsConfiguration	: 
+			request.getMethod().equals("OPTIONS") ? 
+				CorsConfigurationUtils.combine(corsConfiguration, storeCorsConfiguration) :
+				corsConfiguration.combine(storeCorsConfiguration);
 	}
 	
 	

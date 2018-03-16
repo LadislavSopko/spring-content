@@ -171,6 +171,17 @@ public class ContentEntityRestControllerIntegrationTest {
 						testEntity.mimeType = "text/plain";
 						testEntity = repository.save(testEntity);
 					});
+					
+					Context("an GET request from a known host", () -> {
+						It("should return the relevant cors headers and OK", () -> {
+							mvc.perform(get("/testEntitiesContent/" + testEntity.id)
+							   .header("Access-Control-Request-Method", "GET")
+							   .header("Origin", "http://www.someurl.com"))
+							.andExpect(status().isOk())
+							.andExpect(header().string("Access-Control-Allow-Origin", "http://www.someurl.com"));
+						});
+					});
+					
 					Context("a GET to /{store}/{id}", () -> {
 						It("should return the original content and 200", () -> {
 							MockHttpServletResponse response = mvc.perform(get("/testEntitiesContent/" + testEntity.id)
