@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Set;
 
 import org.aopalliance.intercept.MethodInvocation;
@@ -148,7 +147,9 @@ public class RenditionServiceImpl implements RenditionService, StoreExtension {
 			*/
 		}
 		if ( null == bestProvider ) {
-			throw new NoSuchElementException("Unable to find renderer from '" + fromMimeType + "' to '" + toMimeType + "'"); 
+			//throw new NoSuchElementException("Unable to find renderer from '" + fromMimeType + "' to '" + toMimeType + "'"); 
+			throw new IllegalArgumentException("Unable to find renderer from '" + fromMimeType + "' to '" + toMimeType + "'");
+			//throw new MethodArgumentNotValidException("Unable to find renderer from '" + fromMimeType + "' to '" + toMimeType + "'");
 		}
 		return bestProvider;
 	}
