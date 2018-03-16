@@ -16,9 +16,17 @@ public class JpegToPngRenditionProvider implements RenditionProvider {
 
 	@Override
 	public String consumes() {
-		throw new UnsupportedOperationException();
+		return "image/jpg";
 	}
 
+	@Override
+	public Boolean consumes(String fromMimeType) {
+		if (MimeType.valueOf("image/jpeg").includes(MimeType.valueOf(fromMimeType)) ||
+				MimeType.valueOf("image/jpg").includes(MimeType.valueOf(fromMimeType))
+				) return true;
+		return false;
+	}
+	
 	@Override
 	public String[] produces() {
 		throw new UnsupportedOperationException();
@@ -26,7 +34,7 @@ public class JpegToPngRenditionProvider implements RenditionProvider {
 
 	@Override
 	public RenditionCapability isCapable(String fromMimeType, String toMimeType) {
-		if (MimeType.valueOf(toMimeType).includes(MimeType.valueOf("image/png")) && MimeType.valueOf("image/jpeg").includes(MimeType.valueOf(fromMimeType))) return RenditionCapability.GOOD_CAPABILITY;
+		if (MimeType.valueOf(toMimeType).includes(MimeType.valueOf("image/png")) && consumes(fromMimeType)) return RenditionCapability.GOOD_CAPABILITY;
 		return RenditionCapability.NOT_CAPABLE;
 	}
 	

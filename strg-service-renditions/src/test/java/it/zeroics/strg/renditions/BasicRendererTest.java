@@ -38,19 +38,19 @@ public class BasicRendererTest {
 			Context("#Match Meta", () -> {
 				It("Must match request of metadata", () -> {
 					try {
-						MimeHelper.justMeta(MimeType.valueOf("")) ;
+						MimeHelper.isMeta(MimeType.valueOf("")) ;
 						fail("Invalid meta is recognized as good");
 					}
 					catch(Exception e) {
 						assertThat(e , instanceOf(Exception.class));
 					}
 					
-					assertThat(MimeHelper.justMeta(MimeType.valueOf("this/that")) , is(false));
-					assertThat(MimeHelper.justMeta(MimeType.valueOf("this/that;meta=true")) , is(false));
-					assertThat(MimeHelper.justMeta(MimeType.valueOf("application/pdf;meta=true")) , is(false));
+					assertThat(MimeHelper.isMeta(MimeType.valueOf("this/that")) , is(false));
+					assertThat(MimeHelper.isMeta(MimeType.valueOf("this/that;meta=true")) , is(false));
+					assertThat(MimeHelper.isMeta(MimeType.valueOf("application/pdf;meta=true")) , is(false));
 
-					assertThat(MimeHelper.justMeta(MimeType.valueOf("application/json")) , is(false));
-					assertThat(MimeHelper.justMeta(MimeType.valueOf("application/json;meta=true")) , is(true));
+					assertThat(MimeHelper.isMeta(MimeType.valueOf("application/json")) , is(false));
+					assertThat(MimeHelper.isMeta(MimeType.valueOf("application/it.zeroics.meta")) , is(true));
 				});
 			});
         });

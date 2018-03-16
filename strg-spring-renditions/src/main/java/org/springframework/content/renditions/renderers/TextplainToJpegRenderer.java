@@ -46,6 +46,12 @@ public class TextplainToJpegRenderer implements RenditionProvider {
     }
 
     @Override
+    public Boolean consumes(String fromMimeType) {
+    	if ( fromMimeType.equals("text/plain")) return true;
+        return false;
+    }
+
+    @Override
     public String[] produces() {
         return new String[] {"image/jpg", "image/jpeg"};
     }

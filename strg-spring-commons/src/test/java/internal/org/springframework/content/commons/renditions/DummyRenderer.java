@@ -9,18 +9,24 @@ import org.springframework.util.MimeType;
 public class DummyRenderer implements RenditionProvider{
 	@Override
     public String consumes() {
-		throw new UnsupportedOperationException();
+		return "one/thing";
+    }
+
+	@Override
+    public Boolean consumes(String fromMimeType) {
+		if ( MimeType.valueOf("one/thing").includes(MimeType.valueOf(fromMimeType)) ) return true;
+		return false;
     }
 
     @Override
     public String[] produces() {
-    	throw new UnsupportedOperationException();
+    	return new String[] {"sometihng/else"};
     }
     
     @Override
    	public RenditionCapability isCapable(String fromMimeType, String toMimeType) {
    		if (MimeType.valueOf(toMimeType).includes(MimeType.valueOf("something/else"))  && 
-   			MimeType.valueOf("one/thing").includes(MimeType.valueOf(fromMimeType))) return RenditionCapability.GOOD_CAPABILITY;
+   			consumes(fromMimeType)) return RenditionCapability.GOOD_CAPABILITY;
    		return RenditionCapability.NOT_CAPABLE;
    	}
 

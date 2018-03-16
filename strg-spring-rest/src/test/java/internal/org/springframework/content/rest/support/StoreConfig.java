@@ -51,6 +51,11 @@ public class StoreConfig extends JpaInfrastructureConfig {
 			}
 
 			@Override
+			public Boolean consumes(String s) {
+				throw new UnsupportedOperationException();
+			}
+
+			@Override
 			public String[] produces() {
 				throw new UnsupportedOperationException();
 			}

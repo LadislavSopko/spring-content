@@ -34,12 +34,18 @@ public class WordToJpegRenderer implements RenditionProvider {
 
     @Override
     public String consumes() {
-    	throw new UnsupportedOperationException();
+    	return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+    }
+
+    @Override
+    public Boolean consumes(String fromMimeType) {
+    	if ( fromMimeType.equals("application/vnd.openxmlformats-officedocument.wordprocessingml.document")) return true;
+    	return false;
     }
 
     @Override
     public String[] produces() {
-    	throw new UnsupportedOperationException();
+    	return new String[] {"image/jpeg","image/jpg"};
     }
     
     @Override

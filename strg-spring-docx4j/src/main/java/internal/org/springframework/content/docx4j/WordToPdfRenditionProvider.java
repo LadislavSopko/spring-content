@@ -17,17 +17,23 @@ public class WordToPdfRenditionProvider implements RenditionProvider {
 
 	@Override
 	public String consumes() {
-		throw new UnsupportedOperationException();
+		return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+	}
+
+	@Override
+	public Boolean consumes(String fromMimeType) {
+		if (fromMimeType.equals("application/vnd.openxmlformats-officedocument.wordprocessingml.document")) return true;
+		return false;
 	}
 
 	@Override
 	public String[] produces() {
-		throw new UnsupportedOperationException();
+		return new String[] {"application/pdf"};
 	}
 	
 	@Override
 	public RenditionCapability isCapable(String fromMimeType, String toMimeType) {
-		if (MimeType.valueOf(toMimeType).includes(MimeType.valueOf("application/pdf")) && MimeType.valueOf("application/vnd.openxmlformats-officedocument.wordprocessingml.document").includes(MimeType.valueOf(fromMimeType))) return RenditionCapability.GOOD_CAPABILITY;
+		if (MimeType.valueOf(toMimeType).includes(MimeType.valueOf("application/pdf")) && consumes(fromMimeType)) return RenditionCapability.GOOD_CAPABILITY;
 		return RenditionCapability.NOT_CAPABLE;
 	}
 
