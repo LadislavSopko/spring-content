@@ -99,6 +99,9 @@
 		<module>./strg-service-renditions</module>
 		<module>./strg-service-renditions-boot-starter</module>
 		
+		<module>./strg-service-sample-api-shell</module>
+		<module>./strg-service-sample-api-rest</module>
+		
 		<!-- SPRING third parties -->
 		<module>./content-fs-spring-boot-starter</module>
 		<module>./content-jpa-spring-boot-starter</module>
