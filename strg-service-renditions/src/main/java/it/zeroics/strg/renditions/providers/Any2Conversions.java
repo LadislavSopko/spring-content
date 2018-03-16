@@ -1,10 +1,9 @@
 package it.zeroics.strg.renditions.providers;
 
-import java.io.InputStream;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.content.commons.renditions.RenditionCapability;
+import org.springframework.content.commons.renditions.RenditionProvider;
 import org.springframework.stereotype.Service;
 //import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -12,49 +11,38 @@ import org.springframework.util.MimeType;
 
 import internal.org.springframework.content.commons.renditions.BasicRenderer;
 import internal.org.springframework.content.commons.renditions.RenditionContext;
-import it.zeroics.strg.renditions.ImageRenderer;
+import it.zeroics.strg.renditions.CapabilityRenderer;
+import it.zeroics.strg.renditions.DicomRenderer;
 import it.zeroics.strg.renditions.RenditionException;
+import it.zeroics.strg.renditions.utils.MimeHelper;
+
+import java.io.InputStream;
 
 @Service
-public class AnyImage2Any extends BasicProvider {
+public class Any2Conversions extends BasicProvider {
 
-	private static Log logger = LogFactory.getLog(AnyImage2Any.class);
+	private static Log logger = LogFactory.getLog(Any2Conversions.class);
 
-	public AnyImage2Any() {
+	public Any2Conversions() {
 		super() ;
 	};
-	
+
 	@Override
 	public Boolean consumes(String fromMimeType) {
-		if ( MimeType.valueOf(fromMimeType).getType().equals("image") ) {
-			return true;
-		}
-		return false;
+		return true;
 	}
 	
 	@Override
 	public String[] produces() {
-		return new String[]{"application/pdf",
-				"image/jpg",
-				"image/png",
-				"image/tif",
-				"image/x-tif",
-				"image/gif",
-				"image/x-rgb",
-				"x-windows-bmp",
-				"image/bmp",
-				"x-portable-bitmap",
-				"x-icon"} ;
+		return new String[]{MimeHelper.CAPABILITY_MIMETYPE} ;
 	}
 
 	@Override
 	public RenditionCapability isCapable(String fromMimeType, String toMimeType) {
 		logger.debug("Mime check: " + fromMimeType + " -> " + toMimeType);
 		MimeType toMime = MimeType.valueOf(toMimeType) ;
-		if (toMime.includes(MimeType.valueOf("application/pdf")) || toMime.getType().equals("image")) {
-			if ( MimeType.valueOf(fromMimeType).getType().equals("image") ) {
-				return RenditionCapability.GOOD_CAPABILITY;
-			}
+		if ( MimeHelper.isCapability(toMime) ) {
+			return RenditionCapability.BEST_FIT;
 		}
 		return RenditionCapability.NOT_CAPABLE;
 	}
@@ -66,7 +54,7 @@ public class AnyImage2Any extends BasicProvider {
 		Assert.notNull(fromInputSource, "input source must not be null");
 
 		try {
-    		BasicRenderer converter = new ImageRenderer(fromInputSource, MimeType.valueOf(toMimeType));
+    		BasicRenderer converter = new CapabilityRenderer(fromInputSource, MimeType.valueOf(toMimeType));
 			return RenditionContext.getInstance().DoWork(fromInputSource, converter);
 
 		} catch (Exception e) {

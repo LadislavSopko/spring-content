@@ -17,6 +17,8 @@ import org.dcm4che3.tool.common.DicomFiles;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MimeType;
 
+import internal.org.springframework.content.commons.renditions.BasicRenderer;
+import internal.org.springframework.content.commons.renditions.RenditionContext;
 //import gettingstarted.springcontentfs.File;
 import internal.org.springframework.content.commons.utils.InputContentStream;
 import it.zeroics.strg.renditions.utils.Metadata;
@@ -82,6 +84,6 @@ public class DicomRenderer extends BasicRenderer {
 		}
 
 		// remove worker!!!
-		Context.getInstance().WorkerDone(this);
+		RenditionContext.getInstance().WorkerDone(this);
 	}
 }

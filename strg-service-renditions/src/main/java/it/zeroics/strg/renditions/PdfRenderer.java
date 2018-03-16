@@ -21,6 +21,8 @@ import org.jodconverter.office.OfficeManager;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MimeType;
 
+import internal.org.springframework.content.commons.renditions.BasicRenderer;
+import internal.org.springframework.content.commons.renditions.RenditionContext;
 //import gettingstarted.springcontentfs.File;
 import internal.org.springframework.content.commons.utils.InputContentStream;
 import it.zeroics.strg.model.Medium;
@@ -166,6 +168,6 @@ public class PdfRenderer extends BasicRenderer {
 		}
 
 		// remove worker!!!
-		Context.getInstance().WorkerDone(this);
+		RenditionContext.getInstance().WorkerDone(this);
 	}
 }

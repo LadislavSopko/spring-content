@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.MimeType;
 
-import it.zeroics.strg.renditions.BasicRenderer;
-import it.zeroics.strg.renditions.Context;
+import internal.org.springframework.content.commons.renditions.BasicRenderer;
+import internal.org.springframework.content.commons.renditions.RenditionContext;
 import it.zeroics.strg.renditions.RenditionException;
 import it.zeroics.strg.renditions.TikaRenderer;
 import it.zeroics.strg.renditions.utils.MimeHelper;
@@ -27,6 +27,16 @@ public class MostAny2Txt extends BasicProvider {
 		super() ;
     };
 
+	@Override
+	public Boolean consumes(String fromMimeType) {
+		return true; // Consumes all.
+	}
+	
+	@Override
+	public String[] produces() {
+		return new String[]{"text/plain", MimeHelper.METADATA_MIMETYPE} ;
+	}
+
     @Override
 	public RenditionCapability isCapable(String fromMimeType, String toMimeType) {
     	logger.debug("Mime check: " + fromMimeType + " -> " + toMimeType);
@@ -37,7 +47,7 @@ public class MostAny2Txt extends BasicProvider {
     			MimeType.valueOf("*/*").includes(fromMime) ) {
     		return RenditionCapability.BEST_FIT;
     	}
-    	if (MimeHelper.justMeta(toMime) &&
+    	if (MimeHelper.isMeta(toMime) &&
     			!fromMime.getSubtype().equals("dicom") && // TODO: Tika is able but not very able, should return a "vote".
     			MimeType.valueOf("*/*").includes(fromMime) ) {
 			return RenditionCapability.PRETTY_CAPABLE ;
@@ -54,7 +64,7 @@ public class MostAny2Txt extends BasicProvider {
         
         try {
     		BasicRenderer converter = new TikaRenderer(fromInputSource, MimeType.valueOf(toMimeType));
-        	return Context.getInstance().DoWork(fromInputSource, converter);
+        	return RenditionContext.getInstance().DoWork(fromInputSource, converter);
         	            
         } catch (Exception e) {
             throw new RenditionException(String.format("Unexpected error reading input attempting to get mime-type rendition %s", toMimeType), e);

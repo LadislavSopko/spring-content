@@ -10,9 +10,8 @@ public interface RenditionProvider {
 	public static final int GOOD_CAPABILITY = 3;
 	public static final int BEST_FIT = 4;	
 	
-	@Deprecated
     public String consumes();
-	@Deprecated
+    public Boolean consumes(String fromMimeType);
     public String[] produces();
 	
 	

@@ -28,6 +28,7 @@ public class RenditionServiceImpl implements RenditionService, StoreExtension {
 	private List<RenditionProvider> providers = new ArrayList<RenditionProvider>();
 
 	public RenditionServiceImpl() {
+		RenditionContext.getInstance().setRenditionService(this) ;
 	}
 	
 	@Autowired(required=false)
@@ -72,7 +73,8 @@ public class RenditionServiceImpl implements RenditionService, StoreExtension {
 	public String[] conversions(String fromMimeType) {
 		Set<String> conversions = new HashSet<>();
 		for (RenditionProvider provider : providers) {
-			if (provider.consumes().equals(fromMimeType)) {
+			// if (provider.consumes().equals(fromMimeType)) {
+			if (provider.consumes(fromMimeType)) {
 				conversions.addAll(Arrays.asList(provider.produces()));
 			}
 		}
@@ -146,11 +148,13 @@ public class RenditionServiceImpl implements RenditionService, StoreExtension {
 			}
 			*/
 		}
+		/*
 		if ( null == bestProvider ) {
 			//throw new NoSuchElementException("Unable to find renderer from '" + fromMimeType + "' to '" + toMimeType + "'"); 
 			throw new IllegalArgumentException("Unable to find renderer from '" + fromMimeType + "' to '" + toMimeType + "'");
 			//throw new MethodArgumentNotValidException("Unable to find renderer from '" + fromMimeType + "' to '" + toMimeType + "'");
 		}
+		*/
 		return bestProvider;
 	}
 }

@@ -23,19 +23,24 @@ public class BasicProvider implements RenditionProvider {
 	}
 
 	@Override
+	public Boolean consumes(String fromMimeType) {
+		throw new UnsupportedOperationException("Method must be implemented in extended class");
+	}
+
+	@Override
 	public String[] produces() {
-		throw new UnsupportedOperationException("Deprecated method:use isCapable instead");
+		throw new UnsupportedOperationException("Method must be implemented in extended class");
 	}
 
 	@Override
 	public RenditionCapability isCapable(String fromMimeType, String toMimeType) {
-		throw new UnsupportedOperationException("Deprecated method:use isCapable instead");
+		throw new UnsupportedOperationException("Method must be implemented in extended class");
 	}
 
 	@SuppressWarnings("resource")
 	@Override
 	public InputStream convert(InputStream fromInputSource, String toMimeType) {
-		throw new UnsupportedOperationException("Deprecated method:use isCapable instead");
+		throw new UnsupportedOperationException("Method must be implemented in extended class");
 	}
 
 }

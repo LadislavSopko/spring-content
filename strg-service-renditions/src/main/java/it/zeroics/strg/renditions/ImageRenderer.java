@@ -21,6 +21,8 @@ import org.springframework.util.MimeType;
 
 import com.sun.star.form.binding.IncompatibleTypesException;
 
+import internal.org.springframework.content.commons.renditions.BasicRenderer;
+import internal.org.springframework.content.commons.renditions.RenditionContext;
 //import gettingstarted.springcontentfs.File;
 import internal.org.springframework.content.commons.utils.InputContentStream;
 import it.zeroics.strg.model.Medium;
@@ -162,6 +164,6 @@ public class ImageRenderer extends BasicRenderer {
 		}
 
 		// remove worker!!!
-		Context.getInstance().WorkerDone(this);
+		RenditionContext.getInstance().WorkerDone(this);
 	}
 }

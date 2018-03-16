@@ -1,23 +1,20 @@
-package it.zeroics.strg.renditions;
+package internal.org.springframework.content.commons.renditions;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
-import java.util.Map;
-
-import javax.annotation.PostConstruct;
 
 import org.springframework.stereotype.Component;
 import org.springframework.util.MimeType;
 
 @Component
 public class BasicRenderer implements Runnable {
-	PipedInputStream in = null;
-	PipedOutputStream out = null;
+	protected PipedInputStream in = null;
+	protected PipedOutputStream out = null;
 
-	InputStream is = null;	
-	MimeType outputMimeType = null;
+	protected InputStream is = null;	
+	protected MimeType outputMimeType = null;
 
 	private void init(InputStream is, MimeType mt){
 		this.is = is;
@@ -56,7 +53,7 @@ public class BasicRenderer implements Runnable {
 			e. printStackTrace();
 		}
 		*/
-    	Context.getInstance().WorkerDone(this);
+    	RenditionContext.getInstance().WorkerDone(this);
     }
 
 	// Should not Override

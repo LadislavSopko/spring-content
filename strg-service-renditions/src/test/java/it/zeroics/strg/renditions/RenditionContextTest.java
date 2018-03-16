@@ -29,14 +29,14 @@ import static org.hamcrest.Matchers.*;
 
 @RunWith(Ginkgo4jRunner.class)
 @Ginkgo4jConfiguration(threads=1)
-public class ContextTest {
-	private static final Log LOGGER = LogFactory.getLog(ContextTest.class);
+public class RenditionContextTest {
+	private static final Log LOGGER = LogFactory.getLog(RenditionContextTest.class);
 
     {
         Describe("Context", () -> {
 			Context("#getInstance", () -> {
 				It("Must obtain a valid instance", () -> {
-					assertThat(Context.getInstance(), instanceOf(Context.class)) ;
+					assertThat(RenditionContext.getInstance(), instanceOf(RenditionContext.class)) ;
 				});
 			});
         });

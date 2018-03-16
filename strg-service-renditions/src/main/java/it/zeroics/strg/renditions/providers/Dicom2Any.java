@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.MimeType;
 
-import it.zeroics.strg.renditions.BasicRenderer;
-import it.zeroics.strg.renditions.Context;
+import internal.org.springframework.content.commons.renditions.BasicRenderer;
+import internal.org.springframework.content.commons.renditions.RenditionContext;
 import it.zeroics.strg.renditions.DicomRenderer;
 import it.zeroics.strg.renditions.RenditionException;
 import it.zeroics.strg.renditions.utils.MimeHelper;
@@ -27,11 +27,23 @@ public class Dicom2Any extends BasicProvider {
 	};
 
 	@Override
+	public Boolean consumes(String fromMimeType) {
+		if (MimeType.valueOf(fromMimeType).getSubtype().equals("dicom") ) {
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public String[] produces() {
+		return new String[]{MimeHelper.METADATA_MIMETYPE} ;
+	}
+
+	@Override
 	public RenditionCapability isCapable(String fromMimeType, String toMimeType) {
 		logger.debug("Mime check: " + fromMimeType + " -> " + toMimeType);
-		MimeType fromMime = MimeType.valueOf(fromMimeType) ;
 		MimeType toMime = MimeType.valueOf(toMimeType) ;
-		if ( MimeHelper.justMeta(toMime) && fromMime.getSubtype().equals("dicom")) {
+		if ( MimeHelper.isMeta(toMime) && consumes(fromMimeType) ) {
 			return RenditionCapability.BEST_FIT;
 		}
 		return RenditionCapability.NOT_CAPABLE;
@@ -45,7 +57,7 @@ public class Dicom2Any extends BasicProvider {
 
 		try {
     		BasicRenderer converter = new DicomRenderer(fromInputSource, MimeType.valueOf(toMimeType));
-			return Context.getInstance().DoWork(fromInputSource, converter);
+			return RenditionContext.getInstance().DoWork(fromInputSource, converter);
 
 		} catch (Exception e) {
 			throw new RenditionException(String

@@ -7,7 +7,7 @@ angular.module('MediaApp', [])
     		{mime: 'text/plain', ext: 'txt', descr: 'Text'},
     		{mime: 'application/pdf', ext: 'pdf', descr: 'Pdf'},
     		{mime: 'application/pdf;pdfA=true', ext: 'pdf', descr: 'Pdf/A'},
-    		{mime: 'application/json;meta=true', ext: 'json', descr: 'Meta'},
+    		{mime: 'application/it.zeroics.meta', ext: 'json', descr: 'Meta'},
     		{mime: 'image/jpg', ext: 'jpg', descr: 'JPeg'},
     		{mime: 'image/jpg;gray=true', ext: 'jpg', descr: 'JPeg/Gray'},
     		{mime: 'image/jpg;thumb=150x150', ext: 'jpg', descr: 'JPeg/Thumb'},
@@ -17,6 +17,7 @@ angular.module('MediaApp', [])
     		{mime: 'image/tif', ext: 'tif', descr: 'Tiff'},
     		{mime: 'image/tif;gray=true', ext: 'tif', descr: 'Tiff/Gray'},
 
+    		{mime: 'application/it.zeroics.capability', ext: 'json', descr: 'Conversion Capability'},
     		{mime: 'this/that', ext: 'wrng', descr: 'Wrong'}
     	]
     };

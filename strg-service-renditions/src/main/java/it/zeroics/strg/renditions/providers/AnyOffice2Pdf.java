@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.MimeType;
 
-import it.zeroics.strg.renditions.BasicRenderer;
-import it.zeroics.strg.renditions.Context;
+import internal.org.springframework.content.commons.renditions.BasicRenderer;
+import internal.org.springframework.content.commons.renditions.RenditionContext;
 import it.zeroics.strg.renditions.PdfRenderer;
 import it.zeroics.strg.renditions.RenditionException;
 
@@ -26,6 +26,24 @@ public class AnyOffice2Pdf extends BasicProvider {
 	};
 
 	@Override
+	public Boolean consumes(String fromMimeType) {
+		if (fromMimeType.startsWith("application/vnd.oasis.opendocument.") || // MimeType.valueOf("application/vnd.oasis.opendocument.*").includes(MimeType.valueOf(fromMimeType)) || // [Open|Libre]Office
+				fromMimeType.startsWith("application/vnd.openxmlformats-officedocument.") || // MimeType.valueOf("application/vnd.openxmlformats-officedocument.*").includes(MimeType.valueOf(fromMimeType)) || // Modern MSOffice .<ext>x
+				MimeType.valueOf(fromMimeType).includes(MimeType.valueOf("application/msword")) || // Microsoft Word .doc
+				MimeType.valueOf(fromMimeType).includes(MimeType.valueOf("application/vnd.ms-powerpoint")) || // Microsoft Power Point .ppt
+				MimeType.valueOf(fromMimeType).includes(MimeType.valueOf("application/vnd.ms-excel")) // Microsoft Power Point .xls
+		) {
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public String[] produces() {
+		return new String[]{"application/pdf"} ;
+	}
+
+	@Override
 	public RenditionCapability isCapable(String fromMimeType, String toMimeType) {
 		logger.debug("Mime check: " + fromMimeType + " -> " + toMimeType);
 		MimeType toMime = MimeType.valueOf(toMimeType) ;
@@ -38,12 +56,7 @@ public class AnyOffice2Pdf extends BasicProvider {
 				logger.debug("Compatibile with application/vnd.openxmlformats-officedocument.*");
 			}
 			*/
-			if (fromMimeType.startsWith("application/vnd.oasis.opendocument.") || // MimeType.valueOf("application/vnd.oasis.opendocument.*").includes(MimeType.valueOf(fromMimeType)) || // [Open|Libre]Office
-					fromMimeType.startsWith("application/vnd.openxmlformats-officedocument.") || // MimeType.valueOf("application/vnd.openxmlformats-officedocument.*").includes(MimeType.valueOf(fromMimeType)) || // Modern MSOffice .<ext>x
-					MimeType.valueOf(fromMimeType).includes(MimeType.valueOf("application/msword")) || // Microsoft Word .doc
-					MimeType.valueOf(fromMimeType).includes(MimeType.valueOf("application/vnd.ms-powerpoint")) || // Microsoft Power Point .ppt
-					MimeType.valueOf(fromMimeType).includes(MimeType.valueOf("application/vnd.ms-excel")) // Microsoft Power Point .xls
-			) {
+			if (consumes(fromMimeType)) {
 				return RenditionCapability.BEST_FIT;
 			}
 		}
@@ -58,7 +71,7 @@ public class AnyOffice2Pdf extends BasicProvider {
 
 		try {
     		BasicRenderer converter = new PdfRenderer(fromInputSource, MimeType.valueOf(toMimeType));
-			return Context.getInstance().DoWork(fromInputSource, converter);
+			return RenditionContext.getInstance().DoWork(fromInputSource, converter);
 
 		} catch (Exception e) {
 			throw new RenditionException(String
