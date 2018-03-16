@@ -2,8 +2,8 @@ package org.springframework.content.fs.io;
 
 import static org.springframework.util.StringUtils.cleanPath;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.content.commons.io.DeletableResource;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.FileSystemResource;
@@ -23,7 +23,7 @@ import org.springframework.util.Assert;
  */
 public class FileSystemResourceLoader extends org.springframework.core.io.FileSystemResourceLoader {
 
-	private static final Logger logger = LoggerFactory.getLogger(FileSystemResourceLoader.class);
+	private static final Log logger = LogFactory.getLog(FileSystemResourceLoader.class);
 
 	private FileSystemResource root;
 	

@@ -7,8 +7,8 @@ import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -42,7 +42,7 @@ public class FilesystemContentAutoConfiguration {
 	@ConfigurationProperties(prefix = "spring.content.fs", ignoreInvalidFields = false, ignoreUnknownFields = false)
 	public static class FilesystemProperties {
 
-	    private static final Logger logger = LoggerFactory.getLogger(FilesystemProperties.class);
+	    private static final Log logger = LogFactory.getLog(FilesystemProperties.class);
 	    
 	    @PostConstruct
 	    public void init() {

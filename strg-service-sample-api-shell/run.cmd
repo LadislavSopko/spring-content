@@ -1,0 +1,1 @@
+java -jar target/strg-service-sample-api-shell-0.0.1-SNAPSHOT.jar
