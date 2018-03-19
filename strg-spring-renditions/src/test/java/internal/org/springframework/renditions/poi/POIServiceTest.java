@@ -30,7 +30,8 @@ public class POIServiceTest {
     private InputStream stream;
 
     {
-        Describe("POIService", () -> {
+    	Describe("POIService", () -> {
+        	
             BeforeEach(() -> {
                 poi = new POIServiceImpl();
             });
