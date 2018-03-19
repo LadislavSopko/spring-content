@@ -34,6 +34,7 @@ public class PdfRenderer extends BasicRenderer {
 	
 	public PdfRenderer(InputStream is, MimeType mt) {
 		super(is, mt);
+		RenditionContext.getInstance().setSupportedExtension("application/pdf", ".pdf");
 	}
 
 	/**

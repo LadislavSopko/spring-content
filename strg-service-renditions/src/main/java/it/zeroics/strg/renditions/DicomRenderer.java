@@ -22,6 +22,7 @@ import internal.org.springframework.content.commons.renditions.RenditionContext;
 //import gettingstarted.springcontentfs.File;
 import internal.org.springframework.content.commons.utils.InputContentStream;
 import it.zeroics.strg.renditions.utils.Metadata;
+import it.zeroics.strg.renditions.utils.MimeHelper;
 import it.zeroics.strg.model.Medium;
 
 
@@ -52,6 +53,7 @@ public class DicomRenderer extends BasicRenderer {
 	
 	public DicomRenderer(InputStream is, MimeType mt) {
 		super(is, mt);
+		RenditionContext.getInstance().setSupportedExtension(MimeHelper.METADATA_MIMETYPE, ".json");
 	}
 	
 	@Override

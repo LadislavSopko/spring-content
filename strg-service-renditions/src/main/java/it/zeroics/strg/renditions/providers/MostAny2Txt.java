@@ -29,7 +29,8 @@ public class MostAny2Txt extends BasicProvider {
 
 	@Override
 	public Boolean consumes(String fromMimeType) {
-		return true; // Consumes all.
+		if ( fromMimeType.equals(MimeHelper.CAPABILITY_MIMETYPE)) return false ; // Anything but capabilities.
+		return true; // Consumes all the rest.
 	}
 	
 	@Override

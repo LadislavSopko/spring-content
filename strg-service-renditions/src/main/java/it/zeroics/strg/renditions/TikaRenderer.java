@@ -36,6 +36,8 @@ public class TikaRenderer extends BasicRenderer {
 	
 	public TikaRenderer(InputStream is, MimeType mt) {
 		super(is, mt) ;
+		RenditionContext.getInstance().setSupportedExtension("text/plain", ".txt");
+		RenditionContext.getInstance().setSupportedExtension(MimeHelper.METADATA_MIMETYPE, ".json");
 	}
 
 	private void addTikaMeta(it.zeroics.strg.renditions.utils.Metadata m, org.apache.tika.metadata.Metadata tikaMetadata, String tikaMetadataProperty) {

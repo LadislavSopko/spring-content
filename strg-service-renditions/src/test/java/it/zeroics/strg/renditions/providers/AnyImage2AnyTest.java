@@ -87,13 +87,14 @@ public class AnyImage2AnyTest {
 						MimeHelper mh = new MimeHelper("image/png");
 						// Can't compare png. Same image can be compressed or not and a data withing changes. Must compare metadata.
 						InputStream pngStream = c.callConverterFromFileName("sample-image.jpg","image/jpg", mh.toString(), provider);
-						assertThat(pngStream, is(not(nullValue())));
+						// assertThat(pngStream, is(not(nullValue())));
 
 						MostAny2Txt metaProvider = new MostAny2Txt() ;
-						/* Text extraction from PDF differs from text extraction from doc converted to PDF.
-						 * Must use a different pattern file 
+						/* Image conversion from jpg to png differs from the png itself. The resulting png contains the same image
+						 * but format differs and an internal timestamp too. 
+						 * Must match something else, as basic metadata 
 						 */
-						assertThat(c.compareAsByteArray(
+						assertThat(c.compareAsString(
 								c.callConverterFromInputStream(pngStream, "sample-image.jpg.png", "image/png", MimeHelper.METADATA_MIMETYPE, metaProvider), 
 								"sample-image.png.json"), is(true));
 						context.close();

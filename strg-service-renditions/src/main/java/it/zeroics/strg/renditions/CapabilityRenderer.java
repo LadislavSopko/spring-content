@@ -28,6 +28,7 @@ import internal.org.springframework.content.commons.renditions.RenditionServiceI
 //import gettingstarted.springcontentfs.File;
 import internal.org.springframework.content.commons.utils.InputContentStream;
 import it.zeroics.strg.renditions.utils.Metadata;
+import it.zeroics.strg.renditions.utils.MimeHelper;
 import it.zeroics.strg.model.Medium;
 
 
@@ -38,6 +39,7 @@ public class CapabilityRenderer extends BasicRenderer {
 	
 	public CapabilityRenderer(InputStream is, MimeType mt) {
 		super(is, mt);
+		RenditionContext.getInstance().setSupportedExtension(MimeHelper.CAPABILITY_MIMETYPE, ".json");
 	}
 	
 	@Override

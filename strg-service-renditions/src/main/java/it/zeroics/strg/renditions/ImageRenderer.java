@@ -36,6 +36,22 @@ public class ImageRenderer extends BasicRenderer {
 	
 	public ImageRenderer(InputStream is, MimeType mt) {
 		super(is, mt);
+		RenditionContext.getInstance().setSupportedExtension("application/pdf", ".pdf");
+		RenditionContext.getInstance().setSupportedExtension("image/gif", ".gif");
+		RenditionContext.getInstance().setSupportedExtension("image/png", ".png");
+		RenditionContext.getInstance().setSupportedExtension("image/x-rgb", ".rgb");
+		RenditionContext.getInstance().setSupportedExtension("image/x-windows-bmp", ".bmp");
+		RenditionContext.getInstance().setSupportedExtension("image/bmp", ".bmp");
+		RenditionContext.getInstance().setSupportedExtension("image/x-portable-bitmap", ".pbm");
+		RenditionContext.getInstance().setSupportedExtension("image/x-icon", ".ico");
+		RenditionContext.getInstance().setSupportedExtension("image/pjpeg", ".jpg");
+		RenditionContext.getInstance().setSupportedExtension("image/jpeg", ".jpg");
+		RenditionContext.getInstance().setSupportedExtension("image/pjpg", ".jpg");
+		RenditionContext.getInstance().setSupportedExtension("image/jpg", ".jpg");
+		RenditionContext.getInstance().setSupportedExtension("image/tiff", ".tif");
+		RenditionContext.getInstance().setSupportedExtension("image/x-tiff", ".tif");
+		RenditionContext.getInstance().setSupportedExtension("image/tif", ".tif");
+		RenditionContext.getInstance().setSupportedExtension("image/x-tif", ".tif");
 	}
 	
 	@Override

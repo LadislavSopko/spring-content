@@ -8,10 +8,14 @@ import java.io.PipedOutputStream;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MimeType;
 
+import internal.org.springframework.content.commons.utils.InputContentStream;
+
 @Component
 public class BasicRenderer implements Runnable {
 	protected PipedInputStream in = null;
 	protected PipedOutputStream out = null;
+	
+	protected InputContentStream result = null;
 
 	protected InputStream is = null;	
 	protected MimeType outputMimeType = null;
@@ -23,6 +27,13 @@ public class BasicRenderer implements Runnable {
 		in = new PipedInputStream();
 		try {
 			out = new PipedOutputStream(in);
+
+			InputContentStream ics = (InputContentStream)is;
+		    if(ics != null) {
+		    	result = new InputContentStream(in, ics.getEntity(), mt.toString());
+		    }else {
+		    	result = new InputContentStream(in, null, mt.toString());
+		    }
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -59,7 +70,7 @@ public class BasicRenderer implements Runnable {
 	// Should not Override
 	public InputStream getInputStream() {
     	// remove worker only when Input stream is consumed!!!
-		return in;
+		return result;
 	}
 	
 }
