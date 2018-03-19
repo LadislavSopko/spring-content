@@ -24,13 +24,6 @@ public class RendererTest {
 		catch(UnsupportedOperationException e) {
 			// OK
 		}
-		try {
-			provider.produces();
-			return false ;
-		}
-		catch(UnsupportedOperationException e) {
-			// OK
-		}
 		return true ;
 	}
 

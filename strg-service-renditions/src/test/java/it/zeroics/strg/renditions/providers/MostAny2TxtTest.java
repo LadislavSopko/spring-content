@@ -50,7 +50,6 @@ public class MostAny2TxtTest {
 				It("Must be capable only in some cases", () -> {
 					assertThat(provider.isCapable("what/the_fuck", "text/plain").isBest(), is(true));
 					MimeHelper mh = new MimeHelper(MimeHelper.METADATA_MIMETYPE);
-					mh.requireMetadata();
 					assertThat(provider.isCapable("what/the_fuck", mh.toString()).isBetterThan(RenditionCapability.NOT_CAPABLE), is(true));
 					assertThat(provider.isCapable("what/the_fuck", mh.toString()).isBest(), is(false));
 					assertThat(provider.isCapable("image/dicom", mh.toString()), is(RenditionCapability.NOT_CAPABLE));
@@ -69,7 +68,6 @@ public class MostAny2TxtTest {
 					It("Must convert docx to json", () -> {
 						RendererTest c = new RendererTest();
 						MimeHelper mh = new MimeHelper(MimeHelper.METADATA_MIMETYPE);
-						mh.requireMetadata();
 						assertThat(c.compareAsString(
 								c.callConverterFromFileName("sample-docx.docx","application/vnd.openxmlformats-officedocument.wordprocessingml.document", mh.toString(), provider),
 								"sample-docx.docx.meta"), is(true));

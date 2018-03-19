@@ -49,7 +49,6 @@ public class Dicom2AnyTest {
 			Context("#isCapable", () -> {
 				It("Must be capable only in some cases", () -> {
 					MimeHelper mh = new MimeHelper(MimeHelper.METADATA_MIMETYPE);
-					mh.requireMetadata();
 					assertThat(provider.isCapable("what/the_fuck", mh.toString()).isBetterThan(RenditionCapability.NOT_CAPABLE), is(false));
 					assertThat(provider.isCapable("image/dicom", mh.toString()).isBetterThan(RenditionCapability.NOT_CAPABLE), is(true));
 					assertThat(provider.isCapable("image/dicom", mh.toString()).isBest(), is(true));
@@ -60,7 +59,6 @@ public class Dicom2AnyTest {
 					It("Must convert single frame dcm to json", () -> {
 						RendererTest c = new RendererTest();
 						MimeHelper mh = new MimeHelper(MimeHelper.METADATA_MIMETYPE);
-						mh.requireMetadata();
 						assertThat(c.compareAsString(
 								c.callConverterFromFileName("sample-singleframe-dcm.dcm","image/dicom", mh.toString(), provider),
 								"sample-singleframe-dcm.dcm.meta"), is(true));
@@ -68,7 +66,6 @@ public class Dicom2AnyTest {
 					It("Must convert multi frame dcm to json", () -> {
 						RendererTest c = new RendererTest();
 						MimeHelper mh = new MimeHelper(MimeHelper.METADATA_MIMETYPE);
-						mh.requireMetadata();
 						assertThat(c.compareAsString(
 								c.callConverterFromFileName("sample-multiframe-dcm.dcm","image/dicom",mh.toString(), provider),
 								"sample-multiframe-dcm.dcm.meta"), is(true));

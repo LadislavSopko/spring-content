@@ -53,7 +53,6 @@ public class AnyOffice2PdfTest {
 					assertThat(provider.isCapable("what/the_fuck", "text/plain").isBest(), is(false));
 					assertThat(provider.isCapable("what/the_fuck", "application/pdf"), is(RenditionCapability.NOT_CAPABLE));
 					MimeHelper mh = new MimeHelper(MimeHelper.METADATA_MIMETYPE);
-					mh.requireMetadata();
 					assertThat(provider.isCapable("what/the_fuck", mh.toString()), is(RenditionCapability.NOT_CAPABLE));
 					assertThat(provider.isCapable("image/dicom", "application/pdf"), is(RenditionCapability.NOT_CAPABLE));
 					assertThat(provider.isCapable("application/msword", "application/pdf").isBetterThan(RenditionCapability.NOT_CAPABLE), is(true));

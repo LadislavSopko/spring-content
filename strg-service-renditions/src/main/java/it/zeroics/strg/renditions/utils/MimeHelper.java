@@ -54,9 +54,6 @@ public class MimeHelper {
 	// Parameters
 	
 	// Metadata
-	public void requireMetadata() {
-		parms.put(METADATA_KEY, TRUE_VALUE) ;
-	}
 	public Boolean isMeta() {
         // Should I bring text or meta?
         if ( toMime().isCompatibleWith(MimeType.valueOf(METADATA_MIMETYPE)) ) {
@@ -73,9 +70,6 @@ public class MimeHelper {
 	}
 	
 	// Capability
-	public void requireCapability() {
-		parms.put(CAPABILITY_KEY, TRUE_VALUE) ;
-	}
 	public Boolean isCapability() {
         if ( toMime().isCompatibleWith(MimeType.valueOf(CAPABILITY_MIMETYPE)) ) {
         	return true;
