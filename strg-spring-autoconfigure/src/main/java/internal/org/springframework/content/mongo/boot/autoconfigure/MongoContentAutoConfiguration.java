@@ -13,5 +13,4 @@ import internal.org.springframework.content.mongo.config.MongoStoreConfiguration
 @ConditionalOnClass({Mongo.class, MongoContentStoresRegistrar.class})
 @Import({MongoContentAutoConfigureRegistrar.class, MongoStoreConfiguration.class})
 public class MongoContentAutoConfiguration {
-    //some comment for merge
 }
