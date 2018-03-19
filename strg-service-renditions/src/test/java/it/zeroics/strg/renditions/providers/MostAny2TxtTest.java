@@ -19,6 +19,7 @@ import org.springframework.content.commons.renditions.RenditionProvider;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 import java.util.Map;
 
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.*;
@@ -48,11 +49,21 @@ public class MostAny2TxtTest {
 			});
 			Context("#isCapable", () -> {
 				It("Must be capable only in some cases", () -> {
+					assertThat(provider.consumes("what/the_fuck"), is(true)) ; // !!!
 					assertThat(provider.isCapable("what/the_fuck", "text/plain").isBest(), is(true));
 					MimeHelper mh = new MimeHelper(MimeHelper.METADATA_MIMETYPE);
 					assertThat(provider.isCapable("what/the_fuck", mh.toString()).isBetterThan(RenditionCapability.NOT_CAPABLE), is(true));
 					assertThat(provider.isCapable("what/the_fuck", mh.toString()).isBest(), is(false));
+					assertThat(provider.consumes("image/dicom"), is(true)) ; // Comsumes dicom image to extract text but not metadata
 					assertThat(provider.isCapable("image/dicom", mh.toString()), is(RenditionCapability.NOT_CAPABLE));
+					assertThat(provider.consumes(MimeHelper.CAPABILITY_MIMETYPE), is(false)) ;
+					assertThat(provider.isCapable("application/pdf", MimeHelper.CAPABILITY_MIMETYPE).isBetterThan(RenditionCapability.NOT_CAPABLE), is(false));
+				});
+				It("Must produce something expected", () -> {
+					assertThat(Arrays.asList(provider.produces()).contains("text/plain"), is(true)) ;
+					assertThat(Arrays.asList(provider.produces()).contains(MimeHelper.METADATA_MIMETYPE), is(true)) ;
+					assertThat(Arrays.asList(provider.produces()).contains("application/pdf"), is(false)) ;
+					assertThat(Arrays.asList(provider.produces()).contains("image/dicom"), is(false)) ;
 				});
 			});
 			Context("#convert", () -> {

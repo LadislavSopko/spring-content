@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import internal.org.springframework.content.commons.renditions.BasicRenderer;
 import internal.org.springframework.content.commons.renditions.RenditionContext;
+import internal.org.springframework.content.commons.renditions.RenditionServiceImpl;
 //import gettingstarted.springcontentfs.File;
 import internal.org.springframework.content.commons.utils.InputContentStream;
 import it.zeroics.strg.renditions.utils.Metadata;
@@ -41,8 +42,6 @@ public class CapabilityRenderer extends BasicRenderer {
 	
 	@Override
 	public void run() {
-		File dicomFile = null ;
-
 		try {
 			// Obtain RenditionService implementation and ask for RenditionProviders capabilities
 			RenditionService rs = RenditionContext.getInstance().getRenditionService() ;
@@ -60,11 +59,6 @@ public class CapabilityRenderer extends BasicRenderer {
 			out.close();
 		} catch(IllegalArgumentException | IOException | SecurityException e) {
 			e. printStackTrace();
-		}
-		finally {
-			if ( null != dicomFile ) {
-				dicomFile.delete();
-			}
 		}
 
 		// remove worker!!!

@@ -41,10 +41,10 @@ public class AnyImage2Any extends BasicProvider {
 				"image/x-tif",
 				"image/gif",
 				"image/x-rgb",
-				"x-windows-bmp",
+				"image/x-windows-bmp",
 				"image/bmp",
-				"x-portable-bitmap",
-				"x-icon"} ;
+				"image/x-portable-bitmap",
+				"image/x-icon"} ;
 	}
 
 	@Override

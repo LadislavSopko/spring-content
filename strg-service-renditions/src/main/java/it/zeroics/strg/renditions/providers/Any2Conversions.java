@@ -29,6 +29,7 @@ public class Any2Conversions extends BasicProvider {
 
 	@Override
 	public Boolean consumes(String fromMimeType) {
+		if ( fromMimeType.equals(MimeHelper.CAPABILITY_MIMETYPE)) return false;
 		return true;
 	}
 	

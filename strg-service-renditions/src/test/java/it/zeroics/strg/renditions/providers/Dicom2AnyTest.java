@@ -19,6 +19,7 @@ import org.springframework.content.commons.renditions.RenditionProvider;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 import java.util.Map;
 
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.*;
@@ -49,9 +50,18 @@ public class Dicom2AnyTest {
 			Context("#isCapable", () -> {
 				It("Must be capable only in some cases", () -> {
 					MimeHelper mh = new MimeHelper(MimeHelper.METADATA_MIMETYPE);
+					assertThat(provider.consumes("what/the_fuck"), is(false)) ;
 					assertThat(provider.isCapable("what/the_fuck", mh.toString()).isBetterThan(RenditionCapability.NOT_CAPABLE), is(false));
+					assertThat(provider.consumes("image/dicom"), is(true)) ;
 					assertThat(provider.isCapable("image/dicom", mh.toString()).isBetterThan(RenditionCapability.NOT_CAPABLE), is(true));
 					assertThat(provider.isCapable("image/dicom", mh.toString()).isBest(), is(true));
+					assertThat(provider.consumes(MimeHelper.CAPABILITY_MIMETYPE), is(false)) ;
+					assertThat(provider.isCapable("image/dicom", MimeHelper.CAPABILITY_MIMETYPE).isBetterThan(RenditionCapability.NOT_CAPABLE), is(false));
+				});
+				It("Must produce something expected", () -> {
+					assertThat(Arrays.asList(provider.produces()).contains(MimeHelper.METADATA_MIMETYPE), is(true)) ;
+					assertThat(Arrays.asList(provider.produces()).contains("text/plain"), is(false)) ;
+					assertThat(Arrays.asList(provider.produces()).contains("image/dicom"), is(false)) ;
 				});
 			});
 			Context("#convert", () -> {
