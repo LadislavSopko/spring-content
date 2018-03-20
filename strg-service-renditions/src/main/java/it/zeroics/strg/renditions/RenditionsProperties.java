@@ -6,14 +6,23 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "it.zeroics.strg.renditions", ignoreInvalidFields = false, ignoreUnknownFields = false)
 public class RenditionsProperties {	
-	private static String imagikCall ;
+	private static String imagickCall ;
+	private static String imagickMetaCall;
 
-	public static String getImagikCall() {
-		return imagikCall;
+	public static String getImagickCall() {
+		return imagickCall;
 	}
 
-	public static void setImagikCall(String imagikCall) {
-		RenditionsProperties.imagikCall = imagikCall;
+	public static void setImagickCall(String imagickCall) {
+		RenditionsProperties.imagickCall = imagickCall;
+	}
+
+	public static String getImagickMetaCall() {
+		return imagickMetaCall;
+	}
+
+	public static void setImagickMetaCall(String imagickMetaCall) {
+		RenditionsProperties.imagickMetaCall = imagickMetaCall;
 	}
 }
 

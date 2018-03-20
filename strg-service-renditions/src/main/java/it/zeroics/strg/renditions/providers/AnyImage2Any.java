@@ -14,6 +14,7 @@ import internal.org.springframework.content.commons.renditions.BasicRenderer;
 import internal.org.springframework.content.commons.renditions.RenditionContext;
 import it.zeroics.strg.renditions.ImageRenderer;
 import it.zeroics.strg.renditions.RenditionException;
+import it.zeroics.strg.renditions.utils.MimeHelper;
 
 @Service
 public class AnyImage2Any extends BasicProvider {
@@ -44,15 +45,18 @@ public class AnyImage2Any extends BasicProvider {
 				"image/x-windows-bmp",
 				"image/bmp",
 				"image/x-portable-bitmap",
-				"image/x-icon"} ;
+				"image/x-icon",
+				MimeHelper.METADATA_MIMETYPE} ;
 	}
 
 	@Override
 	public RenditionCapability isCapable(String fromMimeType, String toMimeType) {
 		logger.debug("Mime check: " + fromMimeType + " -> " + toMimeType);
-		MimeType toMime = MimeType.valueOf(toMimeType) ;
-		if (toMime.includes(MimeType.valueOf("application/pdf")) || toMime.getType().equals("image")) {
-			if ( MimeType.valueOf(fromMimeType).getType().equals("image") ) {
+		if ( MimeType.valueOf(fromMimeType).getType().equals("image") ) {
+			MimeType toMime = MimeType.valueOf(toMimeType) ;
+			if (toMime.includes(MimeType.valueOf("application/pdf"))
+					|| MimeHelper.isMeta(toMime)
+					|| toMime.getType().equals("image")) {
 				return RenditionCapability.GOOD_CAPABILITY;
 			}
 		}
