@@ -4,33 +4,80 @@ package internal.org.springframework.content.commons.utils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Optional;
+
+import org.springframework.core.io.ResourceLoader;
 
 public class InputContentStream extends InputStream {
 
-    private final InputStream is;
+    private InputStream is;
     private final Object entity;
     private final String mimeType;
+    
+    /*
+     * We will do load of effective content as late as possible
+     * so in some case we can skip it at all!
+     * this part is fully transparent to the user
+     */
+    private Boolean loaded;
+    private final String location;
+    private final Optional<ResourceLoader> loader;
+    
 
-	
+	/* GETTERS */
 	public Object getEntity() {
 		return entity;
 	}
-	
-	
-
 	public String getMimeType() {
 		return mimeType;
 	}
+	
+	private void load() {
+		if(!loaded) {
+			loader.ifPresent((x)->{
+				try {
+					is = x.getResource(location).getInputStream();
+					loaded = true;
+				} catch (IOException e) {
+					is = null;
+					e.printStackTrace();
+				}
+			});
+		}
+	}
 
 
+	public InputContentStream(ResourceLoader loader, String location, Object e) {
+		this.loader = Optional.of(loader);
+		this.location = location;
+		this.loaded = false;
+        this.is = null;
+        this.entity = e;
+        this.mimeType = null;
+	}
+	
+	public InputContentStream(ResourceLoader loader, String location, Object e, String m) {
+		this.loader = Optional.of(loader);
+		this.location = location;
+		this.loaded = false;
+        this.is = null;
+        this.entity = e;
+        this.mimeType = m;
+	}
 
 	public InputContentStream(InputStream is, Object e) {
+		this.loader = Optional.of(null);
+		this.location = null;
+		this.loaded = true;
         this.is = is;
         this.entity = e;
         this.mimeType = null;
 	}
 	
 	public InputContentStream(InputStream is, Object e, String m) {
+		this.loader = Optional.of(null);
+		this.location = null;
+		this.loaded = true;
         this.is = is;
         this.entity = e;
         this.mimeType = m;
@@ -53,6 +100,7 @@ public class InputContentStream extends InputStream {
      */
     @Override
     public int read() throws IOException{
+    	if(!loaded) load();
         return is.read();
     }
 
@@ -91,6 +139,7 @@ public class InputContentStream extends InputStream {
      */
     @Override
     public int read(byte b[]) throws IOException {
+    	if(!loaded) load();
         return is.read(b);
     }
 
@@ -153,6 +202,7 @@ public class InputContentStream extends InputStream {
      */
     @Override
     public int read(byte b[], int off, int len) throws IOException {
+    	if(!loaded) load();
         return is.read(b, off, len);
     }
 
@@ -180,6 +230,7 @@ public class InputContentStream extends InputStream {
      */
     @Override
     public long skip(long n) throws IOException {
+    	if(!loaded) load();
         return is.skip(n);
     }
 
@@ -211,6 +262,7 @@ public class InputContentStream extends InputStream {
      */
     @Override
     public int available() throws IOException {
+    	if(!loaded) load();
         return is.available();
     }
 
@@ -225,6 +277,7 @@ public class InputContentStream extends InputStream {
      */
     @Override
     public void close() throws IOException {
+    	if(!loaded) return; // was not even open
         is.close();
     }
 
@@ -256,6 +309,7 @@ public class InputContentStream extends InputStream {
      */
     @Override
     public synchronized void mark(int readlimit) {
+    	if(!loaded) load();
         is.mark(readlimit);
     }
 
@@ -305,6 +359,7 @@ public class InputContentStream extends InputStream {
      */
     @Override
     public synchronized void reset() throws IOException {
+    	if(!loaded) load();
         is.reset();
     }
 
@@ -321,6 +376,7 @@ public class InputContentStream extends InputStream {
      * @see     java.io.InputStream#reset()
      */
     public boolean markSupported() {
+    	if(!loaded) load();
         return is.markSupported();
     }
 
