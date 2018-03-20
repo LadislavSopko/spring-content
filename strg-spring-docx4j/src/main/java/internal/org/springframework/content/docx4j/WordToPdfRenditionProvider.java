@@ -9,6 +9,7 @@ import org.docx4j.convert.out.FOSettings;
 import org.docx4j.fonts.PhysicalFonts;
 import org.docx4j.model.fields.FieldUpdater;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
+import org.springframework.content.commons.renditions.RenditionCapability;
 import org.springframework.content.commons.renditions.RenditionProvider;
 import org.springframework.util.MimeType;
 
@@ -20,13 +21,20 @@ public class WordToPdfRenditionProvider implements RenditionProvider {
 	}
 
 	@Override
+	public Boolean consumes(String fromMimeType) {
+		if (fromMimeType.equals("application/vnd.openxmlformats-officedocument.wordprocessingml.document")) return true;
+		return false;
+	}
+
+	@Override
 	public String[] produces() {
 		return new String[] {"application/pdf"};
 	}
 	
 	@Override
-	public Boolean isCapable(String fromMimeType, String toMimeType) {
-		return MimeType.valueOf(toMimeType).includes(MimeType.valueOf("application/pdf")) && MimeType.valueOf("application/vnd.openxmlformats-officedocument.wordprocessingml.document").includes(MimeType.valueOf(fromMimeType));
+	public RenditionCapability isCapable(String fromMimeType, String toMimeType) {
+		if (MimeType.valueOf(toMimeType).includes(MimeType.valueOf("application/pdf")) && consumes(fromMimeType)) return RenditionCapability.GOOD_CAPABILITY;
+		return RenditionCapability.NOT_CAPABLE;
 	}
 
 	@Override

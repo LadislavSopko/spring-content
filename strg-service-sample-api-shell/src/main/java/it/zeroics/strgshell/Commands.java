@@ -26,6 +26,7 @@ import org.springframework.shell.standard.ShellOption;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import internal.org.springframework.content.commons.renditions.RenditionContext;
 import it.zeroics.strg.api.MediumContentStore;
 import it.zeroics.strg.api.MediumReopository;
 import it.zeroics.strg.model.Medium;
@@ -204,12 +205,8 @@ public class Commands {
 				if(!mime.equals("")) {
 					is = contentStore.getRendition(x, mime);
 					
-					try {
-						mtExt = allMimeTypes.forName(mime.toString()).getExtension();
-					} catch (MimeTypeException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					mtExt = RenditionContext.getInstance().getSupportedExtension(mime.toString()) ;
+					// mtExt = allMimeTypes.forName(mime.toString()).getExtension();
 					
 				}else {
 					is = contentStore.getContent(x);

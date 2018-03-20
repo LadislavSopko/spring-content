@@ -11,6 +11,7 @@ import java.util.Arrays;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.content.commons.renditions.RenditionCapability;
 import org.springframework.content.commons.renditions.RenditionProvider;
 
 import internal.org.springframework.content.docx4j.JpegToPngRenditionProvider;
@@ -26,8 +27,7 @@ public class JpegToPngRenditionProviderTest {
 	
 	@Test
 	public void testCanConvert() {
-		assertThat(service.consumes(), is("image/jpeg"));
-		assertThat(Arrays.asList(service.produces()), hasItems("image/png"));
+		assertThat(service.isCapable("image/jpeg", "image/png").isBetterThan(RenditionCapability.NOT_CAPABLE), is(true));
 	}
 
 	@Test

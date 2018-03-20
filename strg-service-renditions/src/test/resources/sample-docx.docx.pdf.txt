@@ -1,0 +1,99 @@
+
+My header
+
+Docx sample document
+This is a document exhibiting basic docx features.  
+
+This is style Heading 1
+
+Some text.
+
+Tables
+
+Cell text Shaded grey
+Vertical merge Shaded grey
+
+Horizontal merge
+
+(There is another document which tests tables more thoroughly)
+
+Paragraph properties
+
+Left indent
+Centred 
+
+Align Right
+Justified text
+
+Indented indented indented indented indented indented indented indented indented indented indented
+indented indented indented indented indented indented indented indented indented 
+
+First line indent, Left indent, Hanging indent aaa bbb aaa bbb aaa bbb aaa bbb aaa bbb aaa bbb aaa bbb aaa
+bbb aaa bbb aaa bbb aaa bbb aaa bbb aaa bbb aaa bbb
+
+Normal
+
+A short paragraph with 10 points spacing before, 20 points after.
+
+Run properties
+
+Font styles Aerial Black
+
+Font styles 18 point
+Font styles bold
+Font styles italic
+Font styles underline
+
+Bullets & numbering
+
+Bullets
+? Level 1
+
+o Level 2
+
+
+
+My header
+
+Numbering
+1) Level 1
+
+a) Level 2
+a.i) Level 3
+
+Images
+
+Jpeg:
+
+Gif (scaled):
+
+
+
+My header
+
+Png (from http://davidpritchard.org/images/pacsoc-s1b.png )
+
+http://davidpritchard.org/images/pacsoc-s1b.png
+
+
+My header
+(TODO: we really should have both 2003 & 2007 pictures)
+
+
+
+My header
+That was a page break
+
+Here is some change tracking. An insertion Followed by A deletion.
+
+This line contains a soft return
+and here it continues
+
+
+	This is style Heading 1
+	Tables
+	Paragraph properties
+	Run properties
+	Bullets & numbering
+	Images
+
