@@ -7,6 +7,7 @@ import org.apache.poi.openxml4j.exceptions.NotOfficeXmlFileException;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.springframework.content.commons.renditions.RenditionCapability;
 import org.springframework.content.commons.renditions.RenditionProvider;
 import org.springframework.content.commons.repository.StoreExtensionException;
 import org.springframework.content.renditions.RenditionException;
@@ -51,6 +52,7 @@ public class WordToJpegRendererTest {
                 poi = mock(POIService.class);
                 renderer = new WordToJpegRenderer(poi);
             });
+            /*
             Context("#consumes", () -> {
                 It("should return word ml mimetype", () -> {
                     assertThat(renderer.consumes(), is("application/vnd.openxmlformats-officedocument.wordprocessingml.document"));
@@ -59,6 +61,13 @@ public class WordToJpegRendererTest {
             Context("#produces", () -> {
                 It("should return jpeg mimetype", () -> {
                     assertThat(renderer.produces(), hasItemInArray("image/jpg"));
+                });
+            });
+            */
+            Context("#isCapable", () -> {
+                It("should be able to convert word in jpg", () -> {
+                    assertThat(renderer.isCapable("application/vnd.openxmlformats-officedocument.wordprocessingml.document", "image/jpg").isBetterThan(RenditionCapability.NOT_CAPABLE), is(true));            
+                    assertThat(renderer.isCapable("application/vnd.openxmlformats-officedocument.wordprocessingml.document", "image/jpeg").isBetterThan(RenditionCapability.NOT_CAPABLE), is(true));            
                 });
             });
             Context("#convert", () -> {

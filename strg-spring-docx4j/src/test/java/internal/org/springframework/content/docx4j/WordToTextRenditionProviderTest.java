@@ -10,6 +10,7 @@ import java.util.Arrays;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.content.commons.renditions.RenditionCapability;
 import org.springframework.content.commons.renditions.RenditionProvider;
 
 import internal.org.springframework.content.docx4j.WordToTextRenditionProvider;
@@ -27,6 +28,7 @@ public class WordToTextRenditionProviderTest {
 	public void testCanConvert() {
 		assertThat(service.consumes(), is("application/vnd.openxmlformats-officedocument.wordprocessingml.document"));
 		assertThat(Arrays.asList(service.produces()), hasItems("text/plain"));
+		assertThat(service.isCapable("application/vnd.openxmlformats-officedocument.wordprocessingml.document", "text/plain").isBetterThan(RenditionCapability.NOT_CAPABLE), is(true));
 	}
 
 	@Test

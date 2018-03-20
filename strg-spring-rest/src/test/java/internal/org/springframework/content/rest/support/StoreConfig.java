@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
+import org.springframework.content.commons.renditions.RenditionCapability;
 import org.springframework.content.commons.renditions.RenditionProvider;
 import org.springframework.content.fs.config.EnableFilesystemStores;
 import org.springframework.content.fs.io.FileSystemResourceLoader;
@@ -46,12 +47,17 @@ public class StoreConfig extends JpaInfrastructureConfig {
 
 			@Override
 			public String consumes() {
-				return "text/plain";
+				throw new UnsupportedOperationException();
+			}
+
+			@Override
+			public Boolean consumes(String s) {
+				throw new UnsupportedOperationException();
 			}
 
 			@Override
 			public String[] produces() {
-				return new String[] {"text/html"};
+				throw new UnsupportedOperationException();
 			}
 
 			@Override
@@ -64,9 +70,10 @@ public class StoreConfig extends JpaInfrastructureConfig {
 			}
 
 			@Override
-			public Boolean isCapable(String fromMimeType, String toMimeType) {
-				return MimeType.valueOf(toMimeType).includes(MimeType.valueOf("text/html")) && 
-			   		   MimeType.valueOf("text/plain").includes(MimeType.valueOf(fromMimeType));
+			public RenditionCapability isCapable(String fromMimeType, String toMimeType) {
+				if (MimeType.valueOf(toMimeType).includes(MimeType.valueOf("text/html")) && 
+			   		   MimeType.valueOf("text/plain").includes(MimeType.valueOf(fromMimeType))) return RenditionCapability.GOOD_CAPABILITY;
+				return RenditionCapability.NOT_CAPABLE;
 			}
 		};
 	}

@@ -6,6 +6,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.runner.RunWith;
+import org.springframework.content.commons.renditions.RenditionCapability;
 import org.springframework.content.commons.renditions.RenditionProvider;
 
 import java.io.ByteArrayInputStream;
@@ -34,17 +35,26 @@ public class TextplainToJpegRendererTest {
             JustBeforeEach(() -> {
                 renderer = new TextplainToJpegRenderer(wrapText);
             });
-            Context("#consumes", () -> {
-                It("should return text/plain", () -> {
-                    assertThat(renderer.consumes(), is("text/plain"));
+            /*
+                 		Context("#consumes", () -> {
+                            It("should return text/plain", () -> {
+                                assertThat(renderer.consumes(), is("text/plain"));
+                            });
+                        });
+                        Context("#produces", () -> {
+                            It("should return jpeg mimetype", () -> {
+                                assertThat(renderer.produces(), hasItemInArray("image/jpg"));
+                                assertThat(renderer.produces(), hasItemInArray("image/jpeg"));
+                            });
+                        });
+             */
+            Context("#isCapable", () -> {
+                It("should be able to convert text in jpeg", () -> {
+                    assertThat(renderer.isCapable("text/plain", "image/jpg").isBetterThan(RenditionCapability.NOT_CAPABLE), is(true));            
+                    assertThat(renderer.isCapable("text/plain", "image/jpeg").isBetterThan(RenditionCapability.NOT_CAPABLE), is(true));            
                 });
             });
-            Context("#produces", () -> {
-                It("should return jpeg mimetype", () -> {
-                    assertThat(renderer.produces(), hasItemInArray("image/jpg"));
-                    assertThat(renderer.produces(), hasItemInArray("image/jpeg"));
-                });
-            });
+            
             Context("#convert", () -> {
                 JustBeforeEach(() -> {
                     try {

@@ -7,7 +7,6 @@ import java.lang.reflect.Field;
 import java.util.List;
 
 import org.apache.tika.config.TikaConfig;
-import org.apache.tika.mime.MimeTypeException;
 import org.apache.tika.mime.MimeTypes;
 import org.atteo.evo.inflector.English;
 import org.springframework.content.commons.annotations.ContentLength;
@@ -22,6 +21,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
 
+import internal.org.springframework.content.commons.renditions.RenditionContext;
 import internal.org.springframework.content.commons.utils.InputContentStream;
 import internal.org.springframework.content.rest.StoreRestResource;
 import internal.org.springframework.content.rest.annotations.ContentStoreRestResource;
@@ -74,7 +74,12 @@ public final class ContentStoreUtils {
 		
 		for (int i=0; i < arrMimeTypes.length && content == null; i++) {
 			MediaType mimeType = arrMimeTypes[i];
-			if (mimeType.includes(targetMimeType)) {
+			if ( !(mimeType.isConcrete() && targetMimeType.isConcrete() &&
+					mimeType.getType().equals(targetMimeType.getType()) &&
+					mimeType.getSubtype().equals(targetMimeType.getSubtype()) &&
+					!mimeType.equals(targetMimeType)
+					) && // If the same but with parameters, use renderer...
+					mimeType.includes(targetMimeType)) {  // ... or load original in compatibility mode
 				headers.setContentType(targetMimeType);
 				
 				// content name header
@@ -95,13 +100,8 @@ public final class ContentStoreUtils {
 					headers.setContentType(MediaType.valueOf(mt));
 					
 					// determine file extension
-					String mtExt = ".unkn";
-					try {
-						mtExt = allMimeTypes.forName(mimeType.toString()).getExtension();
-					} catch (MimeTypeException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					String mtExt = RenditionContext.getInstance().getSupportedExtension(mimeType.toString()) ;
+					// String mtExt = allMimeTypes.forName(mime.toString()).getExtension();
 					
 					// content name header
 					headers.set(httpNameHeader, cName + mtExt);

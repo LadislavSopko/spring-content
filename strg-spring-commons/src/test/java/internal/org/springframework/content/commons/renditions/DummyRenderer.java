@@ -2,24 +2,32 @@ package internal.org.springframework.content.commons.renditions;
 
 import java.io.InputStream;
 
+import org.springframework.content.commons.renditions.RenditionCapability;
 import org.springframework.content.commons.renditions.RenditionProvider;
 import org.springframework.util.MimeType;
 
 public class DummyRenderer implements RenditionProvider{
 	@Override
     public String consumes() {
-        return "one/thing";
+		return "one/thing";
+    }
+
+	@Override
+    public Boolean consumes(String fromMimeType) {
+		if ( MimeType.valueOf("one/thing").includes(MimeType.valueOf(fromMimeType)) ) return true;
+		return false;
     }
 
     @Override
     public String[] produces() {
-        return new String[] {"something/else"};
+    	return new String[] {"sometihng/else"};
     }
     
     @Override
-   	public Boolean isCapable(String fromMimeType, String toMimeType) {
-   		return MimeType.valueOf(toMimeType).includes(MimeType.valueOf("something/else"))  && 
-   			   MimeType.valueOf("one/thing").includes(MimeType.valueOf(fromMimeType));
+   	public RenditionCapability isCapable(String fromMimeType, String toMimeType) {
+   		if (MimeType.valueOf(toMimeType).includes(MimeType.valueOf("something/else"))  && 
+   			consumes(fromMimeType)) return RenditionCapability.GOOD_CAPABILITY;
+   		return RenditionCapability.NOT_CAPABLE;
    	}
 
     @SuppressWarnings("resource")

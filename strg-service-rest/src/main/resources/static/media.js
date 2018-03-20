@@ -1,6 +1,26 @@
 angular.module('MediaApp', [])
   .controller('MediaListController', function($http) {
     var mediaList = this;
+    mediaList.conversion = {
+    	mime: 'text/plain',
+    	options: [
+    		{mime: 'text/plain', ext: 'txt', descr: 'Text'},
+    		{mime: 'application/pdf', ext: 'pdf', descr: 'Pdf'},
+    		{mime: 'application/pdf;pdfA=true', ext: 'pdf', descr: 'Pdf/A'},
+    		{mime: 'application/it.zeroics.meta', ext: 'json', descr: 'Meta'},
+    		{mime: 'image/jpg', ext: 'jpg', descr: 'JPeg'},
+    		{mime: 'image/jpg;gray=true', ext: 'jpg', descr: 'JPeg/Gray'},
+    		{mime: 'image/jpg;thumb=150x150', ext: 'jpg', descr: 'JPeg/Thumb'},
+    		{mime: 'image/png', ext: 'png', descr: 'Png'},
+    		{mime: 'image/png;gray=true', ext: 'png', descr: 'Png/Gray'},
+    		{mime: 'image/png;thumb=150x150', ext: 'png', descr: 'Png/Thumb'},
+    		{mime: 'image/tif', ext: 'tif', descr: 'Tiff'},
+    		{mime: 'image/tif;gray=true', ext: 'tif', descr: 'Tiff/Gray'},
+
+    		{mime: 'application/it.zeroics.capability', ext: 'json', descr: 'Conversion Capability'},
+    		{mime: 'this/that', ext: 'wrng', descr: 'Wrong'}
+    	]
+    };
     mediaList.media = [];
 
     mediaList.getMediaList = function() {
@@ -28,7 +48,29 @@ angular.module('MediaApp', [])
         return "mediaList.download('" + m._links["self"].href +"')";
     };
     
-    
+    mediaList.getExtension = function() {
+    	var retVal = '' ;
+    	mediaList.conversion.options.forEach(function(element, index, array) {
+    		if ( element.mime.toString()
+    				== mediaList.conversion.mime ) {
+    			retVal = element.ext;
+    		}
+    	}
+    	);
+    	return retVal;
+    };
+
+    mediaList.getDescription = function() {
+    	var retVal = 'Unknown' ;
+    	mediaList.conversion.options.forEach(function(element, index, array) {
+    		if ( element.mime.toString()
+    				== mediaList.conversion.mime ) {
+    			retVal = element.descr;
+    		}
+    	}
+    	);
+    	return retVal;
+    };
 
     mediaList.upload = function() {
         var f = document.getElementById('mediumElement').files[0];
@@ -52,18 +94,22 @@ angular.module('MediaApp', [])
     };
     
     mediaList.downloadFile = function (u) {
+        var ext = this.getExtension();
         $http({
             method: 'GET',
             url: u._links["self"].href,
             //params: { name: name },
             responseType: 'arraybuffer',
         	headers: {
-                'accept': 'text/plain;'
+                'accept': this.conversion.mime
             }
         }).success(function (data, status, headers) {
             headers = headers();
      
-            var filename = headers['x-file-name'] || "text.txt";
+            var filename = headers['x-file-name'] || ("file."+ext);
+            if ( !filename.endsWith("."+ext) ) {
+            	filename += "."+ext
+            }
             var contentType = headers['content-type'];
      
             var linkElement = document.createElement('a');

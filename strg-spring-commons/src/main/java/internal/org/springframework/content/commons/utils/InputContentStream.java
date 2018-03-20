@@ -10,6 +10,7 @@ public class InputContentStream extends InputStream {
     private final InputStream is;
     private final Object entity;
     private final String mimeType;
+    private String fileExtension;
 
 	
 	public Object getEntity() {
@@ -21,7 +22,6 @@ public class InputContentStream extends InputStream {
 	public String getMimeType() {
 		return mimeType;
 	}
-
 
 
 	public InputContentStream(InputStream is, Object e) {
@@ -323,6 +323,18 @@ public class InputContentStream extends InputStream {
     public boolean markSupported() {
         return is.markSupported();
     }
+
+
+
+	public String getFileExtension() {
+		return fileExtension;
+	}
+
+
+
+	public void setFileExtension(String fileExtension) {
+		this.fileExtension = fileExtension;
+	}
 
 
 }
