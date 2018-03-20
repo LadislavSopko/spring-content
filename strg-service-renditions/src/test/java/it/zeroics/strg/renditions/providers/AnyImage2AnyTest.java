@@ -56,13 +56,13 @@ public class AnyImage2AnyTest {
 					assertThat(provider.consumes("what/the_fuck"), is(false)) ;
 					assertThat(provider.isCapable("what/the_fuck", mh.toString()).isBetterThan(RenditionCapability.NOT_CAPABLE), is(false));
 					assertThat(provider.consumes("image/dicom"), is(true)) ;
-					assertThat(provider.isCapable("image/dicom", mh.toString()).isBetterThan(RenditionCapability.NOT_CAPABLE), is(false));
+					assertThat(provider.isCapable("image/dicom", mh.toString()).isBetterThan(RenditionCapability.NOT_CAPABLE), is(true));
 					assertThat(provider.isCapable("image/dicom", mh.toString()).isBest(), is(false));
 					assertThat(provider.consumes(MimeHelper.CAPABILITY_MIMETYPE), is(false)) ;
 					assertThat(provider.isCapable("image/jpg", MimeHelper.CAPABILITY_MIMETYPE).isBetterThan(RenditionCapability.NOT_CAPABLE), is(false));
 				});
 				It("Must produce something expected", () -> {
-					assertThat(Arrays.asList(provider.produces()).contains(MimeHelper.METADATA_MIMETYPE), is(false)) ;
+					assertThat(Arrays.asList(provider.produces()).contains(MimeHelper.METADATA_MIMETYPE), is(true)) ;
 					assertThat(Arrays.asList(provider.produces()).contains("text/plain"), is(false)) ;
 					assertThat(Arrays.asList(provider.produces()).contains("image/dicom"), is(false)) ;
 					assertThat(Arrays.asList(provider.produces()).contains("image/jpg"), is(true)) ;
@@ -89,6 +89,7 @@ public class AnyImage2AnyTest {
 						InputStream pngStream = c.callConverterFromFileName("sample-image.jpg","image/jpg", mh.toString(), provider);
 						// assertThat(pngStream, is(not(nullValue())));
 
+						// Use this to have less metadata, to compare.
 						MostAny2Txt metaProvider = new MostAny2Txt() ;
 						/* Image conversion from jpg to png differs from the png itself. The resulting png contains the same image
 						 * but format differs and an internal timestamp too. 
@@ -105,9 +106,19 @@ public class AnyImage2AnyTest {
 						context.refresh();
 						RendererTest c = new RendererTest();
 						MimeHelper mh = new MimeHelper("image/jpg");
-						assertThat(c.compareAsByteArray(
-								c.callConverterFromFileName("sample-image.png","image/png", mh.toString(), provider),
-								"sample-image.jpg"), is(true));
+						// Can't compare png. Same image can be compressed or not and a data withing changes. Must compare metadata.
+						InputStream pngStream = c.callConverterFromFileName("sample-image.png","image/png", mh.toString(), provider);
+						// assertThat(pngStream, is(not(nullValue())));
+
+						// Use this to have less metadata, to compare.
+						MostAny2Txt metaProvider = new MostAny2Txt() ;
+						/* Image conversion from jpg to png differs from the png itself. The resulting png contains the same image
+						 * but format differs and an internal timestamp too. 
+						 * Must match something else, as basic metadata 
+						 */
+						assertThat(c.compareAsString(
+								c.callConverterFromInputStream(pngStream, "sample-image.png.jpg", "image/jpg", MimeHelper.METADATA_MIMETYPE, metaProvider), 
+								"sample-image.jpg.json"), is(true));
 						context.close();
 					});
 				});

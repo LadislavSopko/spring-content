@@ -51,6 +51,7 @@ public class MostAny2Txt extends BasicProvider {
     	if (MimeHelper.isMeta(toMime) &&
     			!fromMime.getSubtype().equals("dicom") && // TODO: Tika is able but not very able, should return a "vote".
     			MimeType.valueOf("*/*").includes(fromMime) ) {
+    		if ( fromMime.getType().equals("image")) return RenditionCapability.LOW_CAPABILITY; // Let other converter do this job.
 			return RenditionCapability.PRETTY_CAPABLE ;
     	}
 		return RenditionCapability.NOT_CAPABLE;

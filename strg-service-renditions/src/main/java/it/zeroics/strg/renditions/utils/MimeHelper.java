@@ -1,15 +1,9 @@
 package it.zeroics.strg.renditions.utils;
 
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.springframework.util.MimeType;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Oggetto contenente i metadati estratti da un file elaborato da un converter.
@@ -18,19 +12,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class MimeHelper {
 	
-	public static final String METADATA_MIMETYPE = "application/it.zeroics.meta";
-	public static final String CAPABILITY_MIMETYPE = "application/it.zeroics.capability";
+	public static final String METADATA_MIMESUBTYPE = "it.zeroics.meta" ;
+	public static final String METADATA_MIMETYPE = "application/" + METADATA_MIMESUBTYPE ;
+	public static final String CAPABILITY_MIMESUBTYPE = "it.zeroics.capability" ;
+	public static final String CAPABILITY_MIMETYPE = "application/" + CAPABILITY_MIMESUBTYPE;
 	
 	private String type;
 	private String subType;
 	private Map<String, String> parms;
 
 	// Parameter Key & Values
-	private static final String METADATA_KEY = "meta" ;
 	private static final String GRAYSCALE_KEY = "gray" ;
 	private static final String PDFA_KEY = "pdfA" ;
 	private static final String THUMB_KEY = "thumb" ;
-	private static final String CAPABILITY_KEY = "capable" ;
 	//
 	private static final String TRUE_VALUE = "true" ;
 	
