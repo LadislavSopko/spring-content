@@ -1,4 +1,4 @@
-package it.zeroics.strg.renditions;
+package it.zeroics.strg.renditions.dicom;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,7 +28,7 @@ import it.zeroics.strg.model.Medium;
 
 @Component
 public class DicomRenderer extends BasicRenderer {
-	private static final Log logger = LogFactory.getLog(TikaRenderer.class);
+	private static final Log logger = LogFactory.getLog(DicomRenderer.class);
 	private Metadata meta ;
 	
     public class myVisitor implements Attributes.Visitor {

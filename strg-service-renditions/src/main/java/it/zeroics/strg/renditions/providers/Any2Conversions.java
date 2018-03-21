@@ -12,7 +12,6 @@ import org.springframework.util.MimeType;
 import internal.org.springframework.content.commons.renditions.BasicRenderer;
 import internal.org.springframework.content.commons.renditions.RenditionContext;
 import it.zeroics.strg.renditions.CapabilityRenderer;
-import it.zeroics.strg.renditions.DicomRenderer;
 import it.zeroics.strg.renditions.RenditionException;
 import it.zeroics.strg.renditions.utils.MimeHelper;
 

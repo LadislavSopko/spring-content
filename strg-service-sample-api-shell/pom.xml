@@ -36,6 +36,13 @@
 			<artifactId>strg-service-renditions-boot-starter</artifactId>
 			<version>0.1.0-SNAPSHOT</version>
 		</dependency>
+		<!-- Add optional rendition components by adding dependency 
+		<dependency>
+			<groupId>it.zeroics</groupId>
+			<artifactId>strg-service-renditions-dicom-boot-starter</artifactId>
+			<version>0.1.0-SNAPSHOT</version>
+		</dependency>
+		-->
 		<dependency>
 			<groupId>it.zeroics</groupId>
 			<artifactId>strg-service-api-boot-starter</artifactId>

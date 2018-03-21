@@ -2,19 +2,9 @@ package it.zeroics.strg.renditions;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.List;
-import java.util.Vector;
-import java.io.File;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dcm4che3.data.Attributes;
-import org.dcm4che3.data.ElementDictionary;
-import org.dcm4che3.data.VR;
-import org.dcm4che3.tool.common.DicomFiles;
 import org.springframework.content.commons.renditions.RenditionService;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MimeType;
@@ -24,12 +14,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import internal.org.springframework.content.commons.renditions.BasicRenderer;
 import internal.org.springframework.content.commons.renditions.RenditionContext;
-import internal.org.springframework.content.commons.renditions.RenditionServiceImpl;
 //import gettingstarted.springcontentfs.File;
 import internal.org.springframework.content.commons.utils.InputContentStream;
+import it.zeroics.strg.model.Medium;
 import it.zeroics.strg.renditions.utils.Metadata;
 import it.zeroics.strg.renditions.utils.MimeHelper;
-import it.zeroics.strg.model.Medium;
 
 
 @Component
