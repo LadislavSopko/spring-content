@@ -1,4 +1,4 @@
-package it.zeroics.strg.renditions.providers;
+package it.zeroics.strg.renditions.dicom.providers;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -11,8 +11,9 @@ import org.springframework.util.MimeType;
 
 import internal.org.springframework.content.commons.renditions.BasicRenderer;
 import internal.org.springframework.content.commons.renditions.RenditionContext;
-import it.zeroics.strg.renditions.DicomRenderer;
 import it.zeroics.strg.renditions.RenditionException;
+import it.zeroics.strg.renditions.dicom.DicomRenderer;
+import it.zeroics.strg.renditions.providers.BasicProvider;
 import it.zeroics.strg.renditions.utils.MimeHelper;
 
 import java.io.InputStream;

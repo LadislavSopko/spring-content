@@ -98,8 +98,8 @@ public class Any2ConversionsTest {
 					renditionService.setProviders(provider);
 					provider = spy(new MostAny2Txt());
 					renditionService.setProviders(provider);
-					provider = spy(new Dicom2Any());
-					renditionService.setProviders(provider);
+					//provider = spy(new Dicom2Any());
+					//renditionService.setProviders(provider);
 					provider = spy(new AnyImage2Any());
 					renditionService.setProviders(provider);
 					provider = spy(new Any2Conversions());

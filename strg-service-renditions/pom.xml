@@ -10,15 +10,6 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>strg-service-renditions</artifactId>
-    
-      <repositories>
-	    <repository>
-		    <id>www.dcm4che.org</id>
-		    <name>dcm4che Repository</name>
-		    <url>http://www.dcm4che.org/maven2</url>
-		</repository>
-	</repositories> 
-	
     <dependencies>
         <dependency>
             <groupId>it.zeroics</groupId>
@@ -107,18 +98,6 @@
 			</exclusions>
         	 -->
         </dependency>
-        <!-- dependency>
-        	<groupId>org.dcm4che</groupId>
-        	<artifactId>dcm4che-core</artifactId>
-        	<version>5.12.0</version>
-        	<type>bundle</type>
-		</dependency>
-		 -->
-        <dependency>
-		    <groupId>org.dcm4che.tool</groupId>
-		    <artifactId>dcm4che-tool-common</artifactId>
-		    <version>5.12.0</version>
-		</dependency>
         <dependency>
         	<groupId>com.fasterxml.jackson.core</groupId>
         	<artifactId>jackson-databind</artifactId>
@@ -128,13 +107,6 @@
         	<artifactId>spring-boot-configuration-processor</artifactId>
         	<optional>true</optional>
         </dependency>
-        <dependency>
-        	<groupId>org.springframework.boot</groupId>
-        	<artifactId>spring-boot-configuration-processor</artifactId>
-        	<optional>true</optional>
-        </dependency>
     </dependencies>
-    
-  
 
 </project>
