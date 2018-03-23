@@ -75,13 +75,13 @@ public class DefaultMongoStoreImpl<S, SID extends Serializable> implements Conte
 
 		String location = converter.convert(contentId, String.class);
 		Resource resource = gridFs.getResource(location);
-		try {
+		//try {
 			if (resource != null && resource.exists()) {
-				return new InputContentStream(resource.getInputStream(), property);
+				return new InputContentStream(resource, property);
 			}
-		} catch (IOException e) {
-			logger.error(String.format("Unexpected error getting content %s", contentId.toString()), e);
-		}
+		//} catch (IOException e) {
+		//	logger.error(String.format("Unexpected error getting content %s", contentId.toString()), e);
+		//}
 		return null;
 	}
 

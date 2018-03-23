@@ -26,6 +26,8 @@ import org.springframework.util.Assert;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 
+import internal.org.springframework.content.commons.utils.InputContentStream;
+
 public class DefaultS3StoreImpl<S, SID extends Serializable> implements Store<SID>, ContentStore<S,SID> {
 
 	private static Log logger = LogFactory.getLog(DefaultS3StoreImpl.class);
@@ -89,13 +91,13 @@ public class DefaultS3StoreImpl<S, SID extends Serializable> implements Store<SI
 		String location = converter.convert(contentId, String.class);
 		location = absolutify(location);
 		Resource resource = loader.getResource(location);
-		try {
+		//try {
 			if (resource.exists()) {
-				return resource.getInputStream();
+				return new InputContentStream(resource, property);
 			}
-		} catch (IOException e) {
-			logger.error(String.format("Unexpected error getting content %s", contentId.toString()), e);
-		}
+		//} catch (IOException e) {
+		//	logger.error(String.format("Unexpected error getting content %s", contentId.toString()), e);
+		//}
 		
 		return null;
 	}
