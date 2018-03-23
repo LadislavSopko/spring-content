@@ -119,16 +119,14 @@ public class DefaultFilesystemStoreImpl<S, SID extends Serializable> implements 
 			return null;
 
 		String location = conversion.convert(contentId, String.class);
-		Resource resource = loader.getResource(location);
-		
-		try {
+		Resource resource = loader.getResource(location); // will not load file so can be done
+		//try {
 			if (resource.exists()) {
-				return new InputContentStream(resource.getInputStream(), property);//resource.getInputStream();
+				return new InputContentStream(resource, property);//resource.getInputStream();
 			}
-		} catch (IOException e) {
-			logger.error(String.format("Unexpected error getting content %s", contentId.toString()), e);
-		}
-		
+		//} catch (IOException e) {
+		//	logger.error(String.format("Unexpected error getting content %s", contentId.toString()), e);
+		//}
 		return null;
 	}
 

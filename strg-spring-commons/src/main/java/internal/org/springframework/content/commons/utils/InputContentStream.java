@@ -5,32 +5,53 @@ package internal.org.springframework.content.commons.utils;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.springframework.core.io.Resource;
+
 public class InputContentStream extends InputStream {
 
-    private final InputStream is;
+    private InputStream is;
     private final Object entity;
     private final String mimeType;
-    private String fileExtension;
+    
+    /*
+     * We will do load of effective content as late as possible
+     * so in some case we can skip it at all!
+     * this part is fully transparent to the user
+     */
+    private final Resource resource;
+    
 
-	
+	/* GETTERS */
 	public Object getEntity() {
 		return entity;
 	}
-	
-	
-
 	public String getMimeType() {
 		return mimeType;
 	}
-
+	
+	public InputContentStream(Resource resource, Object e) {
+		this.is = null;
+        this.entity = e;
+        this.mimeType = null;
+        this.resource = resource;
+	}
+	
+	public InputContentStream(Resource resource,  Object e, String m) {
+		this.is = null;
+        this.entity = e;
+        this.mimeType = m;
+        this.resource = resource;
+	}
 
 	public InputContentStream(InputStream is, Object e) {
-        this.is = is;
+		this.resource = null;
+		this.is = is;
         this.entity = e;
         this.mimeType = null;
 	}
 	
 	public InputContentStream(InputStream is, Object e, String m) {
+		this.resource = null;
         this.is = is;
         this.entity = e;
         this.mimeType = m;
@@ -53,6 +74,7 @@ public class InputContentStream extends InputStream {
      */
     @Override
     public int read() throws IOException{
+    	if(is == null) is = resource.getInputStream();
         return is.read();
     }
 
@@ -91,6 +113,7 @@ public class InputContentStream extends InputStream {
      */
     @Override
     public int read(byte b[]) throws IOException {
+    	if(is == null) is = resource.getInputStream();
         return is.read(b);
     }
 
@@ -153,6 +176,7 @@ public class InputContentStream extends InputStream {
      */
     @Override
     public int read(byte b[], int off, int len) throws IOException {
+    	if(is == null) is = resource.getInputStream();
         return is.read(b, off, len);
     }
 
@@ -180,6 +204,7 @@ public class InputContentStream extends InputStream {
      */
     @Override
     public long skip(long n) throws IOException {
+    	if(is == null) is = resource.getInputStream();
         return is.skip(n);
     }
 
@@ -211,6 +236,7 @@ public class InputContentStream extends InputStream {
      */
     @Override
     public int available() throws IOException {
+    	if(is == null) is = resource.getInputStream();
         return is.available();
     }
 
@@ -225,6 +251,7 @@ public class InputContentStream extends InputStream {
      */
     @Override
     public void close() throws IOException {
+    	if(is == null) return;
         is.close();
     }
 
@@ -256,7 +283,12 @@ public class InputContentStream extends InputStream {
      */
     @Override
     public synchronized void mark(int readlimit) {
-        is.mark(readlimit);
+		try {
+			if(is == null) is = resource.getInputStream();
+			is.mark(readlimit);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     }
 
     /**
@@ -305,6 +337,7 @@ public class InputContentStream extends InputStream {
      */
     @Override
     public synchronized void reset() throws IOException {
+    	if(is == null) is = resource.getInputStream();
         is.reset();
     }
 
@@ -321,20 +354,12 @@ public class InputContentStream extends InputStream {
      * @see     java.io.InputStream#reset()
      */
     public boolean markSupported() {
-        return is.markSupported();
+    	try {
+			if(is == null) is = resource.getInputStream();
+			return is.markSupported();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	return false;
     }
-
-
-
-	public String getFileExtension() {
-		return fileExtension;
-	}
-
-
-
-	public void setFileExtension(String fileExtension) {
-		this.fileExtension = fileExtension;
-	}
-
-
 }

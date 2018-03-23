@@ -6,6 +6,7 @@ import com.github.paulcwarren.ginkgo4j.Ginkgo4jRunner;
 import internal.org.springframework.content.commons.renditions.RenditionServiceImpl;
 import internal.org.springframework.content.commons.utils.InputContentStream;
 import it.zeroics.strg.model.Medium;
+import it.zeroics.strg.renditions.providers.testsupport.RendererTest;
 import it.zeroics.strg.renditions.utils.MimeHelper;
 
 import org.apache.commons.io.IOUtils;

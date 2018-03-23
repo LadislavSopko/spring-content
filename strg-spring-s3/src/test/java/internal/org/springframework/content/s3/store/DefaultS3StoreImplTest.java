@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.apache.commons.io.IOUtils;
 import org.junit.runner.RunWith;
 import org.mockito.Matchers;
 import org.springframework.content.commons.annotations.ContentId;
@@ -55,6 +56,8 @@ public class DefaultS3StoreImplTest {
     private File parent;
 
     private InputStream result;
+    
+    private InputStream resultIs ;
     
     {
         Describe("DefaultS3StoreImplTest", () -> {
@@ -151,7 +154,7 @@ public class DefaultS3StoreImplTest {
             Context("#getContent", () -> {
                 BeforeEach(() -> {
                     entity = new TestEntity();
-                    content = mock(InputStream.class);
+                    content = new ByteArrayInputStream("Hello content world!".getBytes());//mock(InputStream.class);
                     entity.setContentId("abcd-efgh");
                   
 //                    when(placement.getLocation(eq("abcd-efgh"))).thenReturn("/abcd/efgh");
@@ -163,6 +166,9 @@ public class DefaultS3StoreImplTest {
 
                 JustBeforeEach(() -> {
                 	result = s3StoreImpl.getContent(entity);
+                	// check null first!!!
+                	if(result != null)
+                		result.available(); // this will force load underline stream
                 });
                 Context("when the resource exists", () -> {
                     BeforeEach(() -> {
@@ -178,7 +184,7 @@ public class DefaultS3StoreImplTest {
 	                });
                   
                     It("should get content", () -> {
-                        assertThat(result, is(content));
+                        assertThat(IOUtils.toString(result), is("Hello content world!"));
                     });
                 });
                 Context("when the resource does not exist", () -> {

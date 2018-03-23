@@ -85,19 +85,22 @@
         	<artifactId>strg-service-commons</artifactId>
         	<version>0.1.0-SNAPSHOT</version>
         </dependency>
-        <dependency>
+        <!-- dependency>
         	<groupId>it.tredi</groupId>
         	<artifactId>jodconverter-compare</artifactId>
         	<version>4.0.0</version>
-        	<!-- 
-			<exclusions>
-				<exclusion> 
-			        <groupId>org.slf4j</groupId>
-			        <artifactId>slf4j-log4j12</artifactId>
-			      </exclusion>
-			</exclusions>
-        	 -->
-        </dependency>
+        	
+        </dependency -->
+        <dependency>
+		    <groupId>org.jodconverter</groupId>
+		    <artifactId>jodconverter-core</artifactId>
+		    <version>4.2.0</version>
+		</dependency>
+        <dependency>
+		    <groupId>org.jodconverter</groupId>
+		    <artifactId>jodconverter-local</artifactId>
+		    <version>4.2.0</version>
+		</dependency>
         <dependency>
         	<groupId>com.fasterxml.jackson.core</groupId>
         	<artifactId>jackson-databind</artifactId>

@@ -214,6 +214,13 @@ public class TikaRenderer extends BasicRenderer {
 	        } catch(IOException | TikaException e) {
 	        	logger.error("Error on tika parse file.");
 				e.printStackTrace();
+	        }finally {
+	        	try {
+					out.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 	        }
         }
         else {
@@ -232,7 +239,14 @@ public class TikaRenderer extends BasicRenderer {
 			} catch (IOException | SAXException | TikaException e) {
 				// TODO Auto-generated catch block
 				e. printStackTrace();
-			}
+			}finally {
+	        	try {
+					out.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	        }
         }
     	
     	// remove worker!!!

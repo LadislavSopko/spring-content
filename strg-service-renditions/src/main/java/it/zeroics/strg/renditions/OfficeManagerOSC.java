@@ -3,6 +3,7 @@ package it.zeroics.strg.renditions;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jodconverter.office.DefaultOfficeManagerBuilder;
+import org.jodconverter.office.LocalOfficeManager;
 import org.jodconverter.office.OfficeException;
 import org.jodconverter.office.OfficeManager;
 import org.springframework.stereotype.Component;
@@ -16,21 +17,19 @@ public class OfficeManagerOSC {
 	
 	public OfficeManager getOfficeManager() throws OfficeException {
 		if ( null == officeManager ) {
-			DefaultOfficeManagerBuilder officeManagerBuild = new DefaultOfficeManagerBuilder();
-
-			// Evenutale path alla home directory di OpenOffice (o LibreOffice)
-			/*
-			if (FcsConfig.getInstance().getFcsConversionDocOpenOfficeHomeDir() != null && !FcsConfig.getInstance().getFcsConversionDocOpenOfficeHomeDir().isEmpty())
-				officeManagerBuild.setOfficeHome(FcsConfig.getInstance().getFcsConversionDocOpenOfficeHomeDir());
-
-			if (FcsConfig.getInstance().getFcsConversionDocOpenOfficePorts() != null && FcsConfig.getInstance().getFcsConversionDocOpenOfficePorts().length > 0)
-				officeManagerBuild.setPortNumbers(FcsConfig.getInstance().getFcsConversionDocOpenOfficePorts());
-			if (FcsConfig.getInstance().getFcsConversionTimout() > 0)
-				officeManagerBuild.setTaskExecutionTimeout(FcsConfig.getInstance().getFcsConversionTimout());
-			*/
-
-			this.officeManager = officeManagerBuild.build();
-			this.officeManager.start();
+			boolean done = false;
+			try {
+				this.officeManager = new DefaultOfficeManagerBuilder().build();
+				this.officeManager.start();
+				done = true;
+			}catch(Exception ex) {
+				// skip exception
+			}
+			
+			if(!done) {
+				this.officeManager = new DefaultOfficeManagerBuilder().setOfficeHome("C:\\Program Files (x86)\\OpenOffice 4").build();
+				this.officeManager.start();
+			}
 		}
 		return this.officeManager;
 	}

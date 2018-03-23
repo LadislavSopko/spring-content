@@ -70,17 +70,7 @@
 		</dependencies>
 	</dependencyManagement>
 	
-	<repositories>
-	    <repository>
-	        <id>spring-milestones</id>
-	        <name>Spring Milestones</name>
-	        <url>https://repo.spring.io/libs-milestone</url>
-	        <snapshots>
-	            <enabled>false</enabled>
-	        </snapshots>
-	    </repository>
-	</repositories>
-
+	
 	<properties>
 		<buildType>${SC_BUILD_TYPE}</buildType>
 		<ginkgo4j-version>1.0.9</ginkgo4j-version>
@@ -166,7 +156,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
+				<version>3.6.1</version>
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
@@ -210,6 +200,7 @@
 				<version>2.18.1</version>
 				<configuration>
 					<argLine>${surefireArgLine}</argLine>
+					<testFailureIgnore>true</testFailureIgnore>
 				</configuration>
 				<executions>
 					<execution>
@@ -274,6 +265,9 @@
 	<profiles>
    		<profile>
 			<id>dev</id>
+		</profile>
+		<profile>
+			<id>LACOSEVEN</id>
 		</profile>
 		<profile>
 			<id>ci</id>
@@ -348,6 +342,17 @@
 			<url>http://ecatonchiro.bo.priv:8081/nexus/content/repositories/snapshots/</url>
 		</snapshotRepository>
 	</distributionManagement>
+	
+	
+     <repositories>
+	    <repository>
+		    <id>www.dcm4che.org</id>
+		    <name>dcm4che Repository</name>
+		    <url>https://www.dcm4che.org/maven2</url>
+		    <layout>default</layout>
+		</repository>
+	</repositories> 
+	
 
 	<scm>
 		<url>http://gitlab.bo.priv/storage/it.zeroics.strg-spring.git</url>

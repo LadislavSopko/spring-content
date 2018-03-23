@@ -198,6 +198,13 @@ public class ImageRenderer extends BasicRenderer {
 			e.printStackTrace();
 		}
 		finally {
+			// close output stream so rest of the world will finish
+			try {
+				out.close();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			if ( null != procOutput ) {
 				try {
 					procOutput.close();
