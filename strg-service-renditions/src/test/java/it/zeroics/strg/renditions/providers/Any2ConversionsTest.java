@@ -26,6 +26,7 @@ import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jRunner;
 
 import internal.org.springframework.content.commons.renditions.RenditionServiceImpl;
+import it.zeroics.strg.renditions.providers.testsupport.RendererTest;
 import it.zeroics.strg.renditions.utils.MimeHelper;
 
 @RunWith(Ginkgo4jRunner.class)

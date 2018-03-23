@@ -64,7 +64,7 @@ public class PdfRenderer extends BasicRenderer {
 			
 			String filterName = null;
 			String inputExtension = FilenameUtils.getExtension(from.getName());
-			DocumentFormat sourceFormat = DefaultDocumentFormatRegistry.create().getFormatByExtension(inputExtension);
+			DocumentFormat sourceFormat = DefaultDocumentFormatRegistry.getFormatByExtension(inputExtension);
 			DocumentFamily docFamily = DocumentFamily.TEXT;
 			if (sourceFormat != null)
 				docFamily = sourceFormat.getInputFamily();
@@ -83,12 +83,21 @@ public class PdfRenderer extends BasicRenderer {
 			else
 				filterName = "writer_pdf_Export"; // caso di default: writer (doc)
 			
+			/*
 			Map<String, Object> properties = new HashMap<>();
 			properties.put("FilterName", filterName);
 			properties.put("FilterData", filterData);
+			*/	
 	
-			format = new DocumentFormat("PDF/A", "pdf", "application/pdf");
-			format.setStoreProperties(docFamily, properties);
+			format = DocumentFormat.builder()
+					.extension("pdf")
+					.mediaType("application/pdf")
+					.name("PDF/A")
+					.storeProperty(docFamily, "FilterName", filterName)
+					.storeProperty(docFamily, "FilterData", filterData)
+					.build();
+			
+			//format.setStoreProperties(docFamily, properties);
 			//format.setStoreProperties(DocumentFamily.TEXT, properties);
 			//format.setStoreProperties(DocumentFamily.SPREADSHEET, properties);
 			//format.setStoreProperties(DocumentFamily.PRESENTATION, properties);
