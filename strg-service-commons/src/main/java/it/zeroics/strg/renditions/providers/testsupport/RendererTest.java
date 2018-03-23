@@ -1,4 +1,4 @@
-package it.zeroics.strg.renditions.providers;
+package it.zeroics.strg.renditions.providers.testsupport;
 
 import internal.org.springframework.content.commons.utils.InputContentStream;
 import it.zeroics.strg.model.Medium;
