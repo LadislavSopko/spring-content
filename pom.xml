@@ -104,7 +104,7 @@
 		<module>./strg-spring-rest-boot-starter</module>
 		<module>./strg-spring-s3</module>
 		<module>./strg-spring-s3-boot-starter</module>
-	    <module>./strg-spring-renditions</module>
+	   <module>./strg-spring-renditions</module>
 		<module>./strg-spring-renditions-boot-starter</module>
 		<module>./strg-spring-solr</module>
 		<module>./strg-spring-solr-boot-starter</module>
@@ -120,6 +120,8 @@
 		<module>./strg-service-rest-boot-starter</module>
 		<module>./strg-service-renditions</module>
 		<module>./strg-service-renditions-boot-starter</module>
+		<module>./strg-service-renditions-dicom</module>
+		<module>./strg-service-renditions-dicom-boot-starter</module>
 		
 		<module>./strg-service-sample-api-shell</module>
 		<module>./strg-service-sample-api-rest</module>

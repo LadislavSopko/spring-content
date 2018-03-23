@@ -3,6 +3,7 @@ package it.zeroics.strg.renditions;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PipedOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -39,7 +40,11 @@ public class ImageRenderer extends BasicRenderer {
 	@Value("${imagik.call}") private static String iMagikCall;
 	
 	private static final Log logger = LogFactory.getLog(ImageRenderer.class);
-	
+
+	private static final String SOURCE_FILE_REPLACE_IN_COMMAND = "%SOURCE_FILE%";
+	private static final String DEST_FILE_REPLACE_IN_COMMAND = "%DEST_FILE%";
+	private static final String OPTIONS_REPLACE_IN_COMMAND = "%OPTIONS%";
+		
 	public ImageRenderer(InputStream is, MimeType mt) {
 		super(is, mt);
 		RenditionContext.getInstance().setSupportedExtension("application/pdf", ".pdf");
@@ -120,25 +125,26 @@ public class ImageRenderer extends BasicRenderer {
 			if (logger.isDebugEnabled())
 				logger.debug("ImageRenderer.run(): from " + originalFile.getAbsolutePath() + " to " + outputFile.getAbsolutePath());
 
-			String commandLine = "" ;
+			String commandLine = RenditionsProperties.getImagickCall() ;
+			String originalFileName = originalFile.getAbsolutePath();
+			String outputFileName = outputFile.getAbsolutePath() ;
+			String options = "" ;
 	        if ( MimeHelper.isMeta(outputMimeType) ) {
-				commandLine = RenditionsProperties.getImagickMetaCall() ;
-				
-				// Compose Command line according to mime parameters
-				commandLine += " \"" + originalFile + "\" > \"" + outputFile + "\"" ;
+	        	outputFileName = "json:" + outputFileName ;
 	        }
 	        else {
-				commandLine = RenditionsProperties.getImagickCall() ;
-				// String commandLine = "\"C:/Program Files/ImageMagick-6.8.1-Q16/convert\" -limit memory 250mb -limit map 500mb " ;
 				if ( MimeHelper.isGrayscale(outputMimeType) ) {
-					commandLine += " -colorspace Gray " ;
+					options += " -colorspace Gray " ;
 				}
 				if ( MimeHelper.isThumb(outputMimeType) ) {
-					commandLine += " -thumbnail " + MimeHelper.getThumbMode(outputMimeType) ;
+					options += " -thumbnail " + MimeHelper.getThumbMode(outputMimeType) ;
 				}
-				// Compose Command line according to mime parameters
-				commandLine += " \"" + originalFile + "\" \"" + outputFile + "\"" ;
 	        }
+	        
+			commandLine = commandLine.replace(SOURCE_FILE_REPLACE_IN_COMMAND, originalFileName);
+			commandLine = commandLine.replace(DEST_FILE_REPLACE_IN_COMMAND, outputFileName);	        
+			commandLine = commandLine.replace(OPTIONS_REPLACE_IN_COMMAND, options);	        
+			
 			// Call ImageMagik
 			Runtime runtime = Runtime.getRuntime();
 			Process proc = runtime.exec(commandLine);
@@ -164,11 +170,7 @@ public class ImageRenderer extends BasicRenderer {
 				logger.info("ImageRenderer.run(): conversion tooks " + (System.currentTimeMillis()-startTime) + " millis.");
 
 			// ATTENTION: Image Magick identify command, up to 6.9.0 version, returns 1 instead of 0, so exitValue can't be tested
-			if ( MimeHelper.isMeta(outputMimeType) ) {
-	        	// Convert Metadata to json.
-	        	imagickMetaToJson(outputFile, procOutput, out) ;
-			}
-			else if (exitValue == 0 && outputFile != null && outputFile.isFile() && outputFile.exists()) {
+			if (exitValue == 0 && outputFile != null && outputFile.isFile() && outputFile.exists()) {
 			// Verifico che effettivamente il file sia stato creato nella directory di destinazione
 				// output the file
 	    	    FileInputStream readstream = new FileInputStream(outputFile);
@@ -214,44 +216,5 @@ public class ImageRenderer extends BasicRenderer {
 
 		// remove worker!!!
 		RenditionContext.getInstance().WorkerDone(this);
-	}
-
-	private void imagickMetaToJson(File outputFile, InputStream in, PipedOutputStream out) throws IOException {
-		// TODO Auto-generated method stub
-		Metadata meta = new Metadata(outputFile.getCanonicalPath(), outputFile.length()) ;
-    	Scanner input = new Scanner(in);
-    	Map<Integer, String> levels = new TreeMap<Integer, String>() ;
-    	
-    	while(input.hasNextLine()) {
-    		String thisLine = input.nextLine();
-    		Integer spaces = 0 ;
-			while( thisLine.startsWith(" ")) {
-				spaces++;
-				thisLine = thisLine.substring(1);
-			}
-			
-			// Split.
-			String[] parts = thisLine.split(": ") ;
-			
-			if ( parts.length == 1 || parts[1].trim().length() == 0 ) {
-				// Preserve this line for future usage.
-				String part = parts[0].trim();
-				while ( part.endsWith(":") ) {
-					part = part.substring(0, part.length()-1);
-				}
-				levels.put(spaces, part) ;
-			}
-			else {
-				String PrefixString = "" ;
-				for(Map.Entry<Integer, String> entry: levels.entrySet()) {
-					if ( entry.getKey() >= spaces ) break;
-					PrefixString += entry.getValue() + ":";
-				}
-				meta.addMeta(PrefixString+parts[0].trim(), parts[1].trim());
-			}
-    	}
-    	input.close();
-    	
-    	meta.serialize(out);
 	}
 }

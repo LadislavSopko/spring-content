@@ -1,4 +1,4 @@
-package it.zeroics.strg.renditions.providers;
+package it.zeroics.strg.renditions.dicom.providers;
 
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jRunner;
@@ -6,6 +6,7 @@ import com.github.paulcwarren.ginkgo4j.Ginkgo4jRunner;
 import internal.org.springframework.content.commons.renditions.RenditionServiceImpl;
 import internal.org.springframework.content.commons.utils.InputContentStream;
 import it.zeroics.strg.model.Medium;
+import it.zeroics.strg.renditions.dicom.providers.Dicom2Any;
 import it.zeroics.strg.renditions.utils.MimeHelper;
 
 import org.apache.commons.io.IOUtils;
