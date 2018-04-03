@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+	<title>Tutorial Academy</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+	<link rel="stylesheet" type="text/css" href="css/mkhplayer.default.css"/>
+</head>
+<body>
+ 
+	 <section class="main-content">
+		<video id='video' preload="metadata" width="100%" controls >
+			<source src="http://localhost.fiddler:8080/media/5ac346226330c53930718d08">
+		</video>
+		<script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
+		<script type="text/javascript" src="js/jquery.mkhplayer.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$('video').mkhPlayer();
+			});
+		</script>
+	</section>
+</body>
+</html>

@@ -22,11 +22,13 @@
 			<artifactId>spring-content-commons</artifactId>
 			<version>${spring-content.version}</version>
 		</dependency>
+		<!-- 
 		<dependency>
 			<groupId>com.github.paulcwarren</groupId>
 			<artifactId>spring-content-mongo</artifactId>
 			<version>${spring-content.version}</version>
 		</dependency>
+		 -->
 		
 		<dependency>
 		    <groupId>com.fasterxml.jackson.core</groupId>

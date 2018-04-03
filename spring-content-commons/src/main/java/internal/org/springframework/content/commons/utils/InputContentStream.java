@@ -20,6 +20,10 @@ public class InputContentStream extends InputStream {
      */
     private final Resource resource;
     
+    // experimental and danger!!!
+    public Resource getResource() {
+    	return resource;
+    }
 
 	/* GETTERS */
 	public Object getEntity() {
