@@ -60,39 +60,34 @@
 			<artifactId>spring-data-commons</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-		    <groupId>ch.qos.logback</groupId>
-		    <artifactId>logback-classic</artifactId>
-		    <scope>test</scope>
-		</dependency>
 	</dependencies>
 
 	<build>
 		<pluginManagement>
-			<plugins>
-				<!-- Docs Rendering -->
-				<plugin>
-					<groupId>org.asciidoctor</groupId>
-					<artifactId>asciidoctor-maven-plugin</artifactId>
-					<configuration>
-				        <backend>html</backend>
-				        <doctype>book</doctype>
-				        <attributes>
-						    <version>${project.version}</version>
-				        </attributes>
-				        <outputDirectory>${docs.output.dir}</outputDirectory>
-				    </configuration>
-				    <executions>
-				        <execution>
-				            <id>output-html</id>             
-				            <phase>generate-resources</phase>
-				            <goals>
-				                <goal>process-asciidoc</goal>
-				            </goals>
-				        </execution>
-				    </executions>
-				</plugin>
-			</plugins>
+		<plugins>
+			<!-- Docs Rendering -->
+			<plugin>
+				<groupId>org.asciidoctor</groupId>
+				<artifactId>asciidoctor-maven-plugin</artifactId>
+				<configuration>
+			        <backend>html</backend>
+			        <doctype>book</doctype>
+			        <attributes>
+					    <version>${project.version}</version>
+			        </attributes>
+			        <outputDirectory>${docs.output.dir}</outputDirectory>
+			    </configuration>
+			    <executions>
+			        <execution>
+			            <id>output-html</id>             
+			            <phase>generate-resources</phase>
+			            <goals>
+			                <goal>process-asciidoc</goal>
+			            </goals>
+			        </execution>
+			    </executions>
+			</plugin>
+		</plugins>
 		</pluginManagement>
 	</build>
 
