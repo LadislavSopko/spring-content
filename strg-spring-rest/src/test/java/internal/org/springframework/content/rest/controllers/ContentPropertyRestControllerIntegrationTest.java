@@ -1,7 +1,17 @@
 package internal.org.springframework.content.rest.controllers;
 
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.BeforeEach;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Context;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.io.ByteArrayInputStream;
@@ -31,11 +41,6 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.DelegatingWebMvcConfiguration;
 
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 import internal.org.springframework.content.rest.support.StoreConfig;
 import internal.org.springframework.content.rest.support.TestEntity;
@@ -105,7 +110,7 @@ public class ContentPropertyRestControllerIntegrationTest {
 									.contentType("text/plain"))
 									.andExpect(status().is2xxSuccessful());
 							
-							TestEntity2 fetched = repository2.findOne(testEntity2.id);
+							TestEntity2 fetched = repository2.findById(testEntity2.id).get();
 							assertThat(fetched.child.contentId, is(not(nullValue())));
 							assertThat(fetched.child.contentLen, is(31L));
 							assertThat(fetched.child.mimeType, is("text/plain"));
@@ -172,7 +177,7 @@ public class ContentPropertyRestControllerIntegrationTest {
 									.contentType("text/plain"))
 									.andExpect(status().is2xxSuccessful());
 							
-							TestEntity2 fetched = repository2.findOne(testEntity2.id);
+							TestEntity2 fetched = repository2.findById(testEntity2.id).get();
 							assertThat(fetched.child.contentId, is(not(nullValue())));
 							assertThat(fetched.child.contentLen, is(31L));
 							assertThat(fetched.child.mimeType, is("text/plain"));
@@ -184,7 +189,7 @@ public class ContentPropertyRestControllerIntegrationTest {
 							mvc.perform(delete("/files/" + testEntity2.id.toString() + "/child"))
 									.andExpect(status().isNoContent());
 							
-							TestEntity2 fetched = repository2.findOne(testEntity2.id);
+							TestEntity2 fetched = repository2.findById(testEntity2.id).get();
 							assertThat(fetched.child.contentId, is(nullValue()));
 							assertThat(fetched.child.contentLen, is(0L));
 							assertThat(fetched.child.mimeType, is(nullValue()));
@@ -250,7 +255,7 @@ public class ContentPropertyRestControllerIntegrationTest {
 							mvc.perform(delete("/files/" + testEntity2.id.toString() + "/child/" + testEntity2.child.contentId))
 									.andExpect(status().isNoContent());
 							
-							TestEntity2 fetched = repository2.findOne(testEntity2.id);
+							TestEntity2 fetched = repository2.findById(testEntity2.id).get();
 							assertThat(fetched.child.contentId, is(nullValue()));
 						});
 					});
@@ -275,7 +280,7 @@ public class ContentPropertyRestControllerIntegrationTest {
 								.contentType("text/plain"))
 								.andExpect(status().is2xxSuccessful());
 					
-							TestEntity2 fetched = repository2.findOne(testEntity2.id);
+							TestEntity2 fetched = repository2.findById(testEntity2.id).get();
 							assertThat(fetched.children.size(), is(1));
 							assertThat(fetched.children.get(0).contentLen, is(31L));
 							assertThat(fetched.children.get(0).mimeType, is("text/plain"));
@@ -291,7 +296,7 @@ public class ContentPropertyRestControllerIntegrationTest {
 									.file(new MockMultipartFile("file", "test-file.txt", "text/plain", content.getBytes())))
 									.andExpect(status().is2xxSuccessful());
 
-							TestEntity2 fetched = repository2.findOne(testEntity2.id);
+							TestEntity2 fetched = repository2.findById(testEntity2.id).get();
 							assertThat(fetched.children.size(), is(1));
 							assertThat(fetched.children.get(0).contentLen, is(31L));
 							assertThat(fetched.children.get(0).fileName, is("test-file.txt"));
@@ -354,7 +359,7 @@ public class ContentPropertyRestControllerIntegrationTest {
 									.file(new MockMultipartFile("file", "test-file.txt", "text/plain", content.getBytes())))
 									.andExpect(status().isOk());
 
-							TestEntity2 fetched = repository2.findOne(testEntity2.id);
+							TestEntity2 fetched = repository2.findById(testEntity2.id).get();
 							for (TestEntityChild child : fetched.children) {
 								if (child.contentId.equals(child2.contentId)) {
 									assertThat(child.contentId, is(not(nullValue())));
@@ -373,7 +378,7 @@ public class ContentPropertyRestControllerIntegrationTest {
 	
 							assertThat(contentRepository2.getContent(child2), is(nullValue()));
 	
-							TestEntity2 fetched = repository2.findOne(testEntity2.id);
+							TestEntity2 fetched = repository2.findById(testEntity2.id).get();
 							assertThat(fetched.children.size(), is(2));
 						});
 					});

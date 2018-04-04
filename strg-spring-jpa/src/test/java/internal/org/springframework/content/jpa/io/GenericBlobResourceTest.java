@@ -169,9 +169,9 @@ public class GenericBlobResourceTest {
                         IOUtils.closeQuietly((OutputStream)result);
                     });
                     It("should use update to overwrite the content", () -> {
-                        verify(conn, timeout(100)).prepareStatement(argThat(containsString("UPDATE BLOBS")));
+                        verify(conn, timeout(100)).prepareStatement(org.mockito.hamcrest.MockitoHamcrest.argThat(containsString("UPDATE BLOBS")));
 
-                        verify(preparedStatement, timeout(100)).setBinaryStream(eq(1), argThat(is(instanceOf(InputStream.class))));
+                        verify(preparedStatement, timeout(100)).setBinaryStream(eq(1), org.mockito.hamcrest.MockitoHamcrest.argThat(is(instanceOf(InputStream.class))));
                         verify(preparedStatement, timeout(100)).setInt(2, 999);
                         verify(preparedStatement, timeout(100)).executeUpdate();
                     });
@@ -201,8 +201,8 @@ public class GenericBlobResourceTest {
                         IOUtils.closeQuietly((OutputStream)result);
                     });
                     It("should use insert to add the content", () -> {
-                        verify(conn, timeout(100)).prepareStatement(argThat(containsString("INSERT INTO BLOBS")), eq(Statement.RETURN_GENERATED_KEYS));
-                        verify(preparedStatement, timeout(100)).setBinaryStream(eq(1), argThat(is(instanceOf(InputStream.class))));
+                        verify(conn, timeout(100)).prepareStatement(org.mockito.hamcrest.MockitoHamcrest.argThat(containsString("INSERT INTO BLOBS")), eq(Statement.RETURN_GENERATED_KEYS));
+                        verify(preparedStatement, timeout(100)).setBinaryStream(eq(1), org.mockito.hamcrest.MockitoHamcrest.argThat(is(instanceOf(InputStream.class))));
                         verify(preparedStatement, timeout(100)).executeUpdate();
 
                         assertThat(resource.getId(), is(9999));

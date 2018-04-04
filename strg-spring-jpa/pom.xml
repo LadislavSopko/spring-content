@@ -8,6 +8,10 @@
 		<artifactId>strg-spring</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
+	
+	<properties>
+	    <powermock.version>1.7.1</powermock.version>
+	</properties>
 
 	<dependencies>
 		<dependency>
@@ -60,17 +64,17 @@
 			<!--<scope>test</scope>-->
 		<!--</dependency>-->
 		<dependency>
-			<groupId>org.powermock</groupId>
-			<artifactId>powermock-module-junit4</artifactId>
-			<version>1.7.1</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.powermock</groupId>
-			<artifactId>powermock-api-mockito</artifactId>
-			<version>1.7.1</version>
-			<scope>test</scope>
-		</dependency>
+	      <groupId>org.powermock</groupId>
+	      <artifactId>powermock-module-junit4</artifactId>
+	      <version>${powermock.version}</version>
+	      <scope>test</scope>
+	   </dependency>
+	   <dependency>
+	      <groupId>org.powermock</groupId>
+	      <artifactId>powermock-api-mockito2</artifactId>
+	      <version>${powermock.version}</version>
+	      <scope>test</scope>
+	   </dependency>
 
 		<dependency>
 			<groupId>org.hsqldb</groupId>
