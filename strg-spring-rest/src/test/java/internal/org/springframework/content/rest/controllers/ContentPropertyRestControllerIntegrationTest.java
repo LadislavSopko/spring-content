@@ -9,8 +9,8 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -29,6 +29,7 @@ import org.springframework.data.rest.core.mapping.ResourceMappings;
 import org.springframework.data.rest.webmvc.RootResourceInformation;
 import org.springframework.data.rest.webmvc.config.RepositoryRestMvcConfiguration;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -288,14 +289,17 @@ public class ContentPropertyRestControllerIntegrationTest {
 					});
 					Context("a POST to /{repository}/{id}/{contentProperty}", () -> {
 						It("should append the content to the entity's content property collection", () -> {
-							mvc.perform(post("/files/" + testEntity2.id.toString() + "/children/")
-								.content("Hello New Spring Content World!")
-								.contentType("text/plain"))
-								.andExpect(status().is2xxSuccessful());
-					
+
+							String content = "Hello New Spring Content World!";
+
+							mvc.perform(fileUpload("/files/" + testEntity2.id.toString() + "/children/")
+									.file(new MockMultipartFile("file", "test-file.txt", "text/plain", content.getBytes())))
+									.andExpect(status().is2xxSuccessful());
+
 							TestEntity2 fetched = repository2.findById(testEntity2.id).get();
 							assertThat(fetched.children.size(), is(1));
 							assertThat(fetched.children.get(0).contentLen, is(31L));
+							assertThat(fetched.children.get(0).fileName, is("test-file.txt"));
 							assertThat(fetched.children.get(0).mimeType, is("text/plain"));
 							assertThat(IOUtils.toString(contentRepository2.getContent(fetched.getChildren().get(0))), is("Hello New Spring Content World!"));
 						});
@@ -347,12 +351,23 @@ public class ContentPropertyRestControllerIntegrationTest {
 						});
 					});
 					Context("a POST to /{repository}/{id}/{contentCollectionProperty}/{contentId}", () -> {
-						It("should set the content", () -> { 
-							mvc.perform(post("/files/" + testEntity2.id.toString() + "/children/" + child2.contentId)
-									.content("Modified Content World!")
-									.contentType("text/plain"))
+						It("should set the content", () -> {
+
+							String content = "Modified Content World!";
+
+							mvc.perform(fileUpload("/files/" + testEntity2.id.toString() + "/children/" + child2.contentId)
+									.file(new MockMultipartFile("file", "test-file.txt", "text/plain", content.getBytes())))
 									.andExpect(status().isOk());
-	
+
+							TestEntity2 fetched = repository2.findById(testEntity2.id).get();
+							for (TestEntityChild child : fetched.children) {
+								if (child.contentId.equals(child2.contentId)) {
+									assertThat(child.contentId, is(not(nullValue())));
+									assertThat(child.fileName, is("test-file.txt"));
+									assertThat(child.mimeType, is("text/plain"));
+									assertThat(child.contentLen, is(new Long(content.length())));
+								}
+							}
 							assertThat(IOUtils.toString(contentRepository2.getContent(child2)), is("Modified Content World!"));
 						});
 					});
