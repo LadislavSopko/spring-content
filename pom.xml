@@ -78,27 +78,28 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<docs.output.dir>../target/generated-docs/refs/${SC_BUILD_TYPE}/</docs.output.dir>
+		<spring-content.version>0.0.11-SNAPSHOT</spring-content.version>
 	</properties>
 
 	<modules>
-		<module>./strg-spring-autoconfigure</module>
-		<module>./strg-spring-commons</module>
-		<module>./strg-spring-docx4j</module>
-		<module>./strg-spring-fs</module>
-		<module>./strg-spring-fs-boot-starter</module>
-		<module>./strg-spring-jpa</module>
-		<module>./strg-spring-jpa-boot-starter</module>
-		<module>./strg-spring-mongo</module>
-		<module>./strg-spring-mongo-boot-starter</module>
-		<module>./strg-spring-rest</module>
-		<module>./strg-spring-rest-boot-starter</module>
-		<module>./strg-spring-s3</module>
-		<module>./strg-spring-s3-boot-starter</module>
-	   <module>./strg-spring-renditions</module>
-		<module>./strg-spring-renditions-boot-starter</module>
-		<module>./strg-spring-solr</module>
-		<module>./strg-spring-solr-boot-starter</module>
-		<module>./strg-spring-elasticsearch</module>
+		<module>./spring-content-autoconfigure</module>
+		<module>./spring-content-commons</module>
+		<module>./spring-content-docx4j</module>
+		<module>./spring-content-fs</module>
+		<module>./spring-content-fs-boot-starter</module>
+		<module>./spring-content-jpa</module>
+		<module>./spring-content-jpa-boot-starter</module>
+		<module>./spring-content-mongo</module>
+		<module>./spring-content-mongo-boot-starter</module>
+		<module>./spring-content-rest</module>
+		<module>./spring-content-rest-boot-starter</module>
+		<module>./spring-content-s3</module>
+		<module>./spring-content-s3-boot-starter</module>
+	    <module>./spring-content-renditions</module>
+		<module>./spring-content-renditions-boot-starter</module>
+		<module>./spring-content-solr</module>
+		<module>./spring-content-solr-boot-starter</module>
+		<module>./spring-content-elasticsearch</module>
 		<!-- SERVICE -->
 		
 		<module>./strg-service-microsvc-config</module>
@@ -232,6 +233,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-scm-publish-plugin</artifactId>
+				<version>3.0.0</version>
 				<configuration>
  					<providerImplementations>
 						<git>jgit</git>

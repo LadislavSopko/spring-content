@@ -16,9 +16,9 @@
         </dependency>
 		
 		<dependency>
-			<groupId>it.zeroics</groupId>
-			<artifactId>strg-spring-rest</artifactId>
-			<version>0.1.0-SNAPSHOT</version>
+			<groupId>com.github.paulcwarren</groupId>
+			<artifactId>spring-content-rest</artifactId>
+			<version>${spring-content.version}</version>
 		</dependency>
 		
 

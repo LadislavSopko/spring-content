@@ -10,9 +10,9 @@
 	</parent>
 	<dependencies>
 		<dependency>
-			<groupId>it.zeroics</groupId>
-			<artifactId>strg-spring-autoconfigure</artifactId>
-			<version>0.1.0-SNAPSHOT</version>
+			<groupId>com.github.paulcwarren</groupId>
+			<artifactId>spring-content-autoconfigure</artifactId>
+			<version>${spring-content.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>it.zeroics</groupId>
