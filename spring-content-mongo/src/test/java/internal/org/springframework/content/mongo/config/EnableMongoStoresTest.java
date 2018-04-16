@@ -33,6 +33,7 @@ import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jRunner;
+import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
 
 @RunWith(Ginkgo4jRunner.class)
@@ -172,7 +173,7 @@ public class EnableMongoStoresTest {
 		}
 		@Override
 		public MongoClient mongoClient() {
-			return new MongoClient();
+	        return new MongoClient();
 		}
 	}
 

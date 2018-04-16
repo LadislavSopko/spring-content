@@ -23,17 +23,13 @@ public class ContentJpaDatabaseInitializer extends AbstractDataSourceInitializer
         super.initialize();
     }
 
-    protected boolean isEnabled() {
-        return properties.getInitializer().isEnabled();
+    @Override
+    protected DataSourceInitializationMode getMode() {
+        return properties.getInitializer().getInitializeSchema();
     }
 
     @Override
     protected String getSchemaLocation() {
         return properties.getSchema();
     }
-
-	@Override
-	protected DataSourceInitializationMode getMode() {
-		return properties.getMode();
-	}
 }

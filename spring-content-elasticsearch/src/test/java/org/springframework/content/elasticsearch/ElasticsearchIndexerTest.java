@@ -1,15 +1,7 @@
 package org.springframework.content.elasticsearch;
 
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.*;
-import static org.mockito.Mockito.*;
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertTrue;
-import static org.hamcrest.MatcherAssert.assertThat;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.Serializable;
-
+import com.github.paulcwarren.ginkgo4j.Ginkgo4jRunner;
+import internal.org.springframework.content.elasticsearch.StreamConverter;
 import org.hamcrest.CoreMatchers;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -25,10 +17,24 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestOperations;
 
-import com.github.paulcwarren.ginkgo4j.Ginkgo4jRunner;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.Serializable;
 
-import internal.org.springframework.content.elasticsearch.StreamConverter;
-import internal.org.springframework.content.elasticsearch.StreamConverterImpl;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.*;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.endsWith;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.core.IsInstanceOf.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.anyObject;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.mockito.hamcrest.MockitoHamcrest.argThat;
 
 @RunWith(Ginkgo4jRunner.class)
 public class ElasticsearchIndexerTest {
@@ -82,7 +88,7 @@ public class ElasticsearchIndexerTest {
 					It("should send the content for indexing", () -> {
 						ArgumentCaptor<HttpEntity> argument = ArgumentCaptor.forClass(HttpEntity.class);
 						
-						verify(template).exchange(org.mockito.hamcrest.MockitoHamcrest.argThat(CoreMatchers.endsWith("/some-id")), eq(HttpMethod.PUT), argument.capture(), (Class<Object>)anyObject());
+						verify(template).exchange(argThat(endsWith("/some-id")), eq(HttpMethod.PUT), argument.capture(), (Class<Object>)anyObject());
 						
 						HttpEntity entity = argument.getValue();
 						assertTrue(((String)entity.getBody()).contains("\"contentId\":\"some-id\""));
@@ -164,7 +170,7 @@ public class ElasticsearchIndexerTest {
 				});
 				Context("when elasticsearch is available", () -> {
 					It("should send a DELETE request", () -> {
-						verify(template).exchange(org.mockito.hamcrest.MockitoHamcrest.argThat(CoreMatchers.endsWith("/some-id")), eq(HttpMethod.DELETE), eq(null), (Class<Object>)anyObject());
+						verify(template).exchange(argThat(CoreMatchers.endsWith("/some-id")), eq(HttpMethod.DELETE), eq(null), (Class<Object>)anyObject());
 					});
 					Context("when removing index failed", () -> {
 						It("should throw a StoreAccessException", () -> {

@@ -8,12 +8,13 @@ import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.JustBeforeEach;
 import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.ArgumentMatchers.anyObject;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.hamcrest.MockitoHamcrest.argThat;
 
 import java.io.InputStream;
 import java.io.Serializable;
@@ -86,9 +87,9 @@ public class StoreMethodInterceptorTest {
 				It("should proceed", () -> {
 					InOrder inOrder = Mockito.inOrder(publisher, invocation);
 
-					inOrder.verify(publisher).publishEvent(org.mockito.hamcrest.MockitoHamcrest.argThat(isA(BeforeGetContentEvent.class)));
+					inOrder.verify(publisher).publishEvent(argThat(isA(BeforeGetContentEvent.class)));
 					inOrder.verify(invocation).proceed();
-					inOrder.verify(publisher).publishEvent(org.mockito.hamcrest.MockitoHamcrest.argThat(isA(AfterGetContentEvent.class)));
+					inOrder.verify(publisher).publishEvent(argThat(isA(AfterGetContentEvent.class)));
 				});
 			});
 			Context("when getContent is invoked with illegal arguments", () -> {
@@ -106,9 +107,9 @@ public class StoreMethodInterceptorTest {
 				It("should proceed", () -> {
 					InOrder inOrder = Mockito.inOrder(publisher, invocation);
 
-					inOrder.verify(publisher, never()).publishEvent(org.mockito.hamcrest.MockitoHamcrest.argThat(isA(BeforeGetContentEvent.class)));
+					inOrder.verify(publisher, never()).publishEvent(argThat(isA(BeforeGetContentEvent.class)));
 					inOrder.verify(invocation).proceed();
-					inOrder.verify(publisher, never()).publishEvent(org.mockito.hamcrest.MockitoHamcrest.argThat(isA(AfterGetContentEvent.class)));
+					inOrder.verify(publisher, never()).publishEvent(argThat(isA(AfterGetContentEvent.class)));
 				});
 			});
 			Context("when setContent is invoked", () -> {
@@ -124,9 +125,9 @@ public class StoreMethodInterceptorTest {
 				It("should proceed", () -> {
 					InOrder inOrder = Mockito.inOrder(publisher, invocation);
 
-					inOrder.verify(publisher).publishEvent(org.mockito.hamcrest.MockitoHamcrest.argThat(isA(BeforeSetContentEvent.class)));
+					inOrder.verify(publisher).publishEvent(argThat(isA(BeforeSetContentEvent.class)));
 					verify(invocation).proceed();
-					inOrder.verify(publisher).publishEvent(org.mockito.hamcrest.MockitoHamcrest.argThat(isA(AfterSetContentEvent.class)));
+					inOrder.verify(publisher).publishEvent(argThat(isA(AfterSetContentEvent.class)));
 				});
 			});
 			Context("when setContent is invoked with illegal arguments", () -> {
@@ -144,9 +145,9 @@ public class StoreMethodInterceptorTest {
 				It("should proceed", () -> {
 					InOrder inOrder = Mockito.inOrder(publisher, invocation);
 
-					inOrder.verify(publisher, never()).publishEvent(org.mockito.hamcrest.MockitoHamcrest.argThat(isA(BeforeSetContentEvent.class)));
+					inOrder.verify(publisher, never()).publishEvent(argThat(isA(BeforeSetContentEvent.class)));
 					verify(invocation).proceed();
-					inOrder.verify(publisher, never()).publishEvent(org.mockito.hamcrest.MockitoHamcrest.argThat(isA(AfterSetContentEvent.class)));
+					inOrder.verify(publisher, never()).publishEvent(argThat(isA(AfterSetContentEvent.class)));
 				});
 			});
 			Context("when unsetContent is invoked", () -> {
@@ -162,9 +163,9 @@ public class StoreMethodInterceptorTest {
 				It("should proceed", () -> {
 					InOrder inOrder = Mockito.inOrder(publisher, invocation);
 
-					inOrder.verify(publisher).publishEvent(org.mockito.hamcrest.MockitoHamcrest.argThat(isA(BeforeUnsetContentEvent.class)));
+					inOrder.verify(publisher).publishEvent(argThat(isA(BeforeUnsetContentEvent.class)));
 					verify(invocation).proceed();
-					inOrder.verify(publisher).publishEvent(org.mockito.hamcrest.MockitoHamcrest.argThat(isA(AfterUnsetContentEvent.class)));
+					inOrder.verify(publisher).publishEvent(argThat(isA(AfterUnsetContentEvent.class)));
 				});
 			});
 			Context("when unsetContent is invoked with illegal arguments", () -> {

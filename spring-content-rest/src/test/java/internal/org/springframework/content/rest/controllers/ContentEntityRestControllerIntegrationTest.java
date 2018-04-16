@@ -1,13 +1,6 @@
 package internal.org.springframework.content.rest.controllers;
 
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.BeforeEach;
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Context;
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -18,6 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.io.ByteArrayInputStream;
 import java.io.StringReader;
+import java.util.Optional;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
@@ -40,6 +34,11 @@ import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
 import com.theoryinpractise.halbuilder.api.ReadableRepresentation;
 import com.theoryinpractise.halbuilder.api.RepresentationFactory;
 import com.theoryinpractise.halbuilder.standard.StandardRepresentationFactory;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import internal.org.springframework.content.rest.support.StoreConfig;
 import internal.org.springframework.content.rest.support.TestEntity;
@@ -79,7 +78,7 @@ public class ContentEntityRestControllerIntegrationTest {
 				Context("an OPTIONS request from a known host", () -> {
 					It("should return the relevant cors headers and OK", () -> {
 						mvc.perform(options("/testEntitiesContent/" + testEntity.id)
-						   .header("Access-Control-Request-Method", "GET")
+						   .header("Access-Control-Request-Method", "POST")
 						   .header("Origin", "http://www.someurl.com"))
 						.andExpect(status().isOk())
 						.andExpect(header().string("Access-Control-Allow-Origin", "http://www.someurl.com"));
@@ -88,7 +87,7 @@ public class ContentEntityRestControllerIntegrationTest {
 				Context("an OPTIONS request from an unknown host", () -> {
 					It("should be forbidden", () -> {
 						mvc.perform(options("/testEntitiesContent/" + testEntity.id)
-						   .header("Access-Control-Request-Method", "GET")
+						   .header("Access-Control-Request-Method", "POST")
 						   .header("Origin", "http://www.someotherurl.com"))
 						.andExpect(status().isForbidden());
 					});
@@ -120,11 +119,12 @@ public class ContentEntityRestControllerIntegrationTest {
 						.contentType("text/plain"))
 						.andExpect(status().isCreated());
 
-						TestEntity fetched = repository.findById(testEntity.id).get();
-						assertThat(fetched.contentId, is(not(nullValue())));
-						assertThat(fetched.len, is(31L));
-						assertThat(fetched.mimeType, is("text/plain"));
-						assertThat(IOUtils.toString(contentRepository.getContent(fetched)), is("Hello New Spring Content World!"));
+						Optional<TestEntity> fetched = repository.findById(testEntity.id);
+						assertThat(fetched.isPresent(), is(true));
+						assertThat(fetched.get().contentId, is(not(nullValue())));
+						assertThat(fetched.get().len, is(31L));
+						assertThat(fetched.get().mimeType, is("text/plain"));
+						assertThat(IOUtils.toString(contentRepository.getContent(fetched.get())), is("Hello New Spring Content World!"));
 					});
 				});
 				Context("a DELETE to /{store}/{id} with a mime-type", () -> {
@@ -142,12 +142,13 @@ public class ContentEntityRestControllerIntegrationTest {
 								.file(new MockMultipartFile("file", "test-file.txt", "text/plain", content.getBytes())))
 						.andExpect(status().isOk());
 
-						TestEntity fetched = repository.findById(testEntity.id).get();
-						assertThat(fetched.contentId, is(not(nullValue())));
-						assertThat(fetched.originalFileName, is("test-file.txt"));
-						assertThat(fetched.mimeType, is("text/plain"));
-						assertThat(fetched.len, is(new Long(content.length())));
-						assertThat(IOUtils.toString(contentRepository.getContent(fetched)), is(content));
+						Optional<TestEntity> fetched = repository.findById(testEntity.id);
+						assertThat(fetched.isPresent(), is(true));
+						assertThat(fetched.get().contentId, is(not(nullValue())));
+						assertThat(fetched.get().originalFileName, is("test-file.txt"));
+						assertThat(fetched.get().mimeType, is("text/plain"));
+						assertThat(fetched.get().len, is(new Long(content.length())));
+						assertThat(IOUtils.toString(contentRepository.getContent(fetched.get())), is(content));
 					});
 				});
 				Context("a PUT to /{repository}/{id} with a json body", () -> {
@@ -157,12 +158,13 @@ public class ContentEntityRestControllerIntegrationTest {
 						.contentType("application/hal+json"))
 						.andExpect(status().is2xxSuccessful());
 
-						TestEntity fetched = repository.findById(testEntity.id).get();
-						assertThat(fetched.name, is("Spring Content"));
-						assertThat(fetched.contentId, is(nullValue()));
-						assertThat(fetched.len, is(nullValue()));
-						assertThat(fetched.mimeType, is(nullValue()));
-						assertThat(contentRepository.getContent(fetched), is(nullValue()));
+						Optional<TestEntity> fetched = repository.findById(testEntity.id);
+						assertThat(fetched.isPresent(), is(true));
+						assertThat(fetched.get().name, is("Spring Content"));
+						assertThat(fetched.get().contentId, is(nullValue()));
+						assertThat(fetched.get().len, is(nullValue()));
+						assertThat(fetched.get().mimeType, is(nullValue()));
+						assertThat(contentRepository.getContent(fetched.get()), is(nullValue()));
 					});
 				});
 
@@ -258,12 +260,13 @@ public class ContentEntityRestControllerIntegrationTest {
 									.file(new MockMultipartFile("file", "test-file-modified.txt", "text/plain", content.getBytes())))
 							.andExpect(status().isOk());
 
-							TestEntity fetched = repository.findById(testEntity.id).get();
-							assertThat(fetched.contentId, is(not(nullValue())));
-							assertThat(fetched.originalFileName, is("test-file-modified.txt"));
-							assertThat(fetched.mimeType, is("text/plain"));
-							assertThat(fetched.len, is(new Long(content.length())));
-							assertThat(IOUtils.toString(contentRepository.getContent(fetched)), is(content));
+							Optional<TestEntity> fetched = repository.findById(testEntity.id);
+							assertThat(fetched.isPresent(), is(true));
+							assertThat(fetched.get().contentId, is(not(nullValue())));
+							assertThat(fetched.get().originalFileName, is("test-file-modified.txt"));
+							assertThat(fetched.get().mimeType, is("text/plain"));
+							assertThat(fetched.get().len, is(new Long(content.length())));
+							assertThat(IOUtils.toString(contentRepository.getContent(fetched.get())), is(content));
 						});
 					});
 					Context("a DELETE to /{store}/{id} with the mimetype", () -> {

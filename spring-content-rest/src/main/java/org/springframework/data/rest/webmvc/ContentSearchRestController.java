@@ -1,16 +1,11 @@
 package org.springframework.data.rest.webmvc;
 
-import static org.springframework.data.rest.webmvc.ControllerUtils.EMPTY_RESOURCE_LIST;
-
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import internal.org.springframework.content.rest.annotations.ContentRestController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.content.commons.annotations.ContentId;
 import org.springframework.content.commons.repository.ContentStore;
@@ -37,10 +32,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import internal.org.springframework.content.rest.controllers.BadRequestException;
 import internal.org.springframework.content.rest.mappings.ContentHandlerMapping.StoreType;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import static org.springframework.data.rest.webmvc.ControllerUtils.EMPTY_RESOURCE_LIST;
 
 @RepositoryRestController
 public class ContentSearchRestController /*extends AbstractRepositoryRestController */{
@@ -102,7 +99,7 @@ public class ContentSearchRestController /*extends AbstractRepositoryRestControl
 
 		ContentStoreInfo info = infos[0];
 		
-		ContentStore<Object,Serializable> store = info.getImplementation(ContentStore.class);// info.getImpementation();
+		ContentStore<Object,Serializable> store = info.getImpementation();
 		if (store instanceof Searchable == false) {
 			throw new ResourceNotFoundException("Entity content is not searchable");
 		}
@@ -190,7 +187,7 @@ public class ContentSearchRestController /*extends AbstractRepositoryRestControl
 		List<Resource<Object>> resources = new ArrayList<Resource<Object>>();
 
 		for (Object obj : entities) {
-			resources.add(obj != null ? assembler.toResource(obj) : null);
+			resources.add(obj == null ? null : assembler.toResource(obj));
 		}
 
 		return new Resources<Resource<Object>>(resources, getDefaultSelfLink());

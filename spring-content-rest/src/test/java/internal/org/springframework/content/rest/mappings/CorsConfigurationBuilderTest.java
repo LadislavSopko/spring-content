@@ -1,16 +1,5 @@
 package internal.org.springframework.content.rest.mappings;
 
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.BeforeEach;
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Context;
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.JustBeforeEach;
-import static org.hamcrest.CoreMatchers.hasItems;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import java.util.UUID;
 
 import org.junit.runner.RunWith;
@@ -20,6 +9,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.cors.CorsConfiguration;
 
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jRunner;
+
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.FIt;
+import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.BeforeEach;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Context;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.JustBeforeEach;
 
 @RunWith(Ginkgo4jRunner.class)
 public class CorsConfigurationBuilderTest {
@@ -32,7 +34,7 @@ public class CorsConfigurationBuilderTest {
 	private Exception e;
 	
 	{
-		Describe("CorsConfigurationBuilderTest", () -> {
+		Describe("CorsConfigurationBuilder", () -> {
 			Context("#build", () -> {
 				JustBeforeEach(() -> {
 					builder = new CorsConfigurationBuilder();
@@ -143,7 +145,7 @@ public class CorsConfigurationBuilderTest {
 						storeInterface = StoreWithEmptyAllowCredentials.class;
 					});
 					It("should create a cors configuration with the default allow credentials value", () -> {
-						assertThat(config.getAllowCredentials(), is(false)); // since spring 5.0 default is FALSE!!!!
+						assertThat(config.getAllowCredentials(), is(false));
 					});
 				});
 				Context("given a positive max-age specification", () -> {

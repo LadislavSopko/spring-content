@@ -25,14 +25,14 @@ public class ContentJpaProperties {
     }
     
     public class Initializer {
-        private boolean enabled = true;
+        private DataSourceInitializationMode initializeSchema;
 
-        public boolean isEnabled() {
-            return enabled;
+        public DataSourceInitializationMode getInitializeSchema() {
+            return this.initializeSchema;
         }
 
-        public void setEnabled(boolean enabled) {
-            this.enabled = enabled;
+        public void setInitializeSchema(DataSourceInitializationMode initializeSchema) {
+            this.initializeSchema = initializeSchema;
         }
     }
 }
