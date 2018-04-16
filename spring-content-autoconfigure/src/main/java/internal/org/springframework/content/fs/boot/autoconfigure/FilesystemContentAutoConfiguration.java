@@ -42,7 +42,7 @@ public class FilesystemContentAutoConfiguration {
 	@ConfigurationProperties(prefix = "spring.content.fs", ignoreInvalidFields = false, ignoreUnknownFields = false)
 	public static class FilesystemProperties {
 
-	    private static final Log logger = LogFactory.getLog(FilesystemProperties.class);
+	    private static final Logger logger = LoggerFactory.getLogger(FilesystemProperties.class);
 	    
 	    @PostConstruct
 	    public void init() {

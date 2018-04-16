@@ -19,10 +19,6 @@ import internal.org.springframework.content.rest.mappings.StoreByteRangeHttpRequ
 @ComponentScan("internal.org.springframework.content.rest.controllers")
 public class RestConfiguration extends HateoasAwareSpringDataWebConfiguration {
 	
-	public RestConfiguration(ApplicationContext context, ObjectFactory<ConversionService> conversionService) {
-		super(context, conversionService);
-	}
-
 	@Autowired 
 	ContentStoreService stores;
 
