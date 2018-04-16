@@ -29,9 +29,9 @@
         </dependency>
         <!-- STRG SPRING REST ACCESS -->
         <dependency>
-			<groupId>it.zeroics</groupId>
-			<artifactId>strg-spring-rest-boot-starter</artifactId>
-			<version>0.1.0-SNAPSHOT</version>
+			<groupId>com.github.paulcwarren</groupId>
+			<artifactId>spring-content-rest-boot-starter</artifactId>
+			<version>${spring-content.version}</version>
 		</dependency>
 		<dependency>
             <groupId>org.springframework.boot</groupId>
