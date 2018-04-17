@@ -43,17 +43,19 @@ public class DefaultMongoStoreImpl<S, SID extends Serializable> implements Store
 
 	@Override
     public Resource getResource(SID id) {
-        return gridFs.getResource(id.toString());
+		String location = converter.convert(id, String.class);
+		return gridFs.getResource(location);
     }
 
     @Override
     public void associate(S entity, SID id) {
-        BeanUtils.setFieldWithAnnotation(entity, ContentId.class, id.toString());
-        Resource resource = gridFs.getResource(id.toString());
+    	String location = converter.convert(id, String.class);
+        BeanUtils.setFieldWithAnnotation(entity, ContentId.class, location);
+        Resource resource = gridFs.getResource(location);
         try {
             BeanUtils.setFieldWithAnnotation(entity, ContentLength.class, resource.contentLength());
         } catch (IOException e) {
-            logger.error(String.format("Unexpected error setting content length for %s", id.toString()), e);
+            logger.error(String.format("Unexpected error setting content length for %s", location), e);
         }
     }
 

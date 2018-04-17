@@ -1,15 +1,18 @@
 package internal.org.springframework.content.mongo.repository;
 
-import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.*;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.BeforeEach;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Context;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
+import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.JustBeforeEach;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.isA;
-import static org.mockito.Mockito.doReturn;
+import static org.mockito.ArgumentMatchers.anyObject;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -18,11 +21,13 @@ import java.io.InputStream;
 import java.util.UUID;
 
 import org.bson.types.ObjectId;
+import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.content.commons.annotations.ContentId;
 import org.springframework.content.commons.annotations.ContentLength;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.core.io.Resource;
 import org.springframework.data.mongodb.gridfs.GridFsResource;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 
@@ -38,12 +43,71 @@ public class DefaultMongoStoreImplTest {
     private ObjectId gridFSId;
     private ContentProperty property;
     private GridFsResource resource;
+    private Resource genericResource;
     private ConversionService converter;
 
     private InputStream content;
     private InputStream result;
 
     {
+
+    	 Describe("Store", () -> {
+         	BeforeEach(() -> {
+
+         		converter = mock(ConversionService.class);
+                gridFsTemplate = mock(GridFsTemplate.class);
+                resource = mock(GridFsResource.class);
+                mongoContentRepoImpl = new DefaultMongoStoreImpl<Object, String>(gridFsTemplate, converter);
+         	});
+
+             Context("#getResource", () -> {
+                 Context("given an id", () -> {
+                 	 BeforeEach(() -> {
+                 		when(converter.convert(eq("abcd"), eq(String.class))).thenReturn("abcd");
+                 		when(gridFsTemplate.getResource(eq("abcd"))).thenReturn(resource);
+                      });
+                     JustBeforeEach(() -> {
+                     	genericResource = mongoContentRepoImpl.getResource("abcd");
+                     });
+                     It("should use the mongoStoreConverter to find the resource path", () -> {
+                 		verify(converter).convert(eq("abcd"), eq(String.class));
+                 	 });
+                     It("should fetch the resource from that path", () -> {
+                     	verify(gridFsTemplate).getResource("abcd");
+                     });
+                     It("should get Resource", () -> {
+                         assertThat(genericResource, is(instanceOf(Resource.class)));
+                     });
+                 });
+             });
+
+             Context("#associate", () -> {
+                 BeforeEach(() -> {
+                 	property = new TestEntity();
+
+                     when(converter.convert(eq("12345"), eq(String.class))).thenReturn("12345");
+                     when(gridFsTemplate.getResource(eq("12345"))).thenReturn(resource);
+                     when(resource.contentLength()).thenReturn(20L);
+                 });
+                 JustBeforeEach(() -> {
+                 	mongoContentRepoImpl.associate(property, "12345");
+                 });
+                 It("should use the mongoStoreConverter to find the resource path", () -> {
+              		verify(converter).convert(eq("12345"), eq(String.class));
+              	 });
+                 It("should use the conversion service to get a resource path", () -> {
+                     verify(gridFsTemplate).getResource(eq("12345"));
+                 });
+                 It("should set the entity's content ID attribute", () -> {
+                     assertThat(property.getContentId(), CoreMatchers.is("12345"));
+                 });
+                 It("should set the entity's content length attribute", () -> {
+                     assertThat(property.getContentLen(), CoreMatchers.is(20L));
+                 });
+             });
+
+         });
+
         Describe("DefaultMongoStoreImpl", () -> {
 
         	BeforeEach(() -> {
@@ -115,6 +179,8 @@ public class DefaultMongoStoreImplTest {
                 	});
                 });
             });
+
+
 
              Context("#getContent", () -> {
                 BeforeEach(() -> {
