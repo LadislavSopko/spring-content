@@ -8,17 +8,19 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.content.commons.renditions.RenditionService;
 import org.springframework.stereotype.Component;
 
 @Component
+@CacheConfig(cacheNames = { "files" }) // 2
 public class RenditionContext {
 
 	private static Log logger = LogFactory.getLog(RenditionContext.class);
 
 	private RenditionService rs = null;
-	
-	private Map<String,String> mimeToExt ;
+
+	private Map<String, String> mimeToExt;
 
 	private Set<BasicRenderer> currentConversions = new HashSet<BasicRenderer>();
 
@@ -32,20 +34,21 @@ public class RenditionContext {
 			}
 		}
 	}
-	
+
 	public RenditionService getRenditionService() {
 		return rs;
 	}
 
 	public void setSupportedExtension(String mimeType, String ext) {
-		if ( !ext.startsWith(".") ) ext = "."+ext; // Force dot in front
-		mimeToExt.putIfAbsent(mimeType, ext) ;
+		if (!ext.startsWith("."))
+			ext = "." + ext; // Force dot in front
+		mimeToExt.putIfAbsent(mimeType, ext);
 	}
-	
+
 	public String getSupportedExtension(String mimeType) {
-		return mimeToExt.getOrDefault(mimeType, ".unknown") ;
+		return mimeToExt.getOrDefault(mimeType, ".unknown");
 	}
-	
+
 	// Work
 	public InputStream DoWork(InputStream is, BasicRenderer converter) {
 		// Choose the converter according from and to Mime
@@ -69,7 +72,7 @@ public class RenditionContext {
 			synchronized (RenditionContext.class) {
 				if (singleton == null) {
 					singleton = new RenditionContext();
-					singleton.mimeToExt = new HashMap<String,String>() ;
+					singleton.mimeToExt = new HashMap<String, String>();
 				}
 			}
 		}

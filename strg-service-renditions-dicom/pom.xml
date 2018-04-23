@@ -74,5 +74,14 @@
         	<optional>true</optional>
         </dependency>
     </dependencies>
+    
+    <repositories>
+	    <repository>
+		    <id>www.dcm4che.org</id>
+		    <name>dcm4che Repository</name>
+		    <url>https://www.dcm4che.org/maven2</url>
+		    <layout>default</layout>
+		</repository>
+	</repositories> 
 
 </project>
