@@ -2,15 +2,24 @@ package it.zeroics.strg.cache;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.StandardCopyOption;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import org.apache.commons.io.IOUtils;
+import org.springframework.cache.interceptor.SimpleKey;
 import org.springframework.cache.support.AbstractValueAdaptingCache;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.serializer.support.SerializationDelegate;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
+
+import internal.org.springframework.content.commons.utils.CacheKey;
+import internal.org.springframework.content.commons.utils.InputContentStream;
+
 
 public class StrgCache extends AbstractValueAdaptingCache {
 
@@ -100,7 +109,18 @@ public class StrgCache extends AbstractValueAdaptingCache {
 	@Override
 	@Nullable
 	protected Object lookup(Object key) {
-		return this.store.get(key);
+		
+		if(key instanceof CacheKey) {
+			File targetFile = new File("c:\\tmp\\cache\\" + ((CacheKey)key).key + ".dat");
+			if(targetFile.exists()) {
+				return new InputContentStream(new FileSystemResource(targetFile), ((CacheKey)key).entity, ((CacheKey)key).mime);
+			}
+	
+			return null;
+			
+		}else {
+			return this.store.get(key);
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -119,7 +139,32 @@ public class StrgCache extends AbstractValueAdaptingCache {
 
 	@Override
 	public void put(Object key, @Nullable Object value) {
-		this.store.put(key, toStoreValue(value));
+		Object sv = toStoreValue(value);
+		
+		if(sv instanceof InputContentStream) {
+			// save content in file
+			File targetFile = new File("c:\\tmp\\cache\\" + ((CacheKey)key).key + ".dat");
+			 
+		    try {
+				java.nio.file.Files.copy(
+				  ((InputContentStream)sv), 
+				  targetFile.toPath(), 
+				  StandardCopyOption.REPLACE_EXISTING);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		 
+			IOUtils.closeQuietly(((InputContentStream)sv));
+			
+			
+			// reopen stream
+			FileSystemResource rs = new FileSystemResource(targetFile);
+			((InputContentStream)sv).resetResource(rs);
+			
+		} else {
+			this.store.put(key, sv);
+		}		
 	}
 
 	@Override

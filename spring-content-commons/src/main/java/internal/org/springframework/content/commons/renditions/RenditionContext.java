@@ -13,7 +13,6 @@ import org.springframework.content.commons.renditions.RenditionService;
 import org.springframework.stereotype.Component;
 
 @Component
-@CacheConfig(cacheNames = { "files" }) // 2
 public class RenditionContext {
 
 	private static Log logger = LogFactory.getLog(RenditionContext.class);

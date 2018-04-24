@@ -4,7 +4,10 @@ package internal.org.springframework.content.commons.utils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
 
+import org.springframework.cache.interceptor.SimpleKey;
 import org.springframework.core.io.Resource;
 
 public class InputContentStream extends InputStream {
@@ -13,16 +16,42 @@ public class InputContentStream extends InputStream {
     private final Object entity;
     private final String mimeType;
     
+    public static Object getKey(Object ... pms) {
+    	List<Object> p = Arrays.asList(pms);
+    	
+    	String key = "";
+    	
+    	//p0 - is
+    	if(p.get(0) instanceof InputContentStream) {
+    		key += ((InputContentStream)p.get(0)).getEntity().toString();
+    	}else {
+    		return new SimpleKey(pms);
+    	}
+    	
+    	//p1 - mime
+    	
+    	key += p.get(1);
+    	
+    	return new CacheKey(((InputContentStream)p.get(0)).getEntity(), key.replace("/", ""), p.get(1).toString());
+    }
+    
     /*
      * We will do load of effective content as late as possible
      * so in some case we can skip it at all!
      * this part is fully transparent to the user
      */
-    private final Resource resource;
+    private Resource resource;
     
     // experimental and danger!!!
     public Resource getResource() {
     	return resource;
+    }
+    
+    
+    // POC
+    public void resetResource(Resource r) {
+    	this.resource = r;
+    	this.is = null;
     }
 
 	/* GETTERS */
@@ -257,6 +286,7 @@ public class InputContentStream extends InputStream {
     public void close() throws IOException {
     	if(is == null) return;
         is.close();
+        is = null;
     }
 
     /**

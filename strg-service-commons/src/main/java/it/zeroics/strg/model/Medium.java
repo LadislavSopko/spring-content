@@ -85,4 +85,9 @@ public class Medium {
     public void setMimeType(String mimeType) {
         this.mimeType = mimeType;
     }
+    
+    @Override
+    public String toString() {
+    	return "M-" + contentId;
+    }
 }
