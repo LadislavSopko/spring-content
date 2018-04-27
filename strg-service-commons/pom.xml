@@ -22,13 +22,12 @@
 			<artifactId>spring-content-commons</artifactId>
 			<version>${spring-content.version}</version>
 		</dependency>
-		<!-- 
 		<dependency>
-			<groupId>com.github.paulcwarren</groupId>
-			<artifactId>spring-content-mongo</artifactId>
-			<version>${spring-content.version}</version>
-		</dependency>
-		 -->
+	        <groupId>org.projectlombok</groupId>
+	        <artifactId>lombok</artifactId>
+	        <version>1.16.8</version>
+	        <scope>provided</scope>
+	    </dependency>
 		
 		<dependency>
 		    <groupId>com.fasterxml.jackson.core</groupId>

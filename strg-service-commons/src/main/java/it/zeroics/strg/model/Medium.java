@@ -1,6 +1,9 @@
 package it.zeroics.strg.model;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.springframework.content.commons.annotations.ContentId;
 import org.springframework.content.commons.annotations.ContentLength;
 import org.springframework.content.commons.annotations.ContentName;
@@ -8,7 +11,12 @@ import org.springframework.content.commons.annotations.MimeType;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Document(collection = "media-meta")
+@Getter @Setter @NoArgsConstructor
 public class Medium {
 
     @Id 
@@ -28,63 +36,10 @@ public class Medium {
 
     private Date created = new Date();
     private String summary;
-
     
-    public String getId() {
-        return id;
-    }
+   
+    private Set<Tag> tags = new HashSet<Tag>();
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Date getCreated() {
-        return created;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
-    public String getSummary() {
-        return summary;
-    }
-
-    public void setSummary(String summary) {
-        this.summary = summary;
-    }
-
-    public String getContentId() {
-        return contentId;
-    }
-
-    public void setContentId(String contentId) {
-        this.contentId = contentId;
-    }
-
-    public long getContentLength() {
-        return contentLength;
-    }
-
-    public void setContentLength(long contentLength) {
-        this.contentLength = contentLength;
-    }
-
-    public String getMimeType() {
-        return mimeType;
-    }
-
-    public void setMimeType(String mimeType) {
-        this.mimeType = mimeType;
-    }
     
     @Override
     public String toString() {

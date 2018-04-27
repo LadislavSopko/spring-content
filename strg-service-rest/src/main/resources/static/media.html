@@ -38,7 +38,11 @@
 
         <h2>New File</h2>
         <input type="file" id="mediumElement" name="mediumElement"/>
-        <input type="summary" id="summary" name="summary" ng-model="mediaListCtrl.summary" placeholder="Summary"/>
+        <input type="summary" id="summary" name="summary" ng-model="mediaListCtrl.summary" placeholder="Summary"/></br>
+        
+        <input type="text" id="tk" name="tk" ng-model="mediaListCtrl.tags.key" placeholder="Key"/>
+        <input type="text" id="tv" name="tv" ng-model="mediaListCtrl.tags.value" placeholder="Value"/></br>
+        
         <button ng-click="mediaListCtrl.upload()">Upload</button>
     </div>
   </body>

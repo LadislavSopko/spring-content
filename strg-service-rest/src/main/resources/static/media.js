@@ -74,7 +74,7 @@ angular.module('MediaApp', [])
 
     mediaList.upload = function() {
         var f = document.getElementById('mediumElement').files[0];
-        var medium = {name: f.name, summary: mediaList.summary};
+        var medium = {name: f.name, summary: mediaList.summary, tags:[{key:mediaList.tags.key, value:mediaList.tags.value}]};
 
         $http.post('/media/', medium).
             then(function(response) {
