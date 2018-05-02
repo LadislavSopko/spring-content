@@ -100,6 +100,10 @@ public class WordToJpegRendererTest {
                             assertThat(e, is(instanceOf(RenditionException.class)));
                         });
                     });
+                    /* 
+                     
+                      NOTE!!! -> POIXMLDocument.getProperties does not declare throw statement
+                      
                     Context("when the word document fails to return properties", () -> {
                         BeforeEach(()-> {
                             doc = mock(XWPFDocument.class);
@@ -112,6 +116,7 @@ public class WordToJpegRendererTest {
                             assertThat(e, is(instanceOf(RenditionException.class)));
                         });
                     });
+                    */
                     Context("when the word document fails to return a thumbnail", () -> {
                         BeforeEach(()-> {
                             doc = mock(XWPFDocument.class);

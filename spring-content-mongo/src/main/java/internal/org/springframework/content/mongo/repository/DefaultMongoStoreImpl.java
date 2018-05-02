@@ -24,15 +24,22 @@ import org.springframework.core.io.Resource;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.util.Assert;
 
-import internal.org.springframework.content.commons.utils.InputContentStream;
-
-public class DefaultMongoStoreImpl<S, SID extends Serializable> implements Store<SID>, AssociativeStore<S, SID>, ContentStore<S,SID> {
+public class DefaultMongoStoreImpl<S, SID extends Serializable>
+		implements Store<SID>, AssociativeStore<S, SID>, ContentStore<S, SID> {
 
 	private static Log logger = LogFactory.getLog(DefaultMongoStoreImpl.class);
 
 	private GridFsTemplate gridFs;
 	private ConversionService converter;
 
+	/**
+	 * Constructs default implementation of content store.
+	 * 
+	 * @param gridFs
+	 *            Mongo grid driver.
+	 * @param converter
+	 *            Id converter.
+	 */
 	public DefaultMongoStoreImpl(GridFsTemplate gridFs, ConversionService converter) {
 		Assert.notNull(gridFs, "gridFs cannot be null");
 		Assert.notNull(converter, "converter cannot be null");
@@ -42,27 +49,40 @@ public class DefaultMongoStoreImpl<S, SID extends Serializable> implements Store
 	}
 
 	@Override
-    public Resource getResource(SID id) {
+	public Resource getResource(SID id) {
 		String location = converter.convert(id, String.class);
 		return gridFs.getResource(location);
-    }
+	}
 
-    @Override
-    public void associate(S entity, SID id) {
-    	String location = converter.convert(id, String.class);
-        BeanUtils.setFieldWithAnnotation(entity, ContentId.class, location);
-        Resource resource = gridFs.getResource(location);
-        try {
-            BeanUtils.setFieldWithAnnotation(entity, ContentLength.class, resource.contentLength());
-        } catch (IOException e) {
-            logger.error(String.format("Unexpected error setting content length for %s", location), e);
-        }
-    }
+	@Override
+	public void associate(S entity, SID id) {
+		String location = converter.convert(id, String.class);
+		BeanUtils.setFieldWithAnnotation(entity, ContentId.class, location);
+		Resource resource = gridFs.getResource(location);
+		try {
+			BeanUtils.setFieldWithAnnotation(entity, ContentLength.class, resource.contentLength());
+		} catch (IOException e) {
+			logger.error(String.format("Unexpected error setting content length for %s", location), e);
+		}
+	}
 
-    @Override
-    public void unassociate(S entity) {
-
-    }
+	@Override
+	public void unassociate(S entity) {
+		BeanUtils.setFieldWithAnnotationConditionally(entity, ContentId.class, null, new Condition() {
+			@Override
+			public boolean matches(Field field) {
+				for (Annotation annotation : field.getAnnotations()) {
+					if ("javax.persistence.Id".equals(annotation.annotationType().getCanonicalName())
+							|| "org.springframework.data.annotation.Id"
+									.equals(annotation.annotationType().getCanonicalName())) {
+						return false;
+					}
+				}
+				return true;
+			}
+		});
+		BeanUtils.setFieldWithAnnotation(entity, ContentLength.class, 0L);
+	}
 
 	@Override
 	public void setContent(S property, InputStream content) {
@@ -92,31 +112,35 @@ public class DefaultMongoStoreImpl<S, SID extends Serializable> implements Store
 
 	@Override
 	public InputStream getContent(S property) {
-		if (property == null)
+		if (property == null) {
 			return null;
+		}
 		Object contentId = BeanUtils.getFieldWithAnnotation(property, ContentId.class);
-		if (contentId == null)
+		if (contentId == null) {
 			return null;
+		}
 
 		String location = converter.convert(contentId, String.class);
 		Resource resource = gridFs.getResource(location);
-		//try {
+		try {
 			if (resource != null && resource.exists()) {
-				return new InputContentStream(resource, property);
+				return resource.getInputStream();
 			}
-		//} catch (IOException e) {
-		//	logger.error(String.format("Unexpected error getting content %s", contentId.toString()), e);
-		//}
+		} catch (IOException e) {
+			logger.error(String.format("Unexpected error getting content %s", contentId.toString()), e);
+		}
 		return null;
 	}
 
 	@Override
 	public void unsetContent(S property) {
-		if (property == null)
+		if (property == null) {
 			return;
+		}
 		Object contentId = BeanUtils.getFieldWithAnnotation(property, ContentId.class);
-		if (contentId == null)
+		if (contentId == null) {
 			return;
+		}
 
 		try {
 			String location = converter.convert(contentId, String.class);
@@ -129,13 +153,15 @@ public class DefaultMongoStoreImpl<S, SID extends Serializable> implements Store
 					@Override
 					public boolean matches(Field field) {
 						for (Annotation annotation : field.getAnnotations()) {
-							if ("javax.persistence.Id".equals(annotation.annotationType().getCanonicalName()) ||
-								"org.springframework.data.annotation.Id".equals(annotation.annotationType().getCanonicalName())) {
+							if ("javax.persistence.Id".equals(annotation.annotationType().getCanonicalName())
+									|| "org.springframework.data.annotation.Id"
+											.equals(annotation.annotationType().getCanonicalName())) {
 								return false;
 							}
 						}
 						return true;
-					}});
+					}
+				});
 				BeanUtils.setFieldWithAnnotation(property, ContentLength.class, 0);
 			}
 		} catch (Exception ase) {
