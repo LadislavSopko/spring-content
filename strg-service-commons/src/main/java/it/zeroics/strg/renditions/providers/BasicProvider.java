@@ -4,9 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.content.commons.renditions.RenditionCapability;
 import org.springframework.content.commons.renditions.RenditionProvider;
-import org.springframework.stereotype.Service;
-
-import java.io.InputStream;
+import org.springframework.core.io.Resource;
 
 //@Service
 public class BasicProvider implements RenditionProvider {
@@ -37,9 +35,8 @@ public class BasicProvider implements RenditionProvider {
 		throw new UnsupportedOperationException("Method must be implemented in extended class");
 	}
 
-	@SuppressWarnings("resource")
 	@Override
-	public InputStream convert(InputStream fromInputSource, String toMimeType) {
+	public Resource convert(Resource fromInputSource, String toMimeType) {
 		throw new UnsupportedOperationException("Method must be implemented in extended class");
 	}
 

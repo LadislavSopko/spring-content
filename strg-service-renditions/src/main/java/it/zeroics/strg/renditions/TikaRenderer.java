@@ -1,7 +1,6 @@
 package it.zeroics.strg.renditions;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -15,45 +14,49 @@ import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.parser.ParseContext;
 import org.apache.tika.parser.Parser;
 import org.apache.tika.sax.BodyContentHandler;
+import org.springframework.content.commons.io.MedializedResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MimeType;
 import org.xml.sax.SAXException;
 
-import it.zeroics.strg.model.Medium;
-import it.zeroics.strg.renditions.utils.MimeHelper;
 import internal.org.springframework.content.commons.renditions.BasicRenderer;
 import internal.org.springframework.content.commons.renditions.RenditionContext;
-import internal.org.springframework.content.commons.utils.InputContentStream;
+import it.zeroics.strg.renditions.utils.MimeHelper;
 
 @Component
 public class TikaRenderer extends BasicRenderer {
 
-    private static Log logger = LogFactory.getLog(TikaRenderer.class);
+	private static Log logger = LogFactory.getLog(TikaRenderer.class);
 
 	private TikaConfig tikaConfig = TikaConfig.getDefaultConfig();
 
-    private Metadata metadata = new Metadata();
-	
-	public TikaRenderer(InputStream is, MimeType mt) {
-		super(is, mt) ;
+	private Metadata metadata = new Metadata();
+
+	public TikaRenderer(Resource ir, MimeType mt) {
+		super(ir, mt);
 		RenditionContext.getInstance().setSupportedExtension("text/plain", ".txt");
 		RenditionContext.getInstance().setSupportedExtension(MimeHelper.METADATA_MIMETYPE, ".json");
 	}
 
-	private void addTikaMeta(it.zeroics.strg.renditions.utils.Metadata m, org.apache.tika.metadata.Metadata tikaMetadata, String tikaMetadataProperty) {
+	private void addTikaMeta(it.zeroics.strg.renditions.utils.Metadata m,
+			org.apache.tika.metadata.Metadata tikaMetadata, String tikaMetadataProperty) {
 		String value = tikaMetadata.get(tikaMetadataProperty);
 		if (value != null && !value.isEmpty()) {
 			m.addMeta(tikaMetadataProperty, value);
 		}
 	}
-	private void addTikaMeta(it.zeroics.strg.renditions.utils.Metadata m, org.apache.tika.metadata.Metadata tikaMetadata, Property tikaMetadataProperty) {
+
+	private void addTikaMeta(it.zeroics.strg.renditions.utils.Metadata m,
+			org.apache.tika.metadata.Metadata tikaMetadata, Property tikaMetadataProperty) {
 		String value = tikaMetadata.get(tikaMetadataProperty);
 		if (value != null && !value.isEmpty()) {
 			m.addMeta(tikaMetadataProperty.getName().toString(), value);
 		}
 	}
-	
-	public void addTikaMeta(it.zeroics.strg.renditions.utils.Metadata m, org.apache.tika.metadata.Metadata tikaMetadata) {
+
+	public void addTikaMeta(it.zeroics.strg.renditions.utils.Metadata m,
+			org.apache.tika.metadata.Metadata tikaMetadata) {
 		if (tikaMetadata != null) {
 			addTikaMeta(m, tikaMetadata, org.apache.tika.metadata.Metadata.CONTRIBUTOR);
 			addTikaMeta(m, tikaMetadata, org.apache.tika.metadata.Metadata.COVERAGE);
@@ -181,75 +184,75 @@ public class TikaRenderer extends BasicRenderer {
 			addTikaMeta(m, tikaMetadata, org.apache.tika.metadata.Metadata.RESOURCE_NAME_KEY);
 		}
 	}
-	
+
 	@Override
-	public void run(){
+	public void run() {
 
 		Parser parser = tikaConfig.getParser();
-		String mediaMimeType = ((Medium)((InputContentStream)is).getEntity()).getMimeType() ;
-    	logger.debug("The MIME type is: [" + mediaMimeType + "]");
+		String mediaMimeType = ((MedializedResource) ir).getMime();
+		logger.debug("The MIME type is: [" + mediaMimeType + "]");
 		AutoDetectParser autoParser = null;
-        
-		// TODO:	Identify mime type according to file name extension, file content with magic or anything else
-		//			See https://github.com/apache/tika/blob/master/tika-example/src/main/java/org/apache/tika/example/MyFirstTika.java
-		//			Use AutoDetectParser only if mime can't be obtained elsewere.
-        if ( mediaMimeType.equals("application/pkcs7-mime") ) {
-        	autoParser = new AutoDetectParser(tikaConfig);
-        	metadata.set(Metadata.CONTENT_TYPE, mediaMimeType);
-        }
-        else {
-        	metadata.set(Metadata.CONTENT_TYPE, mediaMimeType);
-        }
-        
-        if ( MimeHelper.isMeta(outputMimeType) ) {
+
+		// TODO: Identify mime type according to file name extension, file content with
+		// magic or anything else
+		// See
+		// https://github.com/apache/tika/blob/master/tika-example/src/main/java/org/apache/tika/example/MyFirstTika.java
+		// Use AutoDetectParser only if mime can't be obtained elsewere.
+		if (mediaMimeType.equals("application/pkcs7-mime")) {
+			autoParser = new AutoDetectParser(tikaConfig);
+			metadata.set(Metadata.CONTENT_TYPE, mediaMimeType);
+		} else {
+			metadata.set(Metadata.CONTENT_TYPE, mediaMimeType);
+		}
+
+		if (MimeHelper.isMeta(outputMimeType)) {
 			Metadata tikaMetadata = new Metadata();
-	        try {
-	        	Tika t = new Tika() ;
-	    		t.parseToString(is, tikaMetadata, 0);
-	    		it.zeroics.strg.renditions.utils.Metadata m = new it.zeroics.strg.renditions.utils.Metadata(((Medium)((InputContentStream)is).getEntity()).getId(), ((Medium)((InputContentStream)is).getEntity()).getContentLength() );
-		        addTikaMeta(m, tikaMetadata) ;
-		        m.serialize(out);
+			try {
+				Tika t = new Tika();
+				t.parseToString(ir.getInputStream(), tikaMetadata, 0);
+				it.zeroics.strg.renditions.utils.Metadata m = new it.zeroics.strg.renditions.utils.Metadata(
+						((MedializedResource) ir).getName(), ((MedializedResource) ir).contentLength());
+				addTikaMeta(m, tikaMetadata);
+				m.serialize(out);
 				out.close();
-				//out.flush();
-	        } catch(IOException | TikaException e) {
-	        	logger.error("Error on tika parse file.");
+				// out.flush();
+			} catch (IOException | TikaException e) {
+				logger.error("Error on tika parse file.");
 				e.printStackTrace();
-	        }finally {
-	        	try {
+			} finally {
+				try {
 					out.close();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-	        }
-        }
-        else {
+			}
+		} else {
 			BodyContentHandler handler = new BodyContentHandler(out);
-			TikaInputStream stream = TikaInputStream.get(is); //, metadata);
-			
-	    	try {
-	    		if ( null == autoParser ) {
-	    			parser.parse(stream, handler, metadata, new ParseContext());
-	    		}
-	    		else {
-	    			autoParser.parse(stream, handler, metadata, new ParseContext());
-	    		}
-	    		out.close();
-	    		//out.flush();
+
+			try {
+				TikaInputStream stream = TikaInputStream.get(ir.getInputStream()); // , metadata);
+				if (null == autoParser) {
+					parser.parse(stream, handler, metadata, new ParseContext());
+				} else {
+					autoParser.parse(stream, handler, metadata, new ParseContext());
+				}
+				out.close();
+				// out.flush();
 			} catch (IOException | SAXException | TikaException e) {
 				// TODO Auto-generated catch block
-				e. printStackTrace();
-			}finally {
-	        	try {
+				e.printStackTrace();
+			} finally {
+				try {
 					out.close();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-	        }
-        }
-    	
-    	// remove worker!!!
-    	RenditionContext.getInstance().WorkerDone(this);
-    }
+			}
+		}
+
+		// remove worker!!!
+		RenditionContext.getInstance().WorkerDone(this);
+	}
 }

@@ -4,22 +4,21 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.StandardCopyOption;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import org.apache.commons.io.IOUtils;
-import org.springframework.cache.interceptor.SimpleKey;
 import org.springframework.cache.support.AbstractValueAdaptingCache;
+import org.springframework.content.commons.io.MedializedResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.serializer.support.SerializationDelegate;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
 import internal.org.springframework.content.commons.utils.CacheKey;
-import internal.org.springframework.content.commons.utils.InputContentStream;
-
 
 public class StrgCache extends AbstractValueAdaptingCache {
 
@@ -30,10 +29,11 @@ public class StrgCache extends AbstractValueAdaptingCache {
 	@Nullable
 	private final SerializationDelegate serialization;
 
-
 	/**
 	 * Create a new ConcurrentMapCache with the specified name.
-	 * @param name the name of the cache
+	 * 
+	 * @param name
+	 *            the name of the cache
 	 */
 	public StrgCache(String name) {
 		this(name, new ConcurrentHashMap<>(256), true);
@@ -41,41 +41,51 @@ public class StrgCache extends AbstractValueAdaptingCache {
 
 	/**
 	 * Create a new ConcurrentMapCache with the specified name.
-	 * @param name the name of the cache
-	 * @param allowNullValues whether to accept and convert {@code null}
-	 * values for this cache
+	 * 
+	 * @param name
+	 *            the name of the cache
+	 * @param allowNullValues
+	 *            whether to accept and convert {@code null} values for this cache
 	 */
 	public StrgCache(String name, boolean allowNullValues) {
 		this(name, new ConcurrentHashMap<>(256), allowNullValues);
 	}
 
 	/**
-	 * Create a new ConcurrentMapCache with the specified name and the
-	 * given internal {@link ConcurrentMap} to use.
-	 * @param name the name of the cache
-	 * @param store the ConcurrentMap to use as an internal store
-	 * @param allowNullValues whether to allow {@code null} values
-	 * (adapting them to an internal null holder value)
+	 * Create a new ConcurrentMapCache with the specified name and the given
+	 * internal {@link ConcurrentMap} to use.
+	 * 
+	 * @param name
+	 *            the name of the cache
+	 * @param store
+	 *            the ConcurrentMap to use as an internal store
+	 * @param allowNullValues
+	 *            whether to allow {@code null} values (adapting them to an internal
+	 *            null holder value)
 	 */
 	public StrgCache(String name, ConcurrentMap<Object, Object> store, boolean allowNullValues) {
 		this(name, store, allowNullValues, null);
 	}
 
 	/**
-	 * Create a new ConcurrentMapCache with the specified name and the
-	 * given internal {@link ConcurrentMap} to use. If the
-	 * {@link SerializationDelegate} is specified,
-	 * {@link #isStoreByValue() store-by-value} is enabled
-	 * @param name the name of the cache
-	 * @param store the ConcurrentMap to use as an internal store
-	 * @param allowNullValues whether to allow {@code null} values
-	 * (adapting them to an internal null holder value)
-	 * @param serialization the {@link SerializationDelegate} to use
-	 * to serialize cache entry or {@code null} to store the reference
+	 * Create a new ConcurrentMapCache with the specified name and the given
+	 * internal {@link ConcurrentMap} to use. If the {@link SerializationDelegate}
+	 * is specified, {@link #isStoreByValue() store-by-value} is enabled
+	 * 
+	 * @param name
+	 *            the name of the cache
+	 * @param store
+	 *            the ConcurrentMap to use as an internal store
+	 * @param allowNullValues
+	 *            whether to allow {@code null} values (adapting them to an internal
+	 *            null holder value)
+	 * @param serialization
+	 *            the {@link SerializationDelegate} to use to serialize cache entry
+	 *            or {@code null} to store the reference
 	 * @since 4.3
 	 */
-	protected StrgCache(String name, ConcurrentMap<Object, Object> store,
-			boolean allowNullValues, @Nullable SerializationDelegate serialization) {
+	protected StrgCache(String name, ConcurrentMap<Object, Object> store, boolean allowNullValues,
+			@Nullable SerializationDelegate serialization) {
 
 		super(allowNullValues);
 		Assert.notNull(name, "Name must not be null");
@@ -85,11 +95,11 @@ public class StrgCache extends AbstractValueAdaptingCache {
 		this.serialization = serialization;
 	}
 
-
 	/**
-	 * Return whether this cache stores a copy of each entry ({@code true}) or
-	 * a reference ({@code false}, default). If store by value is enabled, each
-	 * entry in the cache must be serializable.
+	 * Return whether this cache stores a copy of each entry ({@code true}) or a
+	 * reference ({@code false}, default). If store by value is enabled, each entry
+	 * in the cache must be serializable.
+	 * 
 	 * @since 4.3
 	 */
 	public final boolean isStoreByValue() {
@@ -109,16 +119,17 @@ public class StrgCache extends AbstractValueAdaptingCache {
 	@Override
 	@Nullable
 	protected Object lookup(Object key) {
-		
-		if(key instanceof CacheKey) {
-			File targetFile = new File("c:\\tmp\\cache\\" + ((CacheKey)key).key + ".dat");
-			if(targetFile.exists()) {
-				return new InputContentStream(new FileSystemResource(targetFile), ((CacheKey)key).entity, ((CacheKey)key).mime);
+
+		if (key instanceof CacheKey) {
+			File targetFile = new File("c:\\tmp\\cache\\" + ((CacheKey) key).key + ".dat");
+			if (targetFile.exists()) {
+				return new MedializedResource(new FileSystemResource(targetFile), ((CacheKey) key).mime,
+						((CacheKey) key).name);
 			}
-	
+
 			return null;
-			
-		}else {
+
+		} else {
 			return this.store.get(key);
 		}
 	}
@@ -130,8 +141,7 @@ public class StrgCache extends AbstractValueAdaptingCache {
 		return (T) fromStoreValue(this.store.computeIfAbsent(key, r -> {
 			try {
 				return toStoreValue(valueLoader.call());
-			}
-			catch (Throwable ex) {
+			} catch (Throwable ex) {
 				throw new ValueRetrievalException(key, valueLoader, ex);
 			}
 		}));
@@ -140,31 +150,30 @@ public class StrgCache extends AbstractValueAdaptingCache {
 	@Override
 	public void put(Object key, @Nullable Object value) {
 		Object sv = toStoreValue(value);
-		
-		if(sv instanceof InputContentStream) {
+
+		if (sv instanceof MedializedResource) {
 			// save content in file
-			File targetFile = new File("c:\\tmp\\cache\\" + ((CacheKey)key).key + ".dat");
-			 
-		    try {
-				java.nio.file.Files.copy(
-				  ((InputContentStream)sv), 
-				  targetFile.toPath(), 
-				  StandardCopyOption.REPLACE_EXISTING);
+			File targetFile = new File("c:\\tmp\\cache\\" + ((CacheKey) key).key + ".dat");
+
+			InputStream is = null;
+
+			try {
+				is = ((MedializedResource) sv).getInputStream();
+				java.nio.file.Files.copy(is, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-		 
-			IOUtils.closeQuietly(((InputContentStream)sv));
-			
-			
+
+			IOUtils.closeQuietly(is);
+
 			// reopen stream
 			FileSystemResource rs = new FileSystemResource(targetFile);
-			((InputContentStream)sv).resetResource(rs);
-			
+			((MedializedResource) sv).resetResource(rs);
+
 		} else {
 			this.store.put(key, sv);
-		}		
+		}
 	}
 
 	@Override
@@ -190,13 +199,11 @@ public class StrgCache extends AbstractValueAdaptingCache {
 		if (this.serialization != null) {
 			try {
 				return serializeValue(this.serialization, storeValue);
+			} catch (Throwable ex) {
+				throw new IllegalArgumentException(
+						"Failed to serialize cache value '" + userValue + "'. Does it implement Serializable?", ex);
 			}
-			catch (Throwable ex) {
-				throw new IllegalArgumentException("Failed to serialize cache value '" + userValue +
-						"'. Does it implement Serializable?", ex);
-			}
-		}
-		else {
+		} else {
 			return storeValue;
 		}
 	}
@@ -206,8 +213,7 @@ public class StrgCache extends AbstractValueAdaptingCache {
 		try {
 			serialization.serialize(storeValue, out);
 			return out.toByteArray();
-		}
-		finally {
+		} finally {
 			out.close();
 		}
 	}
@@ -217,12 +223,10 @@ public class StrgCache extends AbstractValueAdaptingCache {
 		if (storeValue != null && this.serialization != null) {
 			try {
 				return super.fromStoreValue(deserializeValue(this.serialization, storeValue));
-			}
-			catch (Throwable ex) {
+			} catch (Throwable ex) {
 				throw new IllegalArgumentException("Failed to deserialize cache value '" + storeValue + "'", ex);
 			}
-		}
-		else {
+		} else {
 			return super.fromStoreValue(storeValue);
 		}
 
@@ -232,8 +236,7 @@ public class StrgCache extends AbstractValueAdaptingCache {
 		ByteArrayInputStream in = new ByteArrayInputStream((byte[]) storeValue);
 		try {
 			return serialization.deserialize(in);
-		}
-		finally {
+		} finally {
 			in.close();
 		}
 	}

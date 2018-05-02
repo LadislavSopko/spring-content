@@ -3,7 +3,7 @@ package it.zeroics.strg.renditions.providers;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.content.commons.renditions.RenditionCapability;
-import org.springframework.content.commons.renditions.RenditionProvider;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 //import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -15,33 +15,32 @@ import it.zeroics.strg.renditions.CapabilityRenderer;
 import it.zeroics.strg.renditions.RenditionException;
 import it.zeroics.strg.renditions.utils.MimeHelper;
 
-import java.io.InputStream;
-
 @Service
 public class Any2Conversions extends BasicProvider {
 
 	private static Log logger = LogFactory.getLog(Any2Conversions.class);
 
 	public Any2Conversions() {
-		super() ;
+		super();
 	};
 
 	@Override
 	public Boolean consumes(String fromMimeType) {
-		if ( fromMimeType.equals(MimeHelper.CAPABILITY_MIMETYPE)) return false;
+		if (fromMimeType.equals(MimeHelper.CAPABILITY_MIMETYPE))
+			return false;
 		return true;
 	}
-	
+
 	@Override
 	public String[] produces() {
-		return new String[]{MimeHelper.CAPABILITY_MIMETYPE} ;
+		return new String[] { MimeHelper.CAPABILITY_MIMETYPE };
 	}
 
 	@Override
 	public RenditionCapability isCapable(String fromMimeType, String toMimeType) {
 		logger.debug("Mime check: " + fromMimeType + " -> " + toMimeType);
-		MimeType toMime = MimeType.valueOf(toMimeType) ;
-		if ( MimeHelper.isCapability(toMime) ) {
+		MimeType toMime = MimeType.valueOf(toMimeType);
+		if (MimeHelper.isCapability(toMime)) {
 			return RenditionCapability.BEST_FIT;
 		}
 		return RenditionCapability.NOT_CAPABLE;
@@ -49,13 +48,13 @@ public class Any2Conversions extends BasicProvider {
 
 	@SuppressWarnings("resource")
 	@Override
-	public InputStream convert(InputStream fromInputSource, String toMimeType) {
+	public Resource convert(Resource fromInputSource, String toMimeType) {
 
 		Assert.notNull(fromInputSource, "input source must not be null");
 
 		try {
-    		BasicRenderer converter = new CapabilityRenderer(fromInputSource, MimeType.valueOf(toMimeType));
-			return RenditionContext.getInstance().DoWork(fromInputSource, converter);
+			BasicRenderer converter = new CapabilityRenderer(fromInputSource, MimeType.valueOf(toMimeType));
+			return RenditionContext.getInstance().DoWork(converter);
 
 		} catch (Exception e) {
 			throw new RenditionException(String

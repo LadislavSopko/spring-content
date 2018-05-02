@@ -1,13 +1,13 @@
 package internal.org.springframework.content.commons.utils;
 
 public class CacheKey {
-	public Object entity;
+	public String name;
 	public String key;
 	public String mime;
-	
-	public CacheKey(Object entity, String key, String mime) {
+
+	public CacheKey(String name, String key, String mime) {
 		super();
-		this.entity = entity;
+		this.name = name;
 		this.key = key;
 		this.mime = mime;
 	}

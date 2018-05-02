@@ -1,10 +1,9 @@
 package it.zeroics.strg.renditions.providers;
 
-import java.io.InputStream;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.content.commons.renditions.RenditionCapability;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 //import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -22,40 +21,30 @@ public class AnyImage2Any extends BasicProvider {
 	private static Log logger = LogFactory.getLog(AnyImage2Any.class);
 
 	public AnyImage2Any() {
-		super() ;
+		super();
 	};
-	
+
 	@Override
 	public Boolean consumes(String fromMimeType) {
-		if ( MimeType.valueOf(fromMimeType).getType().equals("image") ) {
+		if (MimeType.valueOf(fromMimeType).getType().equals("image")) {
 			return true;
 		}
 		return false;
 	}
-	
+
 	@Override
 	public String[] produces() {
-		return new String[]{"application/pdf",
-				"image/jpg",
-				"image/png",
-				"image/tif",
-				"image/x-tif",
-				"image/gif",
-				"image/x-rgb",
-				"image/x-windows-bmp",
-				"image/bmp",
-				"image/x-portable-bitmap",
-				"image/x-icon",
-				MimeHelper.METADATA_MIMETYPE} ;
+		return new String[] { "application/pdf", "image/jpg", "image/png", "image/tif", "image/x-tif", "image/gif",
+				"image/x-rgb", "image/x-windows-bmp", "image/bmp", "image/x-portable-bitmap", "image/x-icon",
+				MimeHelper.METADATA_MIMETYPE };
 	}
 
 	@Override
 	public RenditionCapability isCapable(String fromMimeType, String toMimeType) {
 		logger.debug("Mime check: " + fromMimeType + " -> " + toMimeType);
-		if ( MimeType.valueOf(fromMimeType).getType().equals("image") ) {
-			MimeType toMime = MimeType.valueOf(toMimeType) ;
-			if (toMime.includes(MimeType.valueOf("application/pdf"))
-					|| MimeHelper.isMeta(toMime)
+		if (MimeType.valueOf(fromMimeType).getType().equals("image")) {
+			MimeType toMime = MimeType.valueOf(toMimeType);
+			if (toMime.includes(MimeType.valueOf("application/pdf")) || MimeHelper.isMeta(toMime)
 					|| toMime.getType().equals("image")) {
 				return RenditionCapability.GOOD_CAPABILITY;
 			}
@@ -65,13 +54,13 @@ public class AnyImage2Any extends BasicProvider {
 
 	@SuppressWarnings("resource")
 	@Override
-	public InputStream convert(InputStream fromInputSource, String toMimeType) {
+	public Resource convert(Resource fromInputSource, String toMimeType) {
 
 		Assert.notNull(fromInputSource, "input source must not be null");
 
 		try {
-    		BasicRenderer converter = new ImageRenderer(fromInputSource, MimeType.valueOf(toMimeType));
-			return RenditionContext.getInstance().DoWork(fromInputSource, converter);
+			BasicRenderer converter = new ImageRenderer(fromInputSource, MimeType.valueOf(toMimeType));
+			return RenditionContext.getInstance().DoWork(converter);
 
 		} catch (Exception e) {
 			throw new RenditionException(String

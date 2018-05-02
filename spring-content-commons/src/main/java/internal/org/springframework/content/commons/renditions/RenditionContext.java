@@ -1,6 +1,5 @@
 package internal.org.springframework.content.commons.renditions;
 
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -8,8 +7,8 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.content.commons.renditions.RenditionService;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -49,11 +48,11 @@ public class RenditionContext {
 	}
 
 	// Work
-	public InputStream DoWork(InputStream is, BasicRenderer converter) {
+	public Resource DoWork(BasicRenderer converter) {
 		// Choose the converter according from and to Mime
 		currentConversions.add(converter); // hold instance so we will remove it when done
 		new Thread(converter).start();
-		return converter.getInputStream();
+		return converter.getResult();
 	}
 
 	public void WorkerDone(BasicRenderer c) {

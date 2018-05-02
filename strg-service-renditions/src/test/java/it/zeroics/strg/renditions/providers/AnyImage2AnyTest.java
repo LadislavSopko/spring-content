@@ -5,13 +5,8 @@ import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Describe;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.It;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.JustBeforeEach;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
 
-import java.io.InputStream;
 import java.util.Arrays;
 
 import org.apache.commons.logging.Log;
@@ -24,6 +19,7 @@ import org.springframework.content.commons.renditions.RenditionCapability;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.io.Resource;
 
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jConfiguration;
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jRunner;
@@ -33,49 +29,52 @@ import it.zeroics.strg.renditions.providers.testsupport.RendererTest;
 import it.zeroics.strg.renditions.utils.MimeHelper;
 
 @RunWith(Ginkgo4jRunner.class)
-@Ginkgo4jConfiguration(threads=1)
+@Ginkgo4jConfiguration(threads = 1)
 public class AnyImage2AnyTest {
 	private static final Log LOGGER = LogFactory.getLog(AnyImage2AnyTest.class);
 
-    private AnyImage2Any provider;
+	private AnyImage2Any provider;
 
-    public ExpectedException thrown = ExpectedException.none();
+	public ExpectedException thrown = ExpectedException.none();
 
-    {
-        Describe("RenditionProviders: AnyImage2Any", () -> {
-            JustBeforeEach(() -> {
-                provider = new AnyImage2Any();
-            });
+	{
+		Describe("RenditionProviders: AnyImage2Any", () -> {
+			JustBeforeEach(() -> {
+				provider = new AnyImage2Any();
+			});
 			Context("#deprecated", () -> {
 				It("should throw exception", () -> {
-					assertThat(RendererTest.testDeprecated(provider), is(true)) ;
+					assertThat(RendererTest.testDeprecated(provider), is(true));
 				});
 			});
 			Context("#isCapable", () -> {
 				It("Must be capable only in some cases", () -> {
 					MimeHelper mh = new MimeHelper(MimeHelper.METADATA_MIMETYPE);
-					assertThat(provider.consumes("what/the_fuck"), is(false)) ;
-					assertThat(provider.isCapable("what/the_fuck", mh.toString()).isBetterThan(RenditionCapability.NOT_CAPABLE), is(false));
-					assertThat(provider.consumes("image/dicom"), is(true)) ;
-					assertThat(provider.isCapable("image/dicom", mh.toString()).isBetterThan(RenditionCapability.NOT_CAPABLE), is(true));
+					assertThat(provider.consumes("what/the_fuck"), is(false));
+					assertThat(provider.isCapable("what/the_fuck", mh.toString())
+							.isBetterThan(RenditionCapability.NOT_CAPABLE), is(false));
+					assertThat(provider.consumes("image/dicom"), is(true));
+					assertThat(provider.isCapable("image/dicom", mh.toString())
+							.isBetterThan(RenditionCapability.NOT_CAPABLE), is(true));
 					assertThat(provider.isCapable("image/dicom", mh.toString()).isBest(), is(false));
-					assertThat(provider.consumes(MimeHelper.CAPABILITY_MIMETYPE), is(false)) ;
-					assertThat(provider.isCapable("image/jpg", MimeHelper.CAPABILITY_MIMETYPE).isBetterThan(RenditionCapability.NOT_CAPABLE), is(false));
+					assertThat(provider.consumes(MimeHelper.CAPABILITY_MIMETYPE), is(false));
+					assertThat(provider.isCapable("image/jpg", MimeHelper.CAPABILITY_MIMETYPE)
+							.isBetterThan(RenditionCapability.NOT_CAPABLE), is(false));
 				});
 				It("Must produce something expected", () -> {
-					assertThat(Arrays.asList(provider.produces()).contains(MimeHelper.METADATA_MIMETYPE), is(true)) ;
-					assertThat(Arrays.asList(provider.produces()).contains("text/plain"), is(false)) ;
-					assertThat(Arrays.asList(provider.produces()).contains("image/dicom"), is(false)) ;
-					assertThat(Arrays.asList(provider.produces()).contains("image/jpg"), is(true)) ;
-					assertThat(Arrays.asList(provider.produces()).contains("image/png"), is(true)) ;
-					assertThat(Arrays.asList(provider.produces()).contains("image/gif"), is(true)) ;
-					assertThat(Arrays.asList(provider.produces()).contains("image/tif"), is(true)) ;
-					assertThat(Arrays.asList(provider.produces()).contains("image/x-tif"), is(true)) ;
-					assertThat(Arrays.asList(provider.produces()).contains("image/x-rgb"), is(true)) ;
-					assertThat(Arrays.asList(provider.produces()).contains("image/x-windows-bmp"), is(true)) ;
-					assertThat(Arrays.asList(provider.produces()).contains("image/bmp"), is(true)) ;
-					assertThat(Arrays.asList(provider.produces()).contains("image/x-portable-bitmap"), is(true)) ;
-					assertThat(Arrays.asList(provider.produces()).contains("image/x-icon"), is(true)) ;
+					assertThat(Arrays.asList(provider.produces()).contains(MimeHelper.METADATA_MIMETYPE), is(true));
+					assertThat(Arrays.asList(provider.produces()).contains("text/plain"), is(false));
+					assertThat(Arrays.asList(provider.produces()).contains("image/dicom"), is(false));
+					assertThat(Arrays.asList(provider.produces()).contains("image/jpg"), is(true));
+					assertThat(Arrays.asList(provider.produces()).contains("image/png"), is(true));
+					assertThat(Arrays.asList(provider.produces()).contains("image/gif"), is(true));
+					assertThat(Arrays.asList(provider.produces()).contains("image/tif"), is(true));
+					assertThat(Arrays.asList(provider.produces()).contains("image/x-tif"), is(true));
+					assertThat(Arrays.asList(provider.produces()).contains("image/x-rgb"), is(true));
+					assertThat(Arrays.asList(provider.produces()).contains("image/x-windows-bmp"), is(true));
+					assertThat(Arrays.asList(provider.produces()).contains("image/bmp"), is(true));
+					assertThat(Arrays.asList(provider.produces()).contains("image/x-portable-bitmap"), is(true));
+					assertThat(Arrays.asList(provider.produces()).contains("image/x-icon"), is(true));
 				});
 			});
 			Context("#convert", () -> {
@@ -86,19 +85,22 @@ public class AnyImage2AnyTest {
 						context.refresh();
 						RendererTest c = new RendererTest();
 						MimeHelper mh = new MimeHelper("image/png");
-						// Can't compare png. Same image can be compressed or not and a data withing changes. Must compare metadata.
-						InputStream pngStream = c.callConverterFromFileName("sample-image.jpg","image/jpg", mh.toString(), provider);
+						// Can't compare png. Same image can be compressed or not and a data withing
+						// changes. Must compare metadata.
+						Resource pngResource = c.callConverterFromFileName("sample-image.jpg", "image/jpg",
+								mh.toString(), provider);
 						// assertThat(pngStream, is(not(nullValue())));
 
 						// Use this to have less metadata, to compare.
-						MostAny2Txt metaProvider = new MostAny2Txt() ;
-						/* Image conversion from jpg to png differs from the png itself. The resulting png contains the same image
-						 * but format differs and an internal timestamp too. 
-						 * Must match something else, as basic metadata 
+						MostAny2Txt metaProvider = new MostAny2Txt();
+						/*
+						 * Image conversion from jpg to png differs from the png itself. The resulting
+						 * png contains the same image but format differs and an internal timestamp too.
+						 * Must match something else, as basic metadata
 						 */
-						assertThat(c.compareAsString(
-								c.callConverterFromInputStream(pngStream, "sample-image.jpg.png", "image/png", MimeHelper.METADATA_MIMETYPE, metaProvider), 
-								"sample-image.png.json"), is(true));
+						assertThat(c.compareAsString(c.callConverterFromInputStream(pngResource, "sample-image.jpg.png",
+								"image/png", MimeHelper.METADATA_MIMETYPE, metaProvider), "sample-image.png.json"),
+								is(true));
 						context.close();
 					});
 					It("Must convert png to jpg", () -> {
@@ -107,25 +109,28 @@ public class AnyImage2AnyTest {
 						context.refresh();
 						RendererTest c = new RendererTest();
 						MimeHelper mh = new MimeHelper("image/jpg");
-						// Can't compare png. Same image can be compressed or not and a data withing changes. Must compare metadata.
-						InputStream pngStream = c.callConverterFromFileName("sample-image.png","image/png", mh.toString(), provider);
+						// Can't compare png. Same image can be compressed or not and a data withing
+						// changes. Must compare metadata.
+						Resource pngResource = c.callConverterFromFileName("sample-image.png", "image/png",
+								mh.toString(), provider);
 						// assertThat(pngStream, is(not(nullValue())));
 
 						// Use this to have less metadata, to compare.
-						MostAny2Txt metaProvider = new MostAny2Txt() ;
-						/* Image conversion from jpg to png differs from the png itself. The resulting png contains the same image
-						 * but format differs and an internal timestamp too. 
-						 * Must match something else, as basic metadata 
+						MostAny2Txt metaProvider = new MostAny2Txt();
+						/*
+						 * Image conversion from jpg to png differs from the png itself. The resulting
+						 * png contains the same image but format differs and an internal timestamp too.
+						 * Must match something else, as basic metadata
 						 */
-						assertThat(c.compareAsString(
-								c.callConverterFromInputStream(pngStream, "sample-image.png.jpg", "image/jpg", MimeHelper.METADATA_MIMETYPE, metaProvider), 
-								"sample-image.jpg.json"), is(true));
+						assertThat(c.compareAsString(c.callConverterFromInputStream(pngResource, "sample-image.png.jpg",
+								"image/jpg", MimeHelper.METADATA_MIMETYPE, metaProvider), "sample-image.jpg.json"),
+								is(true));
 						context.close();
 					});
 				});
 			});
-        });
-    }
+		});
+	}
 
 	@PropertySource("classpath:/test.properties")
 	@Configuration
