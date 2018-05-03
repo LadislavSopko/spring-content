@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 
 public class MedializedResource implements MediaResource {
@@ -46,6 +47,9 @@ public class MedializedResource implements MediaResource {
 
 	@Override
 	public long contentLength() throws IOException {
+		if (resource instanceof InputStreamResource)
+			return -1; // InputStreamResource can't determine content length without reading stream so
+						// better avoid it
 		return resource.contentLength();
 	}
 

@@ -13,6 +13,7 @@ import org.springframework.content.commons.annotations.ContentName;
 import org.springframework.content.commons.annotations.MimeType;
 import org.springframework.content.commons.io.MedializedResource;
 import org.springframework.content.commons.repository.ContentStore;
+import org.springframework.content.commons.repository.Store;
 import org.springframework.content.commons.repository.StoreInvoker;
 import org.springframework.content.commons.utils.BeanUtils;
 import org.springframework.core.io.Resource;
@@ -43,15 +44,14 @@ public class StoreInvokerImpl implements StoreInvoker {
 		Assert.notNull(invocation, "invocation must not be null");
 		this.invocation = invocation;
 
-		Class<?> storeClazz = ContentStore.class;
 		try {
-			getContentMethod = storeClazz.getMethod("getContent", Object.class);
+			getContentMethod = ContentStore.class.getMethod("getContent", Object.class);
 		} catch (Exception e) {
 			LOGGER.error("Failed to get ContentStore.getContent method", e);
 		}
 
 		try {
-			getResourceMethod = storeClazz.getMethod("getResource", Object.class);
+			getResourceMethod = Store.class.getMethod("getResource", Serializable.class);
 		} catch (Exception e) {
 			LOGGER.error("Failed to get ContentStore.getResource method", e);
 		}

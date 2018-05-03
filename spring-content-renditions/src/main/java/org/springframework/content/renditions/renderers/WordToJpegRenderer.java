@@ -4,6 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.poi.POIXMLProperties;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.springframework.content.commons.io.MedializedResource;
 import org.springframework.content.commons.renditions.RenditionCapability;
 import org.springframework.content.commons.renditions.RenditionProvider;
 import org.springframework.content.renditions.RenditionException;
@@ -75,7 +76,8 @@ public class WordToJpegRenderer implements RenditionProvider {
 		if (wordDoc != null) {
 			try {
 				POIXMLProperties props = wordDoc.getProperties();
-				return new InputStreamResource(props.getThumbnailImage());
+				return new MedializedResource(new InputStreamResource(props.getThumbnailImage()), "image/jpeg",
+						props.getThumbnailFilename());
 			} catch (Exception e) {
 				throw new RenditionException(
 						String.format("Unexpected error getting thumbnail for mime-type rendition %s", toMimeType), e);

@@ -1,5 +1,6 @@
 package internal.org.springframework.content.rest.utils;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
@@ -52,6 +53,7 @@ public final class ContentStoreUtils {
 	 *            headers that will be sent back to the client
 	 * 
 	 * @return input stream
+	 * @throws IOException
 	 */
 	@SuppressWarnings("unchecked")
 	public static InputStream getContent(ContentStore<Object, Serializable> store, Object entity,
@@ -129,7 +131,15 @@ public final class ContentStoreUtils {
 
 					// content name header
 					headers.set(httpNameHeader, cName + mtExt);
-					break;
+
+					try {
+						content = ret.getInputStream();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+
+						content = null;
+					}
 				}
 			}
 		}
