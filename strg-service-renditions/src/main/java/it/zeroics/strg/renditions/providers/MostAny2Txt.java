@@ -65,7 +65,7 @@ public class MostAny2Txt extends BasicProvider {
 
 	@SuppressWarnings("resource")
 	@Override
-	@Cacheable(key = "T(internal.org.springframework.content.commons.utils.InputContentStream).getKey(#fromInputSource, #toMimeType)")
+	@Cacheable(key = "T(internal.org.springframework.content.commons.utils.CacheKey).getKey(#fromInputSource, #toMimeType)")
 	public Resource convert(Resource fromInputSource, String toMimeType) {
 
 		Assert.notNull(fromInputSource, "input source must not be null");
