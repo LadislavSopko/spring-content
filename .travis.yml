@@ -1,31 +1,22 @@
+# blacklist
 branches:
   except:
-    - travis
+    - master
+		
+# whitelist
+branches:
+  only:
+    - feature/laco/TestStream
+    - devel
+   
 language: java
 jdk:
 - oraclejdk8
 env:
-- BUILD_TYPE=snapshot
+- BUILD_TYPE=dev
 before_install:
 - ./scripts/before-install.sh
 install:
   - mvn install -DskipTests=true -Dgpg.skip -Dmaven.javadoc.skip=true -B -V
 script:
  - mvn test jacoco:report coveralls:report -Dgpg.skip -Dmaven.javadoc.skip=true -B
-deploy:
-  - provider: script
-    script: scripts/deploy.sh
-    skip_cleanup: true
-    on:
-      repo: paulcwarren/spring-content
-      branch: master
-  - provider: script
-    script: scripts/deploy.sh
-    skip_cleanup: true
-    on:
-      repo: paulcwarren/spring-content
-      tags: true
-#script:
-#- mvn deploy --settings settings.xml -P $MAVEN_PROFILE jacoco:report coveralls:report 
-notifications:
-  slack: cloudfoundry:xvgjKLNQTyqAFMnsTywVHik9
