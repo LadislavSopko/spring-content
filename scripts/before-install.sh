@@ -9,7 +9,9 @@ echo Travis tag: ${TRAVIS_TAG}
 #    export BUILD_TYPE=snapshot
 #fi
 
-uname -a
+apt-get update
+apt-get install imagemagick
+
 cat /etc/debian_version
 cat /etc/redhat_version
 exit
