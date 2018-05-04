@@ -10,3 +10,6 @@ echo Travis tag: ${TRAVIS_TAG}
 #fi
 
 uname -a
+cat /etc/debian_version
+cat /etc/redhat_version
+exit
