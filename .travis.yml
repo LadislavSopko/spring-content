@@ -1,14 +1,12 @@
 # blacklist
 branches:
   except:
-    - master
-	
+    - master	
 # whitelist
 branches:
   only:
     - feature/laco/TestStream
-    - devel
-   
+    - devel   
 language: java
 jdk:
 - oraclejdk8
