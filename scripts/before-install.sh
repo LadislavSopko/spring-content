@@ -8,3 +8,5 @@ echo Travis tag: ${TRAVIS_TAG}
 #else
 #    export BUILD_TYPE=snapshot
 #fi
+
+uname -a

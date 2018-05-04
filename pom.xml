@@ -72,12 +72,11 @@
 	
 	
 	<properties>
-		<buildType>${SC_BUILD_TYPE}</buildType>
 		<ginkgo4j-version>1.0.9</ginkgo4j-version>
 		<springboot-version>2.0.0.RELEASE</springboot-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<docs.output.dir>../target/generated-docs/refs/${SC_BUILD_TYPE}/</docs.output.dir>
+		<docs.output.dir>../target/generated-docs/refs/${BUILD_TYPE}/</docs.output.dir>
 		<spring-content.version>0.0.11-SNAPSHOT</spring-content.version>
 	</properties>
 
@@ -140,13 +139,13 @@
 						</goals>
 						<configuration>
 							<rules>
-								<!-- requireEnvironmentVariable>
-									<variableName>SC_BUILD_TYPE</variableName>
-								</requireEnvironmentVariable-->
-								<requireProperty>
+								<requireEnvironmentVariable>
+									<variableName>BUILD_TYPE</variableName>
+								</requireEnvironmentVariable>
+								<!-- requireProperty>
 									<property>buildType</property>
 									<message>You must set a buildType property!</message>
-								</requireProperty>
+								</requireProperty-->
 							</rules>
 							<fail>true</fail>
 						</configuration>
