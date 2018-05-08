@@ -71,6 +71,17 @@ angular.module('MediaApp', [])
     	);
     	return retVal;
     };
+    
+    mediaList.getFileNameFromHeaders = function(hdrs){
+    	// content-disposition:	"form-data; name="attachment"; filename="Curriculum_Sopko.doc""
+    	var cd = hdrs['content-disposition'] || "";
+    	var l = cd.split(';');
+    	for( var e in l){
+    		var ev = l[e].trim().split('=');
+    		if(ev[0] == 'filename') return ev[1].replace(/"/g, '');
+    	}
+    	return 'some_file';
+    };
 
     mediaList.upload = function() {
         var f = document.getElementById('mediumElement').files[0];
@@ -94,6 +105,7 @@ angular.module('MediaApp', [])
     };
     
     mediaList.downloadFile = function (u) {
+    	var self = this;
         var ext = this.getExtension();
         $http({
             method: 'GET',
@@ -106,7 +118,7 @@ angular.module('MediaApp', [])
         }).success(function (data, status, headers) {
             headers = headers();
      
-            var filename = headers['x-file-name'] || ("file."+ext);
+            var filename = self.getFileNameFromHeaders(headers); //headers['x-file-name'] || ("file."+ext);
             if ( !filename.endsWith("."+ext) ) {
             	filename += "."+ext
             }

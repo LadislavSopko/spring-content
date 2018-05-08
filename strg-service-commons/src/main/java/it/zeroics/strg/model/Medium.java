@@ -8,6 +8,7 @@ import org.springframework.content.commons.annotations.ContentId;
 import org.springframework.content.commons.annotations.ContentLength;
 import org.springframework.content.commons.annotations.ContentName;
 import org.springframework.content.commons.annotations.MimeType;
+import org.springframework.content.commons.annotations.OriginalFileName;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -16,33 +17,34 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Document(collection = "media-meta")
-@Getter @Setter @NoArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
 public class Medium {
 
-    @Id 
-    private String id;
-    
-    @ContentName(httpHeader = "x-file-name") 
-    private String name;
-    
-    @ContentId 
-    private String contentId;
-    
-    @ContentLength 
-    private long contentLength;
-    
-    @MimeType 
-    private String mimeType = "application/octet-stream";
+	@Id
+	private String id;
 
-    private Date created = new Date();
-    private String summary;
-    
-   
-    private Set<Tag> tags = new HashSet<Tag>();
+	@ContentName(httpHeader = "x-file-name")
+	@OriginalFileName
+	private String name;
 
-    
-    @Override
-    public String toString() {
-    	return "M-" + contentId;
-    }
+	@ContentId
+	private String contentId;
+
+	@ContentLength
+	private long contentLength;
+
+	@MimeType
+	private String mimeType = "application/octet-stream";
+
+	private Date created = new Date();
+	private String summary;
+
+	private Set<Tag> tags = new HashSet<Tag>();
+
+	@Override
+	public String toString() {
+		return "M-" + contentId;
+	}
 }

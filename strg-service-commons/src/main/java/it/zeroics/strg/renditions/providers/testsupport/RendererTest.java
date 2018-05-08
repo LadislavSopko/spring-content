@@ -7,7 +7,7 @@ import java.util.Arrays;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.content.commons.io.MedializedResource;
+import org.springframework.content.commons.io.DefaultMediaResource;
 import org.springframework.content.commons.renditions.RenditionProvider;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -27,7 +27,7 @@ public class RendererTest {
 
 	public Resource callConverterFromInputStream(Resource ir, String fileIn, String mimeTypeIn, String mimeTypeOut,
 			RenditionProvider provider) throws Exception {
-		return provider.convert(new MedializedResource(ir, mimeTypeIn, fileIn), mimeTypeOut);
+		return provider.convert(new DefaultMediaResource(ir, mimeTypeIn, fileIn), mimeTypeOut);
 	}
 
 	public Resource callConverterFromFileName(String fileIn, String mimeTypeIn, String mimeTypeOut,

@@ -13,7 +13,7 @@ import org.dcm4che3.data.Attributes;
 import org.dcm4che3.data.ElementDictionary;
 import org.dcm4che3.data.VR;
 import org.dcm4che3.tool.common.DicomFiles;
-import org.springframework.content.commons.io.MedializedResource;
+import org.springframework.content.commons.io.DefaultMediaResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MimeType;
@@ -64,7 +64,7 @@ public class DicomRenderer extends BasicRenderer {
 			// String mediaMimeType =
 			// ((gettingstarted.springcontentfs.File)((InputContentStream)is).getEntity()).getMimeType()
 			// ;
-			String mediaName = ((MedializedResource) ir).getName();
+			String mediaName = ((DefaultMediaResource) ir).getName();
 			String inputExtension = FilenameUtils.getExtension(mediaName);
 
 			dicomFile = File.createTempFile("dicom-", "." + inputExtension);

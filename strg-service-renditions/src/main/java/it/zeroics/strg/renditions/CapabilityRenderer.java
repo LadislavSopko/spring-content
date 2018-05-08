@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.content.commons.io.MedializedResource;
+import org.springframework.content.commons.io.DefaultMediaResource;
 import org.springframework.content.commons.renditions.RenditionService;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
@@ -35,7 +35,7 @@ public class CapabilityRenderer extends BasicRenderer {
 			// capabilities
 			RenditionService rs = RenditionContext.getInstance().getRenditionService();
 
-			String[] outputMimeTypes = rs.conversions(((MedializedResource) ir).getMime());
+			String[] outputMimeTypes = rs.conversions(((DefaultMediaResource) ir).getMime());
 
 			ObjectMapper om = new ObjectMapper();
 			try {

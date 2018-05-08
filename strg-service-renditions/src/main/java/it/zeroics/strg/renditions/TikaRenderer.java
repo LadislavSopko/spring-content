@@ -14,7 +14,7 @@ import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.parser.ParseContext;
 import org.apache.tika.parser.Parser;
 import org.apache.tika.sax.BodyContentHandler;
-import org.springframework.content.commons.io.MedializedResource;
+import org.springframework.content.commons.io.DefaultMediaResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MimeType;
@@ -189,7 +189,7 @@ public class TikaRenderer extends BasicRenderer {
 	public void run() {
 
 		Parser parser = tikaConfig.getParser();
-		String mediaMimeType = ((MedializedResource) ir).getMime();
+		String mediaMimeType = ((DefaultMediaResource) ir).getMime();
 		logger.debug("The MIME type is: [" + mediaMimeType + "]");
 		AutoDetectParser autoParser = null;
 
@@ -211,7 +211,7 @@ public class TikaRenderer extends BasicRenderer {
 				Tika t = new Tika();
 				t.parseToString(ir.getInputStream(), tikaMetadata, 0);
 				it.zeroics.strg.renditions.utils.Metadata m = new it.zeroics.strg.renditions.utils.Metadata(
-						((MedializedResource) ir).getName(), ((MedializedResource) ir).contentLength());
+						((DefaultMediaResource) ir).getName(), ((DefaultMediaResource) ir).contentLength());
 				addTikaMeta(m, tikaMetadata);
 				m.serialize(out);
 				out.close();

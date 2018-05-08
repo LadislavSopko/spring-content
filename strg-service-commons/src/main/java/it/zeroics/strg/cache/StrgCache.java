@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.cache.support.AbstractValueAdaptingCache;
-import org.springframework.content.commons.io.MedializedResource;
+import org.springframework.content.commons.io.DefaultMediaResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.serializer.support.SerializationDelegate;
 import org.springframework.lang.Nullable;
@@ -123,7 +123,7 @@ public class StrgCache extends AbstractValueAdaptingCache {
 		if (key instanceof CacheKey) {
 			File targetFile = new File("c:\\tmp\\cache\\" + ((CacheKey) key).key + ".dat");
 			if (targetFile.exists()) {
-				return new MedializedResource(new FileSystemResource(targetFile), ((CacheKey) key).mime,
+				return new DefaultMediaResource(new FileSystemResource(targetFile), ((CacheKey) key).mime,
 						((CacheKey) key).name);
 			}
 
@@ -151,14 +151,14 @@ public class StrgCache extends AbstractValueAdaptingCache {
 	public void put(Object key, @Nullable Object value) {
 		Object sv = toStoreValue(value);
 
-		if (sv instanceof MedializedResource) {
+		if (sv instanceof DefaultMediaResource) {
 			// save content in file
 			File targetFile = new File("c:\\tmp\\cache\\" + ((CacheKey) key).key + ".dat");
 
 			InputStream is = null;
 
 			try {
-				is = ((MedializedResource) sv).getInputStream();
+				is = ((DefaultMediaResource) sv).getInputStream();
 				java.nio.file.Files.copy(is, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
@@ -169,7 +169,7 @@ public class StrgCache extends AbstractValueAdaptingCache {
 
 			// reopen stream
 			FileSystemResource rs = new FileSystemResource(targetFile);
-			((MedializedResource) sv).resetResource(rs);
+			((DefaultMediaResource) sv).resetResource(rs);
 
 		} else {
 			this.store.put(key, sv);

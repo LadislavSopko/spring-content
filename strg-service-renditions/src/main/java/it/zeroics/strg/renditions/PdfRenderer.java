@@ -17,7 +17,7 @@ import org.jodconverter.document.DocumentFormat;
 //import org.jodconverter.document.DocumentFormat;
 import org.jodconverter.office.OfficeException;
 import org.jodconverter.office.OfficeManager;
-import org.springframework.content.commons.io.MedializedResource;
+import org.springframework.content.commons.io.DefaultMediaResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MimeType;
@@ -113,7 +113,7 @@ public class PdfRenderer extends BasicRenderer {
 			// String mediaMimeType =
 			// ((gettingstarted.springcontentfs.File)((InputContentStream)is).getEntity()).getMimeType()
 			// ;
-			String mediaName = ((MedializedResource) ir).getName();
+			String mediaName = ((DefaultMediaResource) ir).getName();
 			String inputExtension = FilenameUtils.getExtension(mediaName);
 			DocumentFormat pdfDocumentFormat = null;
 
