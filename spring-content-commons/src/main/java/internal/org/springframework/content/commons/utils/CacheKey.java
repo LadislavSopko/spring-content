@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.cache.interceptor.SimpleKey;
-import org.springframework.content.commons.io.MedializedResource;
+import org.springframework.content.commons.io.DefaultMediaResource;
 
 public class CacheKey {
 	public String name;
@@ -24,8 +24,8 @@ public class CacheKey {
 		String key = "";
 
 		// p0 - is
-		if (p.get(0) instanceof MedializedResource) {
-			key += ((MedializedResource) p.get(0)).getName();
+		if (p.get(0) instanceof DefaultMediaResource) {
+			key += ((DefaultMediaResource) p.get(0)).getName();
 		} else {
 			return new SimpleKey(pms);
 		}
@@ -34,6 +34,6 @@ public class CacheKey {
 
 		key += p.get(1);
 
-		return new CacheKey(((MedializedResource) p.get(0)).getName(), key.replace("/", ""), p.get(1).toString());
+		return new CacheKey(((DefaultMediaResource) p.get(0)).getName(), key.replace("/", ""), p.get(1).toString());
 	}
 }

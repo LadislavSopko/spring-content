@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 
-import org.springframework.content.commons.io.MedializedResource;
+import org.springframework.content.commons.io.DefaultMediaResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
@@ -15,7 +15,7 @@ public class BasicRenderer implements Runnable {
 	protected PipedInputStream in = null;
 	protected PipedOutputStream out = null;
 
-	protected MedializedResource result = null;
+	protected DefaultMediaResource result = null;
 
 	protected Resource ir = null;
 	protected MimeType outputMimeType = null;
@@ -28,11 +28,11 @@ public class BasicRenderer implements Runnable {
 		try {
 			out = new PipedOutputStream(in);
 
-			MedializedResource mr = (MedializedResource) ir;
+			DefaultMediaResource mr = (DefaultMediaResource) ir;
 			if (mr != null) {
-				result = new MedializedResource(new InputStreamResource(in), mt.toString(), mr.getName());
+				result = new DefaultMediaResource(new InputStreamResource(in), mt.toString(), mr.getName());
 			} else {
-				result = new MedializedResource(new InputStreamResource(in), mt.toString(), "");
+				result = new DefaultMediaResource(new InputStreamResource(in), mt.toString(), "");
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
